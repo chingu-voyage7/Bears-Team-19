@@ -1,2 +1,19 @@
-# Bears-Team-19
-Add-project-description-here | Voyage-7 | https://chingu.io/
+# Budget App
+
+Budgeting app and expense tracking
+
+### Stack
+
+- Node
+- Express
+- React
+- Redux
+- PostgresQL
+
+### Members
+
+- Osycon
+- Paulina
+- Ufedo
+- Dmitri
+- Chsanch
