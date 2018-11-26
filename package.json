@@ -16,7 +16,7 @@
   },
   "keywords": [],
   "author": "Osycon, Paulina, Ufedo, Dmitri, Chsanch ",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
