@@ -1,0 +1,6 @@
+categories
+users
+budgets
+expenses
+incomes
+expenses_categories
