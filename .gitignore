@@ -71,3 +71,8 @@ typings/
 
 
 # End of https://www.gitignore.io/api/node,visualstudiocode
+
+# Vim files to ignore
+*.swp
+*.swo
+tags
