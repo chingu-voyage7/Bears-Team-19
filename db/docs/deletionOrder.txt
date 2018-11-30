@@ -1,6 +1,5 @@
-expenses_categories
-incomes
 expenses
+incomes
 budgets
 users
 categories

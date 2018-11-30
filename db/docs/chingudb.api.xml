@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <database name="chingudb" schema="api" type="PostgreSQL - 11.1 (Debian 11.1-1.pgdg90+1)">
    <tables>
-      <table name="budgets" numRows="0" remarks="" schema="api" type="TABLE">
+      <table name="budgets" numRows="2" remarks="" schema="api" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('api.budgets_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="budget_id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="expenses"/>
             <child column="budget_id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="incomes"/>
@@ -17,9 +17,9 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="categories" numRows="0" remarks="" schema="api" type="TABLE">
+      <table name="categories" numRows="3" remarks="" schema="api" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('api.categories_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
-            <child column="category_id" foreignKey="category" implied="false" onDeleteCascade="false" schema="api" table="expenses_categories"/>
+            <child column="category_id" foreignKey="category" implied="false" onDeleteCascade="false" schema="api" table="expenses"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="label" nullable="false" remarks="" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
@@ -28,36 +28,22 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="expenses" numRows="0" remarks="" schema="api" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('api.expenses_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
-            <child column="expense_id" foreignKey="expense" implied="false" onDeleteCascade="false" schema="api" table="expenses_categories"/>
-         </column>
+      <table name="expenses" numRows="2" remarks="" schema="api" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('api.expenses_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="budget_id" nullable="true" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="budgets"/>
          </column>
          <column autoUpdated="false" digits="0" id="2" name="description" nullable="false" remarks="" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="0" id="3" name="amount" nullable="false" remarks="" size="2147483647" type="money"/>
+         <column autoUpdated="false" digits="0" id="4" name="category_id" nullable="true" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="category" implied="false" onDeleteCascade="false" schema="api" table="categories"/>
+         </column>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="expenses_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="expenses_categories" numRows="0" remarks="" schema="api" type="TABLE">
-         <column autoUpdated="false" digits="0" id="0" name="expense_id" nullable="true" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="expense" implied="false" onDeleteCascade="false" schema="api" table="expenses"/>
-         </column>
-         <column autoUpdated="false" digits="0" id="1" name="category_id" nullable="true" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="category" implied="false" onDeleteCascade="false" schema="api" table="categories"/>
-         </column>
-         <index name="category" unique="false">
-            <column ascending="true" name="category_id"/>
-         </index>
-         <index name="expenses_categories_idx" unique="false">
-            <column ascending="true" name="category_id"/>
-            <column ascending="true" name="expense_id"/>
-         </index>
-      </table>
-      <table name="incomes" numRows="0" remarks="" schema="api" type="TABLE">
+      <table name="incomes" numRows="1" remarks="" schema="api" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('api.incomes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="budget_id" nullable="true" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="budgets"/>
@@ -69,7 +55,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="users" numRows="1" remarks="" schema="api" type="TABLE">
+      <table name="users" numRows="2" remarks="" schema="api" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('api.users_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="user_id" foreignKey="user" implied="false" onDeleteCascade="false" schema="api" table="budgets"/>
          </column>

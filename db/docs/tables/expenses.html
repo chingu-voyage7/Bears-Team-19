@@ -111,10 +111,6 @@
                                     <td>nextval(&#39;api.expenses_id_seq&#39;::regclass)</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
-                                            <tr>
-                                                <td title="expenses_categories.expense_id references expenses.id via expense"><a href='expenses_categories.html'>expenses_categories</a><span class='relatedKey'>.expense_id</span></td>
-                                                <td class="constraint detail">expense<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
-                                            </tr>
                                         </table>
                                     </td>
                                     <td>
@@ -178,9 +174,30 @@
                                     </td>
                                     <td></td>
                                 </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="category_id">category_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="expenses.category_id references categories.id via category"><a href='categories.html'>categories</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">category<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
                                 </tbody>
                             </table>
-                            <p title='4 columns'>Table contained <span id="recordNumber">0</span> rows</p>
+                            <p title='5 columns'>Table contained <span id="recordNumber">2</span> rows</p>
                         </div>
                     </div>
                     <div class="box box-primary">
@@ -232,20 +249,19 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="expenses.html" target="_top" title="expenses" alt="" coords="232,5,481,192">
-<area shape="rect" id="node2" href="budgets.html" target="_top" title="budgets" alt="" coords="5,37,188,184">
-<area shape="rect" id="node3" href="expenses_categories.html" target="_top" title="expenses_categories" alt="" coords="525,8,736,131">
+<area shape="rect" id="node1" href="expenses.html" target="_top" title="expenses" alt="" coords="232,12,485,228">
+<area shape="rect" id="node2" href="budgets.html" target="_top" title="budgets" alt="" coords="5,5,188,152">
+<area shape="rect" id="node3" href="categories.html" target="_top" title="categories" alt="" coords="29,169,164,287">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/expenses.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="budgets.html" target="_top" title="budgets" alt="" coords="151,175,333,321">
-<area shape="rect" id="node2" href="users.html" target="_top" title="users" alt="" coords="5,207,107,295">
-<area shape="rect" id="node3" href="expenses.html" target="_top" title="expenses" alt="" coords="377,5,627,192">
-<area shape="rect" id="node4" href="expenses_categories.html" target="_top" title="expenses_categories" alt="" coords="671,93,881,216">
-<area shape="rect" id="node5" href="categories.html" target="_top" title="categories" alt="" coords="439,209,565,297">
-<area shape="rect" id="node6" href="incomes.html" target="_top" title="incomes" alt="" coords="444,315,560,403">
+<area shape="rect" id="node1" href="budgets.html" target="_top" title="budgets" alt="" coords="151,35,333,181">
+<area shape="rect" id="node2" href="users.html" target="_top" title="users" alt="" coords="5,67,107,155">
+<area shape="rect" id="node3" href="expenses.html" target="_top" title="expenses" alt="" coords="377,111,631,327">
+<area shape="rect" id="node4" href="categories.html" target="_top" title="categories" alt="" coords="175,231,309,348">
+<area shape="rect" id="node5" href="incomes.html" target="_top" title="incomes" alt="" coords="446,5,562,93">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/expenses.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>

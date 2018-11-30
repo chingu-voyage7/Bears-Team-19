@@ -150,16 +150,7 @@ CREATE TABLE api.expenses (
     id integer NOT NULL,
     budget_id integer,
     description text NOT NULL,
-    amount money NOT NULL
-);
-
-
---
--- Name: expenses_categories; Type: TABLE; Schema: api; Owner: -
---
-
-CREATE TABLE api.expenses_categories (
-    expense_id integer,
+    amount money NOT NULL,
     category_id integer
 );
 
@@ -287,7 +278,7 @@ ALTER TABLE ONLY api.users ALTER COLUMN id SET DEFAULT nextval('api.users_id_seq
 
 COPY api.budgets (id, user_id, title, original_amount, available_amount) FROM stdin;
 2	2	Budget user 2	$287.00	$287.00
-1	1	Budget user 1	$1,098.50	$1,028.50
+1	1	Budget user 1	$1,098.50	$1,008.50
 \.
 
 
@@ -306,17 +297,9 @@ COPY api.categories (id, label, description) FROM stdin;
 -- Data for Name: expenses; Type: TABLE DATA; Schema: api; Owner: -
 --
 
-COPY api.expenses (id, budget_id, description, amount) FROM stdin;
-1	1	First expense	$100.00
-\.
-
-
---
--- Data for Name: expenses_categories; Type: TABLE DATA; Schema: api; Owner: -
---
-
-COPY api.expenses_categories (expense_id, category_id) FROM stdin;
-1	3
+COPY api.expenses (id, budget_id, description, amount, category_id) FROM stdin;
+1	1	First expense	$100.00	1
+2	1	I'm expending more money!!!	$20.00	3
 \.
 
 
@@ -357,7 +340,7 @@ SELECT pg_catalog.setval('api.categories_id_seq', 3, true);
 -- Name: expenses_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
 --
 
-SELECT pg_catalog.setval('api.expenses_id_seq', 1, true);
+SELECT pg_catalog.setval('api.expenses_id_seq', 2, true);
 
 
 --
@@ -423,20 +406,6 @@ ALTER TABLE ONLY api.users
 
 
 --
--- Name: category; Type: INDEX; Schema: api; Owner: -
---
-
-CREATE INDEX category ON api.expenses_categories USING btree (category_id);
-
-
---
--- Name: expenses_categories_idx; Type: INDEX; Schema: api; Owner: -
---
-
-CREATE INDEX expenses_categories_idx ON api.expenses_categories USING btree (category_id, expense_id);
-
-
---
 -- Name: expenses update_budget; Type: TRIGGER; Schema: api; Owner: -
 --
 
@@ -467,19 +436,11 @@ ALTER TABLE ONLY api.incomes
 
 
 --
--- Name: expenses_categories category; Type: FK CONSTRAINT; Schema: api; Owner: -
+-- Name: expenses category; Type: FK CONSTRAINT; Schema: api; Owner: -
 --
 
-ALTER TABLE ONLY api.expenses_categories
+ALTER TABLE ONLY api.expenses
     ADD CONSTRAINT category FOREIGN KEY (category_id) REFERENCES api.categories(id);
-
-
---
--- Name: expenses_categories expense; Type: FK CONSTRAINT; Schema: api; Owner: -
---
-
-ALTER TABLE ONLY api.expenses_categories
-    ADD CONSTRAINT expense FOREIGN KEY (expense_id) REFERENCES api.expenses(id);
 
 
 --
