@@ -74,6 +74,20 @@ END
 $$;
 
 
+--
+-- Name: valid_email(text); Type: FUNCTION; Schema: api; Owner: -
+--
+
+CREATE FUNCTION api.valid_email(text) RETURNS boolean
+    LANGUAGE plperlu IMMUTABLE STRICT LEAKPROOF
+    AS $_$
+  use Email::Valid;
+  my $email = shift;
+  Email::Valid->address($email) or die "Invalid email address: $email\n";
+  return 'true';
+$_$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -213,7 +227,8 @@ ALTER SEQUENCE api.incomes_id_seq OWNED BY api.incomes.id;
 
 CREATE TABLE api.users (
     id integer NOT NULL,
-    username text
+    username public.citext,
+    email public.validemail
 );
 
 
@@ -273,91 +288,6 @@ ALTER TABLE ONLY api.users ALTER COLUMN id SET DEFAULT nextval('api.users_id_seq
 
 
 --
--- Data for Name: budgets; Type: TABLE DATA; Schema: api; Owner: -
---
-
-COPY api.budgets (id, user_id, title, original_amount, available_amount) FROM stdin;
-2	2	Budget user 2	$287.00	$287.00
-1	1	Budget user 1	$1,098.50	$1,008.50
-\.
-
-
---
--- Data for Name: categories; Type: TABLE DATA; Schema: api; Owner: -
---
-
-COPY api.categories (id, label, description) FROM stdin;
-1	food	Food related expenses
-2	transportation	Transportation related expenses
-3	utilities	Utilities related expenses
-\.
-
-
---
--- Data for Name: expenses; Type: TABLE DATA; Schema: api; Owner: -
---
-
-COPY api.expenses (id, budget_id, description, amount, category_id) FROM stdin;
-1	1	First expense	$100.00	1
-2	1	I'm expending more money!!!	$20.00	3
-\.
-
-
---
--- Data for Name: incomes; Type: TABLE DATA; Schema: api; Owner: -
---
-
-COPY api.incomes (id, budget_id, description, amount) FROM stdin;
-1	1	More money!	$30.00
-\.
-
-
---
--- Data for Name: users; Type: TABLE DATA; Schema: api; Owner: -
---
-
-COPY api.users (id, username) FROM stdin;
-1	first_user
-2	other_user
-\.
-
-
---
--- Name: budgets_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
---
-
-SELECT pg_catalog.setval('api.budgets_id_seq', 2, true);
-
-
---
--- Name: categories_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
---
-
-SELECT pg_catalog.setval('api.categories_id_seq', 3, true);
-
-
---
--- Name: expenses_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
---
-
-SELECT pg_catalog.setval('api.expenses_id_seq', 2, true);
-
-
---
--- Name: incomes_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
---
-
-SELECT pg_catalog.setval('api.incomes_id_seq', 1, true);
-
-
---
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
---
-
-SELECT pg_catalog.setval('api.users_id_seq', 2, true);
-
-
---
 -- Name: budgets budgets_pkey; Type: CONSTRAINT; Schema: api; Owner: -
 --
 
@@ -387,6 +317,14 @@ ALTER TABLE ONLY api.expenses
 
 ALTER TABLE ONLY api.incomes
     ADD CONSTRAINT incomes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY api.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
 
 
 --

@@ -28,7 +28,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="expenses" numRows="2" remarks="" schema="api" type="TABLE">
+      <table name="expenses" numRows="1" remarks="" schema="api" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('api.expenses_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="budget_id" nullable="true" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="budgets"/>
@@ -43,7 +43,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="incomes" numRows="1" remarks="" schema="api" type="TABLE">
+      <table name="incomes" numRows="0" remarks="" schema="api" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('api.incomes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="budget_id" nullable="true" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="budgets"/>
@@ -59,10 +59,14 @@
          <column autoUpdated="true" defaultValue="nextval('api.users_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="user_id" foreignKey="user" implied="false" onDeleteCascade="false" schema="api" table="budgets"/>
          </column>
-         <column autoUpdated="false" digits="0" id="1" name="username" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="1" name="username" nullable="true" remarks="" size="2147483647" type="citext"/>
+         <column autoUpdated="false" digits="0" id="2" name="email" nullable="false" remarks="" size="2147483647" type="validemail"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="users_pkey" unique="true">
             <column ascending="true" name="id"/>
+         </index>
+         <index name="users_email_key" unique="true">
+            <column ascending="true" name="email"/>
          </index>
          <index name="users_username_key" unique="true">
             <column ascending="true" name="username"/>
@@ -93,6 +97,17 @@ BEGIN
 	WHERE id = NEW.budget_id;
 	RETURN NEW;
 END
+]]>
+         </definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="true" name="valid_email" returnType="boolean" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="PLPERLU">
+            <![CDATA[
+  use Email::Valid;
+  my $email = shift;
+  Email::Valid->address($email) or die "Invalid email address: $email\n";
+  return 'true';
 ]]>
          </definition>
       </routine>
