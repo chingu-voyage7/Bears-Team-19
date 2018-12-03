@@ -4,7 +4,7 @@
   "description": "Budget app",
   "main": "index.js",
   "scripts": {
-    "dev-server": "npx nodemon ./server/index.js",
+    "dev-server": "npx nodemon ./server/bin/www",
     "lint-staged": "lint-staged",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
