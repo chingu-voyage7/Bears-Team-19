@@ -75,6 +75,20 @@ $$;
 
 
 --
+-- Name: trigger_set_timestamp(); Type: FUNCTION; Schema: api; Owner: -
+--
+
+CREATE FUNCTION api.trigger_set_timestamp() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$;
+
+
+--
 -- Name: valid_email(text); Type: FUNCTION; Schema: api; Owner: -
 --
 
@@ -101,7 +115,9 @@ CREATE TABLE api.budgets (
     user_id integer,
     title text NOT NULL,
     original_amount money NOT NULL,
-    available_amount money NOT NULL
+    available_amount money NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
 );
 
 
@@ -132,7 +148,9 @@ ALTER SEQUENCE api.budgets_id_seq OWNED BY api.budgets.id;
 CREATE TABLE api.categories (
     id integer NOT NULL,
     label text NOT NULL,
-    description text
+    description text,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
 );
 
 
@@ -165,7 +183,9 @@ CREATE TABLE api.expenses (
     budget_id integer,
     description text NOT NULL,
     amount money NOT NULL,
-    category_id integer
+    category_id integer,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
 );
 
 
@@ -197,7 +217,9 @@ CREATE TABLE api.incomes (
     id integer NOT NULL,
     budget_id integer,
     description text NOT NULL,
-    amount money NOT NULL
+    amount money NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
 );
 
 
@@ -228,7 +250,11 @@ ALTER SEQUENCE api.incomes_id_seq OWNED BY api.incomes.id;
 CREATE TABLE api.users (
     id integer NOT NULL,
     username public.citext,
-    email public.validemail
+    email public.validemail,
+    name text,
+    notifications boolean DEFAULT true,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
 );
 
 
@@ -341,6 +367,41 @@ ALTER TABLE ONLY api.users
 
 ALTER TABLE ONLY api.users
     ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: users set_timestamp; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON api.users FOR EACH ROW EXECUTE PROCEDURE api.trigger_set_timestamp();
+
+
+--
+-- Name: budgets set_timestamp; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON api.budgets FOR EACH ROW EXECUTE PROCEDURE api.trigger_set_timestamp();
+
+
+--
+-- Name: categories set_timestamp; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON api.categories FOR EACH ROW EXECUTE PROCEDURE api.trigger_set_timestamp();
+
+
+--
+-- Name: expenses set_timestamp; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON api.expenses FOR EACH ROW EXECUTE PROCEDURE api.trigger_set_timestamp();
+
+
+--
+-- Name: incomes set_timestamp; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON api.incomes FOR EACH ROW EXECUTE PROCEDURE api.trigger_set_timestamp();
 
 
 --

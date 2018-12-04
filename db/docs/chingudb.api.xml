@@ -12,6 +12,8 @@
          <column autoUpdated="false" digits="0" id="2" name="title" nullable="false" remarks="" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="0" id="3" name="original_amount" nullable="false" remarks="" size="2147483647" type="money"/>
          <column autoUpdated="false" digits="0" id="4" name="available_amount" nullable="false" remarks="" size="2147483647" type="money"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="5" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="budgets_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -23,6 +25,8 @@
          </column>
          <column autoUpdated="false" digits="0" id="1" name="label" nullable="false" remarks="" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="3" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="4" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="categories_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -38,6 +42,8 @@
          <column autoUpdated="false" digits="0" id="4" name="category_id" nullable="true" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="category" implied="false" onDeleteCascade="false" schema="api" table="categories"/>
          </column>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="5" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="expenses_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -50,6 +56,8 @@
          </column>
          <column autoUpdated="false" digits="0" id="2" name="description" nullable="false" remarks="" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="0" id="3" name="amount" nullable="false" remarks="" size="2147483647" type="money"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="4" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="5" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="incomes_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -61,6 +69,10 @@
          </column>
          <column autoUpdated="false" digits="0" id="1" name="username" nullable="true" remarks="" size="2147483647" type="citext"/>
          <column autoUpdated="false" digits="0" id="2" name="email" nullable="false" remarks="" size="2147483647" type="validemail"/>
+         <column autoUpdated="false" digits="0" id="3" name="name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="true" digits="0" id="4" name="notifications" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="5" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="users_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -97,6 +109,17 @@ BEGIN
 	WHERE id = NEW.budget_id;
 	RETURN NEW;
 END
+]]>
+         </definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="false" name="trigger_set_timestamp" returnType="trigger" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="PLPGSQL">
+            <![CDATA[
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
 ]]>
          </definition>
       </routine>
