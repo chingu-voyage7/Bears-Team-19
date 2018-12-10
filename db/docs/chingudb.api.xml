@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="chingudb" schema="api" type="PostgreSQL - 11.1 (Debian 11.1-1.pgdg90+1)">
+   <tables>
+      <table name="budgets" numRows="2" remarks="" schema="api" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('api.budgets_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="budget_id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="expenses"/>
+            <child column="budget_id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="incomes"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="user_id" nullable="true" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="user" implied="false" onDeleteCascade="false" schema="api" table="users"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="title" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="original_amount" nullable="false" remarks="" size="2147483647" type="money"/>
+         <column autoUpdated="false" digits="0" id="4" name="available_amount" nullable="false" remarks="" size="2147483647" type="money"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="5" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="budgets_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="categories" numRows="3" remarks="" schema="api" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('api.categories_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="category_id" foreignKey="category" implied="false" onDeleteCascade="false" schema="api" table="expenses"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="label" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="3" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="4" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="categories_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="expenses" numRows="1" remarks="" schema="api" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('api.expenses_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="budget_id" nullable="true" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="budgets"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="amount" nullable="false" remarks="" size="2147483647" type="money"/>
+         <column autoUpdated="false" digits="0" id="4" name="category_id" nullable="true" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="category" implied="false" onDeleteCascade="false" schema="api" table="categories"/>
+         </column>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="5" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="expenses_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="incomes" numRows="0" remarks="" schema="api" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('api.incomes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="budget_id" nullable="true" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="budget" implied="false" onDeleteCascade="false" schema="api" table="budgets"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="amount" nullable="false" remarks="" size="2147483647" type="money"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="4" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="5" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="incomes_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="users" numRows="2" remarks="" schema="api" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('api.users_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="user_id" foreignKey="user" implied="false" onDeleteCascade="false" schema="api" table="budgets"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="username" nullable="true" remarks="" size="2147483647" type="citext"/>
+         <column autoUpdated="false" digits="0" id="2" name="email" nullable="false" remarks="" size="2147483647" type="validemail"/>
+         <column autoUpdated="false" digits="0" id="3" name="name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="true" digits="0" id="4" name="notifications" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="5" name="created_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="updated_at" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="users_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="users_email_key" unique="true">
+            <column ascending="true" name="email"/>
+         </index>
+         <index name="users_username_key" unique="true">
+            <column ascending="true" name="username"/>
+         </index>
+      </table>
+   </tables>
+   <routines>
+      <routine dataAccess="MODIFIES" deterministic="false" name="add_expense" returnType="trigger" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="PLPGSQL">
+            <![CDATA[
+BEGIN
+	UPDATE api.budgets
+	SET available_amount = available_amount - NEW.amount
+	WHERE id = NEW.budget_id;
+	RETURN NEW;
+END
+]]>
+         </definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="false" name="add_income" returnType="trigger" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="PLPGSQL">
+            <![CDATA[
+BEGIN
+	UPDATE api.budgets
+	SET available_amount = available_amount + NEW.amount
+	WHERE id = NEW.budget_id;
+	RETURN NEW;
+END
+]]>
+         </definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="false" name="trigger_set_timestamp" returnType="trigger" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="PLPGSQL">
+            <![CDATA[
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+]]>
+         </definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="true" name="valid_email" returnType="boolean" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="PLPERLU">
+            <![CDATA[
+  use Email::Valid;
+  my $email = shift;
+  Email::Valid->address($email) or die "Invalid email address: $email\n";
+  return 'true';
+]]>
+         </definition>
+      </routine>
+   </routines>
+</database>
