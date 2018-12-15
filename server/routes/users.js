@@ -1,5 +1,5 @@
 const express = require('express')
-const bcrypt = require('bcrypt-nodejs')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const client = require('../client')
@@ -8,8 +8,8 @@ require('../config/passport')(passport)
 
 const router = express.Router()
 const db = [1, 2, 3]
-
-const encryptPassword = password => bcrypt.hashSync(password)
+const encryptPassword = (password, saltRounds = 7) =>
+  bcrypt.hashSync(password, saltRounds)
 const errorHandler = error => {
   const errObject = {}
   if (error.response) {
@@ -50,7 +50,6 @@ router.post('/signin', (req, res) => {
     .getUsers('/users')
     .then(result => {
       const user = result.data.filter(item => item.email === email)[0]
-
       const isValid = user
         ? bcrypt.compareSync(password, user.encryptedPassword)
         : false
