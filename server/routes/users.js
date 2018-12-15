@@ -10,6 +10,14 @@ const router = express.Router()
 const db = [1, 2, 3]
 
 const encryptPassword = password => bcrypt.hashSync(password)
+const errorHandler = error => {
+  const errObject = {}
+  if (error.response) {
+    errObject.status = error.response.status
+    errObject.statusText = error.response.statusText
+  }
+  return errObject
+}
 
 router.get(
   '/profile/:id',
@@ -22,8 +30,8 @@ router.get(
 router.get('/', (req, res) => {
   client
     .getUsers('/users')
-    .then(result => res.json(result))
-    .catch(error => res.json({ error }))
+    .then(result => res.json(result.data))
+    .catch(error => res.json(errorHandler(error)))
 })
 
 router.post('/signup', (req, res) => {
@@ -33,7 +41,7 @@ router.post('/signup', (req, res) => {
   client
     .postUser('/users', details)
     .then(result => res.json(result))
-    .catch(error => res.json({ error }))
+    .catch(error => res.json(errorHandler(error)))
 })
 
 router.post('/signin', (req, res) => {
@@ -58,7 +66,7 @@ router.post('/signin', (req, res) => {
         res.status(400).json({ msg: `Wrong credentials!` })
       }
     })
-    .catch(error => res.json({ error }))
+    .catch(error => res.json(errorHandler(error)))
 })
 
 module.exports = router
