@@ -1,0 +1,7 @@
+.main-header {
+  background: var(--primary-color-darker);
+  color: white;
+}
+a {
+  color: white;
+}

@@ -1,10 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import './Header.css'
+import { Logo } from '../assets/Logo.js'
 
 const Header = () => {
   return (
-    <div>
-      <div>Logo</div>
+    <div className="main-header">
+      <div>
+        <Logo />
+      </div>
       <nav>
         <ul>
           <li>
@@ -26,7 +30,6 @@ const Header = () => {
     </li> */}
         </ul>
       </nav>
-      This is the Header
     </div>
   )
 }
