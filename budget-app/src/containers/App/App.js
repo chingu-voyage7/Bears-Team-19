@@ -6,6 +6,7 @@ import About from '../About/About'
 import Contact from '../Contact/Contact'
 import Header from '../../components/Header'
 import NotFound from '../../components/NotFound'
+import Signup from '../Signup/Signup'
 
 class App extends Component {
   constructor() {
@@ -22,6 +23,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route path="/about" component={About} />
             <Route path="/contact" component={Contact} />
+            <Route path="/signup" component={Signup} />
             <Route component={NotFound} />
           </Switch>
         </div>
