@@ -5,6 +5,7 @@ import Home from '../Home/Home'
 import About from '../About/About'
 import Contact from '../Contact/Contact'
 import Header from '../../components/Header'
+import Footer from '../../components/Footer'
 import NotFound from '../../components/NotFound'
 import Signup from '../Signup/Signup'
 
@@ -26,6 +27,7 @@ class App extends Component {
             <Route path="/signup" component={Signup} />
             <Route component={NotFound} />
           </Switch>
+          <Footer />
         </div>
       </Router>
     )
