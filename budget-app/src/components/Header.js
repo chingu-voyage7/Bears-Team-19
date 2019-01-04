@@ -28,12 +28,6 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link to="/contact">
-              <Icon name="contact" />
-              <span>Contact</span>
-            </Link>
-          </li>
-          <li>
             <Link to="/login">
               <Icon name="login" />
               <span>Log in</span>
