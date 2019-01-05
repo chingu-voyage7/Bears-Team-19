@@ -25,12 +25,22 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   color: var(--grey-color-darkest);
   font-size: 16px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a {
+  font-family: var(--font-heading);
+  font-weight: 600;
 }
 
 h1 {
@@ -46,7 +56,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-p {
+body,
+button,
+input,
+select,
+textarea {
   font-family: var(--font-body);
 }

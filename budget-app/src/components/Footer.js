@@ -4,24 +4,34 @@ import Icon from './Icons/index'
 
 const Footer = () => {
   return (
-    <div className="main-footer">
-      <div className="social-media">
-        <Icon name="facebook" />
-        <Icon name="github" />
-        <Icon name="twitter" />
-      </div>
-      <div className="info">
-        <div className="contact">
-          <Icon name="phone" /> +(00) 000 000 000
-          <Icon name="email" /> budgetbears@fakeemail.com
-          <Icon name="mapmarker" /> Fakestreet 42, 12345 Nevertown
+    <footer className="main-footer">
+      <div className="container">
+        <div className="social-media">
+          <Icon name="facebook" width="35" height="35" />
+          <Icon name="github" width="35" height="35" />
+          <Icon name="twitter" width="35" height="35" />
+          <Icon name="instagram" width="35" height="35" />
         </div>
-        <a href="https://github.com/chingu-voyage7/Bears-Team-19">
-          Github Link
-        </a>
-        <p>&copy; 2019 Budget Bears</p>
+        <div className="contact">
+          <div>
+            <Icon name="phone" className="icon" /> +(00) 000 000 000
+          </div>
+          <div>
+            <Icon name="email" className="icon" /> budgetbears@fakeemail.com
+          </div>
+          <div>
+            <Icon name="mapmarker" className="icon" /> Fakestreet 42, 12345
+            Nevertown
+          </div>
+        </div>
+        <div className="info">
+          <a href="https://github.com/chingu-voyage7/Bears-Team-19">
+            Github Link
+          </a>
+          <p className="copyright">&copy; 2019 Budget Bears</p>
+        </div>
       </div>
-    </div>
+    </footer>
   )
 }
 
