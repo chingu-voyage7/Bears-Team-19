@@ -13,6 +13,7 @@ import { Facebook } from './Facebook'
 import { Email } from './Email'
 import { Github } from './Github'
 import { Twitter } from './Twitter'
+import { Instagram } from './Instagram'
 import { Phone } from './Phone'
 import { Mapmarker } from './Mapmarker'
 
@@ -22,6 +23,8 @@ const Icon = props => {
       return <Logo {...props} />
     case 'email':
       return <Email {...props} />
+    case 'instagram':
+      return <Instagram {...props} />
     case 'mapmarker':
       return <Mapmarker {...props} />
     case 'github':

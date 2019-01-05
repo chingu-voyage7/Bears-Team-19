@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const Profile = () => (
+export const Profile = ({ width = 24, height = 24 }) => (
   <svg
-    width="45"
-    height="45"
+    width={width}
+    height={height}
     viewBox="0 0 45 45"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
