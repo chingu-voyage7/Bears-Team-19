@@ -13,6 +13,8 @@ import { Facebook } from './Facebook'
 import { Email } from './Email'
 import { Github } from './Github'
 import { Twitter } from './Twitter'
+import { Phone } from './Phone'
+import { Mapmarker } from './Mapmarker'
 
 const Icon = props => {
   switch (props.name) {
@@ -20,8 +22,12 @@ const Icon = props => {
       return <Logo {...props} />
     case 'email':
       return <Email {...props} />
+    case 'mapmarker':
+      return <Mapmarker {...props} />
     case 'github':
       return <Github {...props} />
+    case 'phone':
+      return <Phone {...props} />
     case 'twitter':
       return <Twitter {...props} />
     case 'facebook':
