@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import './App.css'
 import Home from '../Home/Home'
 import About from '../About/About'
+import Contact from '../Contact/Contact'
+import Header from '../../components/Header'
+import NotFound from '../../components/NotFound'
+import Signup from '../Signup/Signup'
 
 class App extends Component {
   constructor() {
@@ -14,16 +18,14 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <h1>Welcome Aboard!</h1>
-          <a
-            onMouseEnter={event => event.target.classList.add('is-loading')}
-            className="button is-large"
-            href="#"
-          >
-            Bulma Test
-          </a>
-          <Route exact path="/" component={Home} />
-          <Route path="/about" component={About} />
+          <Header />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/about" component={About} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/signup" component={Signup} />
+            <Route component={NotFound} />
+          </Switch>
         </div>
       </Router>
     )
