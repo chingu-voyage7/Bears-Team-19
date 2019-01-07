@@ -38,7 +38,11 @@ h3,
 h4,
 h5,
 h6,
-a {
+a,
+button,
+input,
+select,
+textarea {
   font-family: var(--font-heading);
   font-weight: 600;
 }
@@ -56,10 +60,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-body,
-button,
-input,
-select,
-textarea {
+body {
   font-family: var(--font-body);
 }
