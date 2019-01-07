@@ -71,6 +71,63 @@ const Home = () => (
         </p>
       </article>
     </section>
+    <section className="quotes">
+      <article className="quote">
+        <img
+          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+          alt="placeholder user"
+        />
+        <p>
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts. Separated they
+          live in Bookmarksgrove right
+        </p>
+      </article>
+      <article className="quote">
+        <img
+          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+          alt="placeholder user"
+        />
+        <p>
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts. Separated they
+          live in Bookmarksgrove right
+        </p>
+      </article>
+      <article className="quote">
+        <img
+          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+          alt="placeholder user"
+        />
+        <p>
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts. Separated they
+          live in Bookmarksgrove right
+        </p>
+      </article>
+      <article className="quote">
+        <img
+          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+          alt="placeholder user"
+        />
+        <p>
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts. Separated they
+          live in Bookmarksgrove right
+        </p>
+      </article>
+      <article className="quote">
+        <img
+          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+          alt="placeholder user"
+        />
+        <p>
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts. Separated they
+          live in Bookmarksgrove right
+        </p>
+      </article>
+    </section>
   </>
 )
 
