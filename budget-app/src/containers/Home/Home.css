@@ -1,0 +1,4 @@
+section.above-fold {
+  background: center / contain no-repeat url(./hero_bg.svg);
+  height: 100vh;
+}
