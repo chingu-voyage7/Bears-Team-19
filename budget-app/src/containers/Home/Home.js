@@ -6,8 +6,7 @@ const Home = () => (
     <section className="above-fold">
       <h2>Budgeting app for your every day use.</h2>
       <p className="tagline">
-        Far far away, behind the word mountains, far from the countries Vokalia
-        and Consonantia, there live the blind texts. Separated
+        Far far away, behind the word mountains, far from the country.
       </p>
       <button className="button is-success">Join us</button>
     </section>
@@ -18,16 +17,18 @@ const Home = () => (
         <p>
           Far far away, behind the word mountains, far from the countries
           Vokalia and Consonantia, there live the blind texts. Separated they
-          live in Bookmarksgrove right at the coast of the Semantics, a large
-          language ocean. A small river named Duden
+          live in Bookmarksgrove right at the coast
         </p>
       </article>
       <article className="feature">
         <h3>Feature 2</h3>
-        <img
-          src="https://dummyimage.com/600x400/a3a3a3/fff.jpg"
-          alt="placeholder"
-        />
+        <figure className="feature-image">
+          <img
+            src="https://dummyimage.com/600x400/a3a3a3/fff.jpg"
+            alt="placeholder"
+          />
+          <figcaption>Placeholder</figcaption>
+        </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
           Vokalia and Consonantia, there live the blind texts. Separated they
@@ -46,10 +47,13 @@ const Home = () => (
       </article>
       <article className="feature">
         <h3>Feature 4</h3>
-        <img
-          src="https://dummyimage.com/600x400/a3a3a3/fff.jpg"
-          alt="placeholder"
-        />
+        <figure className="feature-image">
+          <img
+            src="https://dummyimage.com/600x400/a3a3a3/fff.jpg"
+            alt="placeholder"
+          />
+          <figcaption>Placeholder</figcaption>
+        </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
           Vokalia and Consonantia, there live the blind texts. Separated they
@@ -58,10 +62,13 @@ const Home = () => (
         </p>
       </article>
       <article className="feature">
-        <img
-          src="https://dummyimage.com/600x400/a3a3a3/fff.jpg"
-          alt="placeholder"
-        />
+        <figure className="feature-image">
+          <img
+            src="https://dummyimage.com/600x400/a3a3a3/fff.jpg"
+            alt="placeholder"
+          />
+          <figcaption>Placeholder</figcaption>
+        </figure>
         <h3>Feature 5</h3>
         <p>
           Far far away, behind the word mountains, far from the countries
@@ -73,10 +80,13 @@ const Home = () => (
     </section>
     <section className="quotes">
       <article className="quote">
-        <img
-          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-          alt="placeholder user"
-        />
+        <figure className="quote-image">
+          <img
+            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+            alt="placeholder user"
+          />
+          <figcaption>Placeholder</figcaption>
+        </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
           Vokalia and Consonantia, there live the blind texts. Separated they
@@ -84,10 +94,13 @@ const Home = () => (
         </p>
       </article>
       <article className="quote">
-        <img
-          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-          alt="placeholder user"
-        />
+        <figure className="quote-image">
+          <img
+            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+            alt="placeholder user"
+          />
+          <figcaption>Placeholder</figcaption>
+        </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
           Vokalia and Consonantia, there live the blind texts. Separated they
@@ -95,10 +108,13 @@ const Home = () => (
         </p>
       </article>
       <article className="quote">
-        <img
-          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-          alt="placeholder user"
-        />
+        <figure className="quote-image">
+          <img
+            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+            alt="placeholder user"
+          />
+          <figcaption>Placeholder</figcaption>
+        </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
           Vokalia and Consonantia, there live the blind texts. Separated they
@@ -106,10 +122,13 @@ const Home = () => (
         </p>
       </article>
       <article className="quote">
-        <img
-          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-          alt="placeholder user"
-        />
+        <figure className="quote-image">
+          <img
+            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+            alt="placeholder user"
+          />
+          <figcaption>Placeholder</figcaption>
+        </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
           Vokalia and Consonantia, there live the blind texts. Separated they
@@ -117,10 +136,13 @@ const Home = () => (
         </p>
       </article>
       <article className="quote">
-        <img
-          src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-          alt="placeholder user"
-        />
+        <figure className="quote-image">
+          <img
+            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
+            alt="placeholder user"
+          />
+          <figcaption>Placeholder</figcaption>
+        </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
           Vokalia and Consonantia, there live the blind texts. Separated they
