@@ -1,9 +1,9 @@
 section {
-  padding: 0 1rem;
   margin-bottom: 2rem;
 }
 
 article {
+  padding: 0 1rem;
   margin-bottom: 2rem;
 }
 
@@ -21,7 +21,7 @@ section.above-fold {
 }
 
 section:nth-child(3) {
-  background: right bottom / 200px 200px no-repeat url(./bg.svg);
+  background: right bottom / 183px 200px no-repeat url(./bg.svg);
 }
 .above-fold h2 {
   font-weight: 400;
@@ -39,6 +39,13 @@ section:nth-child(3) {
   position: absolute;
   top: 50%;
   left: calc(50% - 2.5rem);
+  max-width: 150px;
+}
+
+.feature:nth-child(odd),
+.quote:nth-child(odd) {
+  background: var(--primary-color-brighter);
+  color: white;
 }
 
 .quote-image {
@@ -46,4 +53,29 @@ section:nth-child(3) {
 }
 .quote-image img {
   border-radius: 50%;
+}
+
+@media (min-width: 850px) {
+  section.above-fold {
+    background: left center / 800px no-repeat url(./hero_bg.svg);
+    height: 90vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .above-fold article {
+    /* background: red; */
+    height: 40%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .tagline,
+  .is-success {
+    position: static;
+  }
 }
