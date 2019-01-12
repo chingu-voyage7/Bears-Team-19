@@ -1,6 +1,9 @@
 section {
   margin-bottom: 2rem;
 }
+h2 {
+  padding: 2rem 1rem;
+}
 
 article {
   padding: 2rem 1rem;
@@ -16,14 +19,14 @@ article figure {
 
 section.above-fold {
   background: center bottom / contain no-repeat url(./hero_bg.svg);
-  height: 90vh;
-  position: relative;
+  height: 80vh;
 }
 
-section:nth-child(3) {
-  background: right bottom / 183px 200px no-repeat url(./bg.svg);
+.above-fold article {
+  position: relative;
+  height: 100%;
 }
-.above-fold h2 {
+.above-fold h1 {
   font-weight: 400;
   margin-top: 2rem;
   margin-bottom: 1rem;
@@ -37,7 +40,7 @@ section:nth-child(3) {
 
 .is-success {
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: calc(50% - 2.5rem);
   max-width: 150px;
 }
@@ -64,18 +67,36 @@ section:nth-child(3) {
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
+    position: relative;
   }
   .above-fold article {
-    /* background: red; */
-    height: 40%;
+    max-height: 50%;
+    padding: 0;
     max-width: 600px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    position: absolute;
+    top: 3%;
   }
   .tagline,
   .is-success {
     position: static;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2rem;
+  }
+  .feature:nth-child(5) {
+    grid-column: 2 / span 2;
+  }
+
+  .quotes {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 1rem;
   }
 }

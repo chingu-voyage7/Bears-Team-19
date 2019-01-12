@@ -5,15 +5,15 @@ const Home = () => (
   <>
     <section className="above-fold">
       <article>
-        <h2>Budgeting app for your every day use.</h2>
+        <h1>Budgeting app for your every day use.</h1>
         <p className="tagline">
           Far far away, behind the word mountains, far from the country.
         </p>
         <button className="button is-success">Join us</button>
       </article>
     </section>
+    <h2>Features</h2>
     <section className="features">
-      <h2>Features</h2>
       <article className="feature">
         <h3>Feature 1</h3>
         <p>
@@ -87,7 +87,6 @@ const Home = () => (
             src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
             alt="placeholder user"
           />
-          <figcaption>Placeholder</figcaption>
         </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
@@ -101,7 +100,6 @@ const Home = () => (
             src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
             alt="placeholder user"
           />
-          <figcaption>Placeholder</figcaption>
         </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
@@ -115,7 +113,6 @@ const Home = () => (
             src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
             alt="placeholder user"
           />
-          <figcaption>Placeholder</figcaption>
         </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
@@ -129,7 +126,6 @@ const Home = () => (
             src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
             alt="placeholder user"
           />
-          <figcaption>Placeholder</figcaption>
         </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
@@ -143,7 +139,6 @@ const Home = () => (
             src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
             alt="placeholder user"
           />
-          <figcaption>Placeholder</figcaption>
         </figure>
         <p>
           Far far away, behind the word mountains, far from the countries
