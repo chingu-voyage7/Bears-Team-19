@@ -1,37 +1,36 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import './Header.css'
 import Icon from './Icons/index'
 
 const Header = () => {
   return (
     <div className="main-header">
-      <Link to="/">
+      <NavLink to="/">
         <div className="logo">
           <Icon name="logo" />
           <h3>Budget Bears</h3>
         </div>
-      </Link>
+      </NavLink>
       <nav>
         <ul>
           <li>
-            <Link to="/">
+            <NavLink to="/">
               <Icon name="home" />
               <span>Home</span>
-              {/* <p>Home</p> */}
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/about">
+            <NavLink to="/about">
               <Icon name="about" />
               <span>About</span>
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/login">
+            <NavLink to="/signin">
               <Icon name="login" />
               <span>Log in</span>
-            </Link>
+            </NavLink>
           </li>
           {/* 
       // TODO Add conditional that checks if user is logged in and shows sign out in that case
