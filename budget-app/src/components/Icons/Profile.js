@@ -1,11 +1,11 @@
 import React from 'react'
 
-export const Profile = ({ width = 24, height = 24 }) => (
+export const Profile = ({ width = 24, height = 24, color = 'none' }) => (
   <svg
     width={width}
     height={height}
     viewBox="0 0 45 45"
-    fill="none"
+    fill={color}
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
