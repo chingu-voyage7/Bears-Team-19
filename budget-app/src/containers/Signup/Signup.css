@@ -1,0 +1,7 @@
+section {
+  height: 65%;
+}
+section .container {
+  max-width: 300px;
+  padding: 1rem;
+}
