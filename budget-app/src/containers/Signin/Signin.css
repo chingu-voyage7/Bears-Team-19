@@ -1,0 +1,11 @@
+section.signin {
+  /* height: 65%; */
+}
+section .container {
+  max-width: 300px;
+  padding: 1rem;
+}
+
+.signin a {
+  color: var(--grey-color-darkest);
+}
