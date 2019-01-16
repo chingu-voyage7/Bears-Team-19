@@ -34,7 +34,7 @@ class Signin extends Component {
                 <input
                   type="email"
                   className="input"
-                  placeholder="Email input"
+                  placeholder="Email"
                   id="email"
                   value={this.state.email}
                   onChange={this.handleChange}
@@ -49,7 +49,7 @@ class Signin extends Component {
                 <input
                   type="password"
                   className="input"
-                  placeholder="Password input"
+                  placeholder="Password"
                   id="password"
                   value={this.state.password}
                   onChange={this.handleChange}
@@ -57,7 +57,7 @@ class Signin extends Component {
               </div>
             </div>
             <div className="control">
-              <button className="button is-primary">Sign in</button>
+              <button className="button is-success">Sign in</button>
             </div>
             <div>
               <p>or log in with:</p>

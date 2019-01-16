@@ -1,5 +1,7 @@
 section.signin {
-  /* height: 65%; */
+  height: 100%;
+  display: grid;
+  align-content: center;
 }
 section .container {
   max-width: 300px;

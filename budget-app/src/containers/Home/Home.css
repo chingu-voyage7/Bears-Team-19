@@ -19,12 +19,12 @@ article figure {
 
 section.above-fold {
   background: center bottom / contain no-repeat url(./hero_bg.svg);
-  height: 80vh;
+  height: calc(100vh - 110px);
 }
 
 .above-fold article {
   position: relative;
-  height: 100%;
+  padding-top: 4rem;
 }
 .above-fold h1 {
   font-weight: 400;
@@ -38,9 +38,9 @@ section.above-fold {
   max-width: calc(100% - 6rem);
 }
 
-.is-success {
+.button-join {
   position: absolute;
-  top: 60%;
+  top: calc(50vh);
   left: calc(50% - 2.5rem);
   max-width: 150px;
 }
@@ -58,34 +58,33 @@ section.above-fold {
   border-radius: 50%;
 }
 
+@media (max-width: 375px) and (min-height: 800px) {
+  .is-success {
+    top: 40vh;
+  }
+}
+
 @media (min-width: 850px) {
   section.above-fold {
-    background: left center / 800px no-repeat url(./hero_bg.svg);
-    height: 90vh;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    background: left 75% / 800px no-repeat url(./hero_bg.svg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     max-width: 1400px;
     margin: 0 auto;
-    position: relative;
+    padding-right: 2rem;
+    padding-left: 2rem;
   }
   .above-fold article {
-    max-height: 50%;
-    padding: 0;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    position: absolute;
-    top: 3%;
+    margin-top: 5rem;
+    grid-column-start: 2;
+    text-align: center;
   }
   .tagline,
-  .is-success {
+  .button-join {
     position: static;
   }
 
-  .features {
+  .featurelist {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 2rem;

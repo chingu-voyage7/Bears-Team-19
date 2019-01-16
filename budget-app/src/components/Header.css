@@ -4,7 +4,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 100px;
   padding: 0 1rem;
 }
 .logo {
@@ -16,7 +15,7 @@
   font-size: 2rem;
 }
 .main-header nav {
-  width: 300px;
+  max-width: 300px;
 }
 .main-header nav ul {
   height: 100%;

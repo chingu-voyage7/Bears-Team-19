@@ -22,7 +22,7 @@ class Signup extends Component {
   }
   render() {
     return (
-      <section>
+      <section className="signup">
         <div className="container">
           <form onSubmit={this.handleSubmit}>
             <h3>Sign up</h3>
@@ -34,7 +34,7 @@ class Signup extends Component {
                 <input
                   type="email"
                   className="input"
-                  placeholder="Email input"
+                  placeholder="Email"
                   id="email"
                   value={this.state.email}
                   onChange={this.handleChange}
@@ -49,7 +49,7 @@ class Signup extends Component {
                 <input
                   type="password"
                   className="input"
-                  placeholder="Password input"
+                  placeholder="Password"
                   id="password"
                   value={this.state.password}
                   onChange={this.handleChange}
@@ -57,7 +57,7 @@ class Signup extends Component {
               </div>
             </div>
             <div className="control">
-              <button className="button is-primary">Sign up</button>
+              <button className="button is-success">Sign up</button>
             </div>
           </form>
           <div>
