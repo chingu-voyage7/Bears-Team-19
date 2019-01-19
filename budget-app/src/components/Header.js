@@ -1,5 +1,7 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+
 import './Header.css'
 import Icon from './Icons/index'
 
@@ -32,15 +34,24 @@ const Header = () => {
               <span>Log in</span>
             </NavLink>
           </li>
-          {/* 
-      // TODO Add conditional that checks if user is logged in and shows sign out in that case
-      <li>
-      <Link to="/signout">Sign out</Link>
-    </li> */}
+          <li>
+            <Link to="/signout">
+              <Icon name="logout" />
+              <span>Sign out</span>
+            </Link>
+          </li>
         </ul>
       </nav>
     </div>
   )
 }
 
-export default Header
+const mapStateToProps = state => {
+  console.log(state)
+  return {}
+  // auth: state.firebase.auth,
+}
+
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps)(Header)

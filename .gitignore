@@ -76,3 +76,5 @@ typings/
 *.swp
 *.swo
 tags
+
+firebase_keys.js

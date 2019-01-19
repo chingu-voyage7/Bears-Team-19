@@ -4,7 +4,6 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import { getFirebase, reactReduxFirebase } from 'react-redux-firebase'
 import thunk from 'redux-thunk'
-
 import 'bulma/css/bulma.css'
 import './index.css'
 import App from './containers/App/App'

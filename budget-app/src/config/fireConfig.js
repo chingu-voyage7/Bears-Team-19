@@ -1,14 +1,15 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import firebaseKeys from './firebase_keys'
 
 // Initialize Firebase
 const config = {
-  apiKey: process.env.FIREBASE_APIKEY,
-  authDomain: process.env.FIREBASE_AUTHDOMAIN,
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-  projectId: process.env.FIREBASE_PROJECTID,
-  storageBucket: process.env.FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID,
+  apiKey: firebaseKeys.FIREBASE_APIKEY,
+  authDomain: firebaseKeys.FIREBASE_AUTHDOMAIN,
+  databaseURL: firebaseKeys.FIREBASE_DATABASE_URL,
+  projectId: firebaseKeys.FIREBASE_PROJECTID,
+  storageBucket: firebaseKeys.FIREBASE_STORAGEBUCKET,
+  messagingSenderId: firebaseKeys.FIREBASE_MESSAGINGSENDERID,
 }
 firebase.initializeApp(config)
 

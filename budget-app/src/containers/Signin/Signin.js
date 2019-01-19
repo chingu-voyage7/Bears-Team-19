@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { NavLink, Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { signIn } from '../../store/actions/authActions'
 
 import Icon from '../../components/Icons/index'
 import './Signin.css'
@@ -18,7 +20,7 @@ class Signin extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    console.log(this.state)
+    this.props.signIn(this.state)
   }
   render() {
     return (
@@ -83,4 +85,19 @@ class Signin extends Component {
   }
 }
 
-export default Signin
+const mapStateToProps = state => {
+  return {
+    authError: state.auth.authError,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signIn: creds => dispatch(signIn(creds)),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Signin)
