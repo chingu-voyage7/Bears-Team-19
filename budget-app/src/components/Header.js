@@ -1,11 +1,13 @@
 import React from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { signOut } from '../store/actions/authActions'
 
 import './Header.css'
 import Icon from './Icons/index'
 
-const Header = () => {
+const Header = props => {
+  const { auth } = props
   return (
     <div className="main-header">
       <NavLink to="/">
@@ -28,18 +30,22 @@ const Header = () => {
               <span>About</span>
             </NavLink>
           </li>
-          <li>
-            <NavLink to="/signin">
-              <Icon name="login" />
-              <span>Log in</span>
-            </NavLink>
-          </li>
-          <li>
-            <Link to="/signout">
-              <Icon name="logout" />
-              <span>Sign out</span>
-            </Link>
-          </li>
+
+          {auth.uid ? (
+            <li>
+              <a onClick={props.signOut} to="/signout">
+                <Icon name="logout" />
+                <span>Sign out</span>
+              </a>
+            </li>
+          ) : (
+            <li>
+              <NavLink to="/signin">
+                <Icon name="login" />
+                <span>Log in</span>
+              </NavLink>
+            </li>
+          )}
         </ul>
       </nav>
     </div>
@@ -47,11 +53,18 @@ const Header = () => {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
-  return {}
-  // auth: state.firebase.auth,
+  return {
+    auth: state.firebase.auth,
+  }
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = dispatch => {
+  return {
+    signOut: () => dispatch(signOut()),
+  }
+}
 
-export default connect(mapStateToProps)(Header)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header)

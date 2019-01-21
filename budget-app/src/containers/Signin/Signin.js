@@ -21,6 +21,10 @@ class Signin extends Component {
   handleSubmit = e => {
     e.preventDefault()
     this.props.signIn(this.state)
+    this.setState({
+      email: '',
+      password: '',
+    })
   }
   render() {
     return (

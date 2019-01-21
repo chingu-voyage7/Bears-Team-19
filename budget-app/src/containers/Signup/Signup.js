@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { signUp } from '../../store/actions/authActions'
 
 import Icon from '../../components/Icons'
 import './Signup.css'
@@ -18,7 +20,11 @@ class Signup extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    console.log(this.state)
+    this.props.signUp(this.state)
+    this.setState({
+      email: '',
+      password: '',
+    })
   }
   render() {
     return (
@@ -78,4 +84,19 @@ class Signup extends Component {
   }
 }
 
-export default Signup
+const mapStateToProps = state => {
+  return {
+    auth: state.firebase.auth,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signUp: newUser => dispatch(signUp(newUser)),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Signup)
