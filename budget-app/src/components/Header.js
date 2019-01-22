@@ -33,7 +33,7 @@ const Header = props => {
 
           {auth.uid ? (
             <li>
-              <a onClick={props.signOut} to="/signout">
+              <a onClick={props.signOut} to="/">
                 <Icon name="logout" />
                 <span>Sign out</span>
               </a>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { signIn } from '../../store/actions/authActions'
 
 import Icon from '../../components/Icons/index'
@@ -27,6 +28,11 @@ class Signin extends Component {
     })
   }
   render() {
+    const { auth } = this.props
+
+    if (auth.uid) {
+      return <Redirect to="/" />
+    }
     return (
       <section className="signin">
         <div className="container">
@@ -92,6 +98,7 @@ class Signin extends Component {
 const mapStateToProps = state => {
   return {
     authError: state.auth.authError,
+    auth: state.firebase.auth,
   }
 }
 

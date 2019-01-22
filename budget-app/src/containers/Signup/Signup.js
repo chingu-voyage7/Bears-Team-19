@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { signUp } from '../../store/actions/authActions'
 
 import Icon from '../../components/Icons'
@@ -27,6 +28,11 @@ class Signup extends Component {
     })
   }
   render() {
+    const { auth } = this.props
+
+    if (auth.uid) {
+      return <Redirect to="/" />
+    }
     return (
       <section className="signup">
         <div className="container">
