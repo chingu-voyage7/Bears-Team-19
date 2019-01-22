@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const client = require('../client')
+const helper = require('./helper')
 
 require('../config/passport')(passport)
 
@@ -10,14 +11,6 @@ const router = express.Router()
 const db = [1, 2, 3]
 const encryptPassword = (password, saltRounds = 7) =>
   bcrypt.hashSync(password, saltRounds)
-const errorHandler = error => {
-  const errObject = {}
-  if (error.response) {
-    errObject.status = error.response.status
-    errObject.statusText = error.response.statusText
-  }
-  return errObject
-}
 
 router.get(
   '/profile/:id',
@@ -31,7 +24,7 @@ router.get('/', (req, res) => {
   client
     .getUsers('/users')
     .then(result => res.json(result.data))
-    .catch(error => res.json(errorHandler(error)))
+    .catch(error => res.json(helper.errorHandler(error)))
 })
 
 router.post('/signup', (req, res) => {
@@ -41,7 +34,7 @@ router.post('/signup', (req, res) => {
   client
     .postUser('/users', details)
     .then(result => res.json(result))
-    .catch(error => res.json(errorHandler(error)))
+    .catch(error => res.json(helper.errorHandler(error)))
 })
 
 router.post('/signin', (req, res) => {
@@ -65,7 +58,7 @@ router.post('/signin', (req, res) => {
         res.status(400).json({ msg: `Wrong credentials!` })
       }
     })
-    .catch(error => res.json(errorHandler(error)))
+    .catch(error => res.json(helper.errorHandler(error)))
 })
 
 module.exports = router
