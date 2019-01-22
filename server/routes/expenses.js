@@ -7,49 +7,65 @@ require('../config/passport')(passport)
 
 const router = express.Router()
 
-router.post('/', (req, res) => {
-  const { budget_id, description, amount, category_id } = req.body
-  client
-    .postExpense('/expenses', {
-      budget_id,
-      description,
-      amount,
-      category_id,
-    })
-    .then(result => res.json(result))
-    .catch(error => res.json(helper.errorHandler(error)))
-})
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { budgetId, description, amount, categoryId } = req.body
+    client
+      .postExpense('/expenses', {
+        budgetId,
+        description,
+        amount,
+        categoryId,
+      })
+      .then(result => res.json(result))
+      .catch(error => res.json(helper.errorHandler(error)))
+  },
+)
 
-router.get('/budget/:budget_id?', (req, res) => {
-  const { budget_id } = req.params
-  const urlSuffix = budget_id ? `?budget_id=eq.${budget_id}` : ''
-  client
-    .getExpense(`/expenses${urlSuffix}`)
-    .then(result => res.json(result.data))
-    .catch(error => res.json(helper.errorHandler(error)))
-})
+router.get(
+  '/budget/:budgetId?',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { budgetId } = req.params
+    const urlSuffix = budgetId ? `?budgetId=eq.${budgetId}` : ''
+    client
+      .getExpense(`/expenses${urlSuffix}`)
+      .then(result => res.json(result.data))
+      .catch(error => res.json(helper.errorHandler(error)))
+  },
+)
 
-router.patch('/:expense_id', (req, res) => {
-  const { expense_id } = req.params
-  const { budget_id, description, amount, category_id } = req.body
-  client
-    .updateExpense(`/expenses?id=eq.${expense_id}`, {
-      budget_id,
-      description,
-      amount,
-      category_id,
-    })
-    .then(result => res.json(result))
-    .catch(error => res.json(helper.errorHandler(error)))
-})
+router.patch(
+  '/:expenseId',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { expenseId } = req.params
+    const { budgetId, description, amount, categoryId } = req.body
+    client
+      .updateExpense(`/expenses?id=eq.${expenseId}`, {
+        budgetId,
+        description,
+        amount,
+        categoryId,
+      })
+      .then(result => res.json(result))
+      .catch(error => res.json(helper.errorHandler(error)))
+  },
+)
 
-router.delete('/:expense_id', (req, res) => {
-  const { expense_id } = req.params
-  const urlSuffix = expense_id ? `?id=eq.${expense_id}` : ''
-  client
-    .deleteExpense(`/expenses${urlSuffix}`)
-    .then(result => res.json(result))
-    .catch(error => res.json(helper.errorHandler(error)))
-})
+router.delete(
+  '/:expenseId',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { expenseId } = req.params
+    const urlSuffix = expenseId ? `?id=eq.${expenseId}` : ''
+    client
+      .deleteExpense(`/expenses${urlSuffix}`)
+      .then(result => res.json(result))
+      .catch(error => res.json(helper.errorHandler(error)))
+  },
+)
 
 module.exports = router
