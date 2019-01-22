@@ -10,6 +10,8 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const routes = require('./routes/index')
 const users = require('./routes/users')
+const expenses = require('./routes/expenses')
+const incomes = require('./routes/incomes')
 
 const app = express()
 
@@ -20,6 +22,8 @@ app.use(cookieParser())
 
 app.use('/', routes)
 app.use('/users', users)
+app.use('/expenses', expenses)
+app.use('/incomes', incomes)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
