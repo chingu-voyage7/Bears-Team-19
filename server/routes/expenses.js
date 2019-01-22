@@ -14,10 +14,10 @@ router.post(
     const { budgetId, description, amount, categoryId } = req.body
     client
       .postExpense('/expenses', {
-        budgetId,
+        budget_id: budgetId,
         description,
         amount,
-        categoryId,
+        category_id: categoryId,
       })
       .then(result => res.json(result))
       .catch(error => res.json(helper.errorHandler(error)))
@@ -29,7 +29,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const { budgetId } = req.params
-    const urlSuffix = budgetId ? `?budgetId=eq.${budgetId}` : ''
+    const urlSuffix = budgetId ? `?budget_id=eq.${budgetId}` : ''
     client
       .getExpense(`/expenses${urlSuffix}`)
       .then(result => res.json(result.data))
@@ -45,10 +45,10 @@ router.patch(
     const { budgetId, description, amount, categoryId } = req.body
     client
       .updateExpense(`/expenses?id=eq.${expenseId}`, {
-        budgetId,
+        budget_id: budgetId,
         description,
         amount,
-        categoryId,
+        category_id: categoryId,
       })
       .then(result => res.json(result))
       .catch(error => res.json(helper.errorHandler(error)))
