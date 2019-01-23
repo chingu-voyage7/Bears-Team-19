@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import DayPicker from 'react-day-picker'
+import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+
 import 'react-day-picker/lib/style.css'
 import './AddExpense.css'
+import { addExpense } from '../../store/actions/budgetActions'
 
 export class AddExpense extends Component {
   state = {
@@ -38,9 +42,15 @@ export class AddExpense extends Component {
       console.log('Fill in the required fields')
     }
     console.log(this.state)
+    this.props.addExpense(this.state)
   }
 
   render() {
+    const { auth } = this.props
+
+    if (!auth.uid) {
+      return <Redirect to="/signin" />
+    }
     return (
       <section className="add-expense">
         <div className="container">
@@ -110,4 +120,15 @@ export class AddExpense extends Component {
   }
 }
 
-export default AddExpense
+const mapStateToProps = state => ({
+  auth: state.firebase.auth,
+})
+
+const mapDispatchToProps = dispatch => ({
+  addExpense: expense => dispatch(addExpense(expense)),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddExpense)
