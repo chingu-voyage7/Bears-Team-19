@@ -12,6 +12,7 @@ import Dashboard from '../Dashboard/Dashboard'
 
 import './App.css'
 import CreateBudget from '../Budget/CreateBudget'
+import AddExpense from '../AddExpense/AddExpense'
 
 class App extends Component {
   constructor() {
@@ -37,6 +38,7 @@ class App extends Component {
               <Route path="/signup" component={Signup} />
               <Route path="/signin" component={Signin} />
               <Route path="/createbudget" component={CreateBudget} />
+              <Route path="/expense/create" component={AddExpense} />
 
               <Route component={NotFound} />
             </Switch>
