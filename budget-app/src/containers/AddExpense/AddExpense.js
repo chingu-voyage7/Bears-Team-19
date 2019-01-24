@@ -13,6 +13,7 @@ export class AddExpense extends Component {
     category: '',
     account: '',
     selectedDay: undefined,
+    toDashboard: false,
   }
 
   handleChange = e => {
@@ -41,8 +42,11 @@ export class AddExpense extends Component {
     ) {
       console.log('Fill in the required fields')
     }
-    console.log(this.state)
+    // console.log(this.state)
     this.props.addExpense(this.state)
+    this.setState({
+      toDashboard: true,
+    })
   }
 
   render() {
@@ -51,6 +55,10 @@ export class AddExpense extends Component {
     if (!auth.uid) {
       return <Redirect to="/signin" />
     }
+    if (this.state.toDashboard === true) {
+      return <Redirect to="/" />
+    }
+
     return (
       <section className="add-expense">
         <div className="container">
