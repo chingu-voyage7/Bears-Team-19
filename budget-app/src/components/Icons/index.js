@@ -1,5 +1,6 @@
 import React from 'react'
 import { About } from './About'
+import { Add } from './Add'
 import { Contact } from './Contact'
 import { Delete } from './Delete'
 import { Edit } from './Edit'
@@ -16,6 +17,7 @@ import { Logout } from './Logout'
 import { Mapmarker } from './Mapmarker'
 import { Phone } from './Phone'
 import { Profile } from './Profile'
+import { Remove } from './Remove'
 import { Signup } from './Signup'
 import { Twitter } from './Twitter'
 
@@ -23,6 +25,10 @@ const Icon = props => {
   switch (props.name) {
     case 'logo':
       return <Logo {...props} />
+    case 'add':
+      return <Add {...props} />
+    case 'remove':
+      return <Remove {...props} />
     case 'email':
       return <Email {...props} />
     case 'delete':
