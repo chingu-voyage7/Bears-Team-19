@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import DayPicker from 'react-day-picker'
+import 'react-day-picker/lib/style.css'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import { addTransaction } from '../../store/actions/transactionActions'
+import './AddTransaction.css'
 
-import 'react-day-picker/lib/style.css'
-import './AddExpense.css'
-import { addExpense } from '../../store/actions/budgetActions'
-
-export class AddExpense extends Component {
+export class AddTransaction extends Component {
   state = {
     amount: '',
     category: '',
@@ -42,8 +41,8 @@ export class AddExpense extends Component {
     ) {
       console.log('Fill in the required fields')
     }
-    // console.log(this.state)
-    this.props.addExpense(this.state)
+
+    this.props.addTransaction(this.state)
     this.setState({
       toDashboard: true,
     })
@@ -60,10 +59,10 @@ export class AddExpense extends Component {
     }
 
     return (
-      <section className="add-expense">
+      <section className="add-transaction">
         <div className="container">
           <form onSubmit={this.handleSubmit}>
-            <h3>Add expense</h3>
+            <h3>Add transaction</h3>
             <div className="field">
               <label htmlFor="amount" className="label">
                 Amount
@@ -119,7 +118,7 @@ export class AddExpense extends Component {
               />
             </div>
             <div className="control">
-              <button className="button is-success">Add expense</button>
+              <button className="button is-success">Add transaction</button>
             </div>
           </form>
         </div>
@@ -133,10 +132,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  addExpense: expense => dispatch(addExpense(expense)),
+  addExpense: transaction => dispatch(addTransaction(transaction)),
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AddExpense)
+)(AddTransaction)
