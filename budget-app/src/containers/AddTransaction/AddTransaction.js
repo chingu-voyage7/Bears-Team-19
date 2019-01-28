@@ -6,11 +6,12 @@ import { Redirect } from 'react-router-dom'
 import { addTransaction } from '../../store/actions/transactionActions'
 import './AddTransaction.css'
 
-export class AddTransaction extends Component {
+class AddTransaction extends Component {
   state = {
     amount: '',
     category: '',
     account: '',
+    selectedOption: '',
     selectedDay: undefined,
     toDashboard: false,
   }
@@ -18,6 +19,12 @@ export class AddTransaction extends Component {
   handleChange = e => {
     this.setState({
       [e.target.id]: e.target.value,
+    })
+  }
+
+  handleOptionChange = changeEvent => {
+    this.setState({
+      selectedOption: changeEvent.target.value,
     })
   }
 
@@ -41,7 +48,6 @@ export class AddTransaction extends Component {
     ) {
       console.log('Fill in the required fields')
     }
-
     this.props.addTransaction(this.state)
     this.setState({
       toDashboard: true,
@@ -112,6 +118,30 @@ export class AddTransaction extends Component {
               </div>
             </div>
             <div className="field">
+              <label htmlFor="income" className="radio">
+                <input
+                  type="radio"
+                  id="income"
+                  name="type"
+                  value="income"
+                  onChange={this.handleOptionChange}
+                  required
+                />
+                <span>Income</span>
+              </label>
+              <label htmlFor="expense" className="radio">
+                <input
+                  type="radio"
+                  id="expense"
+                  name="type"
+                  value="expense"
+                  onChange={this.handleOptionChange}
+                  required
+                />
+                <span>Expense</span>
+              </label>
+            </div>
+            <div className="field">
               <DayPicker
                 onDayClick={this.handleDayClick}
                 selectedDays={this.state.selectedDay}
@@ -127,12 +157,14 @@ export class AddTransaction extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  auth: state.firebase.auth,
-})
+const mapStateToProps = state => {
+  return {
+    auth: state.firebase.auth,
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
-  addExpense: transaction => dispatch(addTransaction(transaction)),
+  addTransaction: transaction => dispatch(addTransaction(transaction)),
 })
 
 export default connect(
