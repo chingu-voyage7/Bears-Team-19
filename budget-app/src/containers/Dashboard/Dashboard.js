@@ -1,13 +1,39 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import Icon from '../../components/Icons'
+import { getTransactions } from '../../store/actions/transactionActions'
 import './Dashboard.css'
 
 class Dashboard extends Component {
+  handleDelete = id => {
+    // call delete action here with the id
+    console.log(id, 'id')
+  }
   render() {
-    const { auth } = this.props
-
+    const { auth, transactions } = this.props
+    const rows = transactions.map(transaction => {
+      const { id, date, amount, type, category, account } = transaction
+      return (
+        <tr key={id}>
+          <td>{date}</td>
+          <td>{type}</td>
+          <td>{amount}</td>
+          <td>{category}</td>
+          <td>{account}</td>
+          <td>
+            <Link to={`/transaction/${id}`}>
+              <Icon name="edit" color="#6179C7" />
+            </Link>
+          </td>
+          <td>
+            <div onClick={() => this.handleDelete(id)}>
+              <Icon name="delete" color="#E94B25" />
+            </div>
+          </td>
+        </tr>
+      )
+    })
     if (!auth.uid) {
       return <Redirect to="/signin" />
     }
@@ -53,55 +79,33 @@ class Dashboard extends Component {
               </th>
             </tr>
           </tfoot>
-          <tbody>
-            <tr>
-              <td>2019-01-12</td>
-              <td>Expense</td>
-              <td>14.23</td>
-              <td>Groceries</td>
-              <td>Spending account</td>
-              <td>
-                <Icon name="edit" color="#6179C7" />
-              </td>
-              <td>
-                <Icon name="delete" color="#E94B25" />
-              </td>
-            </tr>
-            <tr>
-              <td>2019-01-12</td>
-              <td>Income</td>
-              <td>14.23</td>
-              <td>Groceries</td>
-              <td>Spending account</td>
-              <td>
-                <Icon name="edit" color="#6179C7" />
-              </td>
-              <td>
-                <Icon name="delete" color="#E94B25" />
-              </td>
-            </tr>
-            <tr>
-              <td>2019-01-12</td>
-              <td>Expense</td>
-              <td>14.23</td>
-              <td>Groceries</td>
-              <td>Spending account</td>
-              <td>
-                <Icon name="edit" color="#6179C7" />
-              </td>
-              <td>
-                <Icon name="delete" color="#E94B25" />
-              </td>
-            </tr>
-          </tbody>
+          <tbody>{rows}</tbody>
         </table>
+
+        <Link to="/transaction/create" className="add">
+          <Icon name="add" color="#23D160" /> <p>New transaction</p>
+        </Link>
       </section>
     )
   }
 }
 
-const mapStateToProps = state => ({
-  auth: state.firebase.auth,
-})
+const mapStateToProps = state => {
+  const transactions = state.transaction.transactions.filter(
+    transaction => transaction.authorid === state.firebase.auth.uid,
+  )
+  return {
+    auth: state.firebase.auth,
+    transactions,
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    getTransactions: userId => dispatch(getTransactions(userId)),
+  }
+}
 
-export default connect(mapStateToProps)(Dashboard)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Dashboard)

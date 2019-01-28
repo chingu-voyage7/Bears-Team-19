@@ -1,17 +1,16 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Home from '../Home/Home'
-import About from '../About/About'
-import Header from '../../components/Header'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Footer from '../../components/Footer'
+import Header from '../../components/Header'
 import NotFound from '../../components/NotFound'
-import Signup from '../Signup/Signup'
-import Signin from '../Signin/Signin'
-import Dashboard from '../Dashboard/Dashboard'
-
-import './App.css'
+import About from '../About/About'
 import CreateBudget from '../Budget/CreateBudget'
+import Dashboard from '../Dashboard/Dashboard'
+import Home from '../Home/Home'
+import Signin from '../Signin/Signin'
+import Signup from '../Signup/Signup'
+import './App.css'
 
 class App extends Component {
   constructor() {
