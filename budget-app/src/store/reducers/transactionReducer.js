@@ -6,7 +6,7 @@ const initialState = {
       account: 'Spending',
       type: 'expense',
       category: 'Food',
-      date: '',
+      date: '2019-01-27',
       authorid: 'ovCsEFb1IfWBpeB2YZWYHeCYrwM2',
     },
     {
@@ -15,7 +15,7 @@ const initialState = {
       account: 'Spending',
       type: 'expense',
       category: 'Food',
-      date: '',
+      date: '2019-01-29',
       authorid: 'ovCsEFb1IfWBpeB2YZWYHeCYrwM2',
     },
   ],

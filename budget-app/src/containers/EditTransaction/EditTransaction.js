@@ -8,16 +8,14 @@ import './EditTransaction.css'
 
 class EditTransaction extends Component {
   state = {
-    amount: this.props.transaction[0] ? this.props.transaction[0].amount : '',
-    category: this.props.transaction[0]
-      ? this.props.transaction[0].category
+    amount: this.props.transaction ? this.props.transaction.amount : '',
+    category: this.props.transaction ? this.props.transaction.category : '',
+    account: this.props.transaction ? this.props.transaction.account : '',
+    selectedOption: this.props.transaction
+      ? this.props.transaction.selectedOption
       : '',
-    account: this.props.transaction[0] ? this.props.transaction[0].account : '',
-    selectedOption: this.props.transaction[0]
-      ? this.props.transaction[0].selectedOption
-      : '',
-    selectedDay: this.props.transaction[0]
-      ? this.props.transaction[0].selectedDay
+    selectedDay: this.props.transaction
+      ? this.props.transaction.selectedDay
       : undefined,
     toDashboard: false,
   }
@@ -61,6 +59,7 @@ class EditTransaction extends Component {
   }
   render() {
     const { auth } = this.props
+    // console.log(this.props)
 
     if (!auth.uid) {
       return <Redirect to="/signin" />
@@ -168,7 +167,7 @@ const mapStateToProps = (state, props) => {
       params: { id },
     },
   } = props
-  const transaction = state.transaction.transaction.filter(
+  const transaction = state.transaction.transaction.find(
     transaction => transaction.id == id,
   )
   return {
