@@ -1,47 +1,70 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { signOut } from '../store/actions/authActions'
+
 import './Header.css'
 import Icon from './Icons/index'
 
-const Header = () => {
+const Header = props => {
+  const { auth } = props
   return (
     <div className="main-header">
-      <Link to="/">
+      <NavLink to="/">
         <div className="logo">
           <Icon name="logo" />
           <h3>Budget Bears</h3>
         </div>
-      </Link>
+      </NavLink>
       <nav>
         <ul>
           <li>
-            <Link to="/">
+            <NavLink to="/">
               <Icon name="home" />
               <span>Home</span>
-              {/* <p>Home</p> */}
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/about">
+            <NavLink to="/about">
               <Icon name="about" />
               <span>About</span>
-            </Link>
+            </NavLink>
           </li>
-          <li>
-            <Link to="/login">
-              <Icon name="login" />
-              <span>Log in</span>
-            </Link>
-          </li>
-          {/* 
-      // TODO Add conditional that checks if user is logged in and shows sign out in that case
-      <li>
-      <Link to="/signout">Sign out</Link>
-    </li> */}
+
+          {auth.uid ? (
+            <li>
+              <a onClick={props.signOut} to="/">
+                <Icon name="logout" />
+                <span>Sign out</span>
+              </a>
+            </li>
+          ) : (
+            <li>
+              <NavLink to="/signin">
+                <Icon name="login" />
+                <span>Log in</span>
+              </NavLink>
+            </li>
+          )}
         </ul>
       </nav>
     </div>
   )
 }
 
-export default Header
+const mapStateToProps = state => {
+  return {
+    auth: state.firebase.auth,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signOut: () => dispatch(signOut()),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header)

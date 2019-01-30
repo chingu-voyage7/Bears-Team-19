@@ -1,0 +1,13 @@
+section.signup {
+  height: 100%;
+  display: grid;
+  align-content: center;
+}
+section .container {
+  max-width: 300px;
+  padding: 1rem;
+}
+
+.signup a {
+  color: var(--grey-color-darkest);
+}

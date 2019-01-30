@@ -16,6 +16,7 @@ import { Twitter } from './Twitter'
 import { Instagram } from './Instagram'
 import { Phone } from './Phone'
 import { Mapmarker } from './Mapmarker'
+import { Google } from './Google'
 
 const Icon = props => {
   switch (props.name) {
@@ -35,6 +36,8 @@ const Icon = props => {
       return <Twitter {...props} />
     case 'facebook':
       return <Facebook {...props} />
+    case 'google':
+      return <Google {...props} />
     case 'profile':
       return <Profile {...props} />
     case 'home':

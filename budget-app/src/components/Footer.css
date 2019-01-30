@@ -1,15 +1,15 @@
+.main-footer {
+  background: var(--primary-color-darker);
+  color: white;
+}
 footer .container {
   display: flex;
   flex-direction: column;
-  padding: 2rem 1rem;
+  padding: 1rem 1rem 0 1rem;
 }
 
 a:hover {
   background: var(--primary-color);
-}
-.main-footer {
-  background: var(--primary-color-darker);
-  color: white;
 }
 .social-media {
   display: flex;
@@ -42,7 +42,6 @@ a:hover {
     flex-direction: row;
     justify-content: space-between;
     max-width: 1100px;
-    margin: 0 auto;
   }
   .social-media svg {
     margin-right: 1.5rem;

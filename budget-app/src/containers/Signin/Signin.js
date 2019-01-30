@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { signUp } from '../../store/actions/authActions'
+import { signIn } from '../../store/actions/authActions'
 
-import Icon from '../../components/Icons'
-import './Signup.css'
+import Icon from '../../components/Icons/index'
+import './Signin.css'
 
-class Signup extends Component {
+class Signin extends Component {
   state = {
     email: '',
     password: '',
@@ -21,7 +21,7 @@ class Signup extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    this.props.signUp(this.state)
+    this.props.signIn(this.state)
     this.setState({
       email: '',
       password: '',
@@ -34,10 +34,10 @@ class Signup extends Component {
       return <Redirect to="/" />
     }
     return (
-      <section className="signup">
+      <section className="signin">
         <div className="container">
           <form onSubmit={this.handleSubmit}>
-            <h3>Sign up</h3>
+            <h3>Sign in</h3>
             <div className="field">
               <label htmlFor="email" className="label">
                 Email
@@ -69,20 +69,25 @@ class Signup extends Component {
               </div>
             </div>
             <div className="control">
-              <button className="button is-success">Sign up</button>
+              <button className="button is-success">Sign in</button>
+            </div>
+            <div>
+              <p>or log in with:</p>
+              <Link to="/">
+                <Icon name="facebook" color="#28439e" width="40" height="40" />
+              </Link>
+              <Link to="/">
+                <Icon name="google" color="#28439e" width="40" height="40" />
+              </Link>
+              <Link to="/">
+                <Icon name="twitter" color="#28439e" width="40" height="40" />
+              </Link>
             </div>
           </form>
           <div>
-            <p>or sign up with:</p>
-            <Link to="/">
-              <Icon name="facebook" color="#28439e" width="40" height="40" />
-            </Link>
-            <Link to="/">
-              <Icon name="google" color="#28439e" width="40" height="40" />
-            </Link>
-            <Link to="/">
-              <Icon name="twitter" color="#28439e" width="40" height="40" />
-            </Link>
+            <p>
+              Don't have an account? <NavLink to="/signup">Sign up</NavLink>
+            </p>
           </div>
         </div>
       </section>
@@ -92,17 +97,18 @@ class Signup extends Component {
 
 const mapStateToProps = state => {
   return {
+    authError: state.auth.authError,
     auth: state.firebase.auth,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    signUp: newUser => dispatch(signUp(newUser)),
+    signIn: creds => dispatch(signIn(creds)),
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Signup)
+)(Signin)
