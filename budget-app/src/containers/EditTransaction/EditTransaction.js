@@ -11,11 +11,9 @@ class EditTransaction extends Component {
     amount: this.props.transaction ? this.props.transaction.amount : '',
     category: this.props.transaction ? this.props.transaction.category : '',
     account: this.props.transaction ? this.props.transaction.account : '',
-    selectedOption: this.props.transaction
-      ? this.props.transaction.selectedOption
-      : '',
+    selectedOption: this.props.transaction ? this.props.transaction.type : '',
     selectedDay: this.props.transaction
-      ? this.props.transaction.selectedDay
+      ? new Date(this.props.transaction.date)
       : undefined,
     toDashboard: false,
   }
@@ -58,12 +56,12 @@ class EditTransaction extends Component {
     })
   }
   render() {
-    const { auth } = this.props
-    // console.log(this.props)
+    // const { auth } = this.props
 
-    if (!auth.uid) {
-      return <Redirect to="/signin" />
-    }
+    // if (!auth.uid) {
+    //   return <Redirect to="/signin" />
+    // }
+    console.log(this.state)
     if (this.state.toDashboard === true) {
       return <Redirect to="/" />
     }
@@ -128,6 +126,7 @@ class EditTransaction extends Component {
                   id="income"
                   name="type"
                   value="income"
+                  checked={this.state.selectedOption === 'income'}
                   onChange={this.handleOptionChange}
                   required
                 />
@@ -139,6 +138,7 @@ class EditTransaction extends Component {
                   id="expense"
                   name="type"
                   value="expense"
+                  checked={this.state.selectedOption === 'expense'}
                   onChange={this.handleOptionChange}
                   required
                 />
@@ -171,7 +171,7 @@ const mapStateToProps = (state, props) => {
     transaction => transaction.id == id,
   )
   return {
-    auth: state.firebase.auth,
+    // auth: state.firebase.auth,
     transaction,
   }
 }
