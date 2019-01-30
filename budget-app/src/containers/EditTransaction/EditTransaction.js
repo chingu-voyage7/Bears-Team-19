@@ -50,27 +50,34 @@ class EditTransaction extends Component {
     ) {
       console.log('Fill in the required fields')
     }
-    this.props.addTransaction(this.state)
+    const fields = {
+      id: this.props.transaction.id,
+      amount: this.state.amount,
+      account: this.state.account,
+      category: this.state.category,
+      type: this.state.selectedOption,
+      date: this.state.selectedDay,
+    }
+    this.props.updateTransaction(fields)
     this.setState({
       toDashboard: true,
     })
   }
   render() {
-    // const { auth } = this.props
+    const { auth } = this.props
 
-    // if (!auth.uid) {
-    //   return <Redirect to="/signin" />
-    // }
-    console.log(this.state)
+    if (!auth.uid) {
+      return <Redirect to="/signin" />
+    }
     if (this.state.toDashboard === true) {
       return <Redirect to="/" />
     }
 
     return (
-      <section className="add-transaction">
+      <section className="update-transaction">
         <div className="container">
           <form onSubmit={this.handleSubmit}>
-            <h3>Add transaction</h3>
+            <h3>Update transaction</h3>
             <div className="field">
               <label htmlFor="amount" className="label">
                 Amount
@@ -152,7 +159,7 @@ class EditTransaction extends Component {
               />
             </div>
             <div className="control">
-              <button className="button is-success">Add transaction</button>
+              <button className="button is-success">Update transaction</button>
             </div>
           </form>
         </div>
@@ -171,7 +178,7 @@ const mapStateToProps = (state, props) => {
     transaction => transaction.id == id,
   )
   return {
-    // auth: state.firebase.auth,
+    auth: state.firebase.auth,
     transaction,
   }
 }

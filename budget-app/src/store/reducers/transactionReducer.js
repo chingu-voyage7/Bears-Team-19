@@ -24,7 +24,13 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case 'UPDATE_TRANSACTION_SUCCESS':
-      return { ...state, ...payload }
+      const updatedTransactions = state.transaction.map(transaction => {
+        if (transaction.id === payload.id) {
+          transaction = { ...transaction, ...payload }
+        }
+        return transaction
+      })
+      return { ...state, transaction: [...updatedTransactions] }
     case 'UPDATE_TRANSACTION_ERROR':
       return { ...state, ...payload }
     default:
