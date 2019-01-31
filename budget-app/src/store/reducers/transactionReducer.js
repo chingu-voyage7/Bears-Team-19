@@ -61,7 +61,10 @@ export default (state = initialState, { type, payload }) => {
   switch (type) {
     case 'GET_TRANSACTIONS':
       return { ...state }
-
+    case 'ADD_TRANSACTION_SUCCESS':
+      return { ...state, ...payload }
+    case 'ADD_TRANSACTION_ERROR':
+      return { ...state, ...payload }
     default:
       return state
   }

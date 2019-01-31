@@ -5,7 +5,7 @@ import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import NotFound from '../../components/NotFound'
 import About from '../About/About'
-import CreateBudget from '../Budget/CreateBudget'
+import AddTransaction from '../AddTransaction/AddTransaction'
 import Dashboard from '../Dashboard/Dashboard'
 import Home from '../Home/Home'
 import Signin from '../Signin/Signin'
@@ -35,7 +35,7 @@ class App extends Component {
               <Route path="/about" component={About} />
               <Route path="/signup" component={Signup} />
               <Route path="/signin" component={Signin} />
-              <Route path="/createbudget" component={CreateBudget} />
+              <Route path="/transaction/create" component={AddTransaction} />
 
               <Route component={NotFound} />
             </Switch>
