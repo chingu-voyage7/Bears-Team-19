@@ -1,0 +1,11 @@
+.add-transaction {
+  margin-top: 2rem;
+}
+.add-transaction h3 {
+  text-transform: uppercase;
+}
+
+label span {
+  font-weight: 600;
+  margin-left: 0.3rem;
+}

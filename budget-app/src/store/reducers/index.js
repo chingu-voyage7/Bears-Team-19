@@ -5,6 +5,7 @@ import transactionReducer from './transactionReducer'
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  transaction: transactionReducer,
   firebase: firebaseReducer,
   transaction: transactionReducer,
 })
