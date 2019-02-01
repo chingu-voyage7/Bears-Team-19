@@ -174,7 +174,7 @@ const mapStateToProps = (state, props) => {
       params: { id },
     },
   } = props
-  const transaction = state.transaction.transaction.find(
+  const transaction = state.transaction.transactions.find(
     transaction => transaction.id == id,
   )
   return {
