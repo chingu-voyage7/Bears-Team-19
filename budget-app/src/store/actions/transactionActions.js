@@ -1,11 +1,11 @@
-
 export const updateTransaction = payload => (dispatch, getState) => {
   // connect to backend and make call with axios
   // payload will have the results from the form
   dispatch({
     type: 'UPDATE_TRANSACTION_SUCCESS',
     payload,
-  }
+  })
+}
 export const addTransaction = payload => (dispatch, getState) => {
   // connect to backend and make call with axios
   // payload will have the results from the form
