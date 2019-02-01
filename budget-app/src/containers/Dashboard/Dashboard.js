@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import Icon from '../../components/Icons'
-import { getTransactions } from '../../store/actions/transactionActions'
+import { deleteTransaction } from '../../store/actions/transactionActions'
 import './Dashboard.css'
 
 class Dashboard extends Component {
   handleDelete = id => {
     // call delete action here with the id
-    console.log(id, 'id')
+    this.props.deleteTransaction(id)
+    // console.log(id, 'id')
   }
   render() {
     const { auth, transactions } = this.props
@@ -27,7 +28,10 @@ class Dashboard extends Component {
             </Link>
           </td>
           <td>
-            <div onClick={() => this.handleDelete(id)}>
+            <div
+              className="delete-transaction"
+              onClick={() => this.handleDelete(id)}
+            >
               <Icon name="delete" color="#E94B25" />
             </div>
           </td>
@@ -101,7 +105,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    getTransactions: userId => dispatch(getTransactions(userId)),
+    deleteTransaction: transactionId =>
+      dispatch(deleteTransaction(transactionId)),
   }
 }
 
