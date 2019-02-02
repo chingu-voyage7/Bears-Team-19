@@ -12,44 +12,109 @@ router.get('/', async (req, res, next) => {
     .where({ uid })
     .select()
 
-  const transactions = await db('transactions')
+  // const transactions = await db('transactions')
+  //   .where({ fk_user_id: user_id })
+  //   .orderBy('trans_id')
+  //   .select()
+
+  const transWithCat = await db('transactions')
+    .innerJoin('categories', 'fk_category_id', 'category_id')
     .where({ fk_user_id: user_id })
     .orderBy('trans_id')
-    .select()
+    .column('trans_id', 'amount', 'account', 'date', 'type', 'category', {
+      authorid: 'fk_user_id',
+    })
   // look up in database table transactions which have the users id as a foreign key.
-  console.log(transactions)
-  res.json({ message: 'Got transactions', transactions })
+  // console.log(transWithCat)
+  console.log(transWithCat)
+  res.json({ message: 'Got transactions', transWithCat })
 })
 
 router.post('/', async (req, res, next) => {
   // Get users uid
-  const { uid, amount, type, account, date } = req.body
+  const { uid, amount, type, account, date, category: categoryField } = req.body
 
   const [{ user_id }] = await db('users')
     .where({ uid })
     .select()
 
-  // create a transaction and insert into database
-  const transactionInfo = { fk_user_id: user_id, amount, type, account, date }
+  // get all categories
+  const [allCategories] = await db
+    .select()
+    .from('categories')
+    .whereIn('category', [categoryField])
 
-  // inset into database
+  // Check if category exists in categories
+  let categoryId
+  if (!allCategories) {
+    ;[categoryId] = await db('categories')
+      .returning('category_id')
+      .insert({ category: categoryField })
+  } else {
+    categoryId = allCategories.category_id
+  }
+  const transactionInfo = {
+    fk_user_id: user_id,
+    amount,
+    type,
+    account,
+    date,
+    fk_category_id: categoryId,
+  }
+
+  // Inset into database
   const [transaction] = await db('transactions')
-    .returning('trans_id')
+    .returning(['trans_id', 'fk_category_id'])
     .insert(transactionInfo)
+
   res.json({ message: 'Created transaction', transaction })
 })
 
 // Update a transaction based on its id
+// TODO: Make sure you don't need to send all input fields
 router.post('/:transid', async (req, res, next) => {
   const { transid } = req.params
-  const { amount, date, account, type } = req.body
+  const { amount, date, account, type, category: categoryField } = req.body
 
-  const updateDetails = { amount, date, account, type }
+  // get all categories
+  const [allCategories] = await db
+    .select()
+    .from('categories')
+    .whereIn('category', [categoryField])
 
+  // Check if category exists in categories
+  let categoryId
+  if (!allCategories) {
+    ;[categoryId] = await db('categories')
+      .returning('category_id')
+      .insert({ category: categoryField })
+  } else {
+    categoryId = allCategories.category_id
+  }
+
+  const updateDetails = {
+    amount,
+    date,
+    account,
+    type,
+    fk_category_id: categoryId,
+  }
+
+  // Update the transaction with new data
   const [updatedTransaction] = await db('transactions')
     .update(updateDetails)
-    .returning(['trans_id', 'amount', 'account', 'type', 'date', 'fk_user_id'])
+    .returning([
+      'trans_id',
+      'amount',
+      'account',
+      'type',
+      'fk_category_id',
+      'date',
+      'fk_user_id',
+    ])
     .where({ trans_id: transid })
+
+  console.log(updatedTransaction)
   res.json({ message: 'Updated transaction', updatedTransaction })
 })
 
@@ -61,7 +126,6 @@ router.delete('/:transid', async (req, res, next) => {
     .del()
     .where({ trans_id: transid })
 
-  console.log(deletedTransaction)
   res.json({ message: 'Deleted transaction', deletedTransaction })
 })
 
