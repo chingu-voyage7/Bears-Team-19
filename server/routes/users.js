@@ -10,7 +10,6 @@ router.get('/', async (req, res, next) => {
 })
 
 // Get user based on id
-// TODO get budgets of user too with join.
 router.get('/user/:id', async (req, res, next) => {
   const { id } = req.params
   const user = await db('users')
