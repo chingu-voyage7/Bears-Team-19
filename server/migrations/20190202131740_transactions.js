@@ -9,6 +9,7 @@ exports.up = async function(knex, Promise) {
     table.string('date').notNullable()
     table.string('type').notNullable()
     table.integer('fk_category_id').notNullable()
+    table.specificType('fk_budget_id', 'int[]')
     table.integer('fk_user_id').notNullable()
     table
       .foreign('fk_user_id')

@@ -26,17 +26,36 @@ router.get('/', async (req, res, next) => {
     })
   // look up in database table transactions which have the users id as a foreign key.
   // console.log(transWithCat)
-  console.log(transWithCat)
+  // console.log(transWithCat)
   res.json({ message: 'Got transactions', transWithCat })
 })
 
 router.post('/', async (req, res, next) => {
   // Get users uid
-  const { uid, amount, type, account, date, category: categoryField } = req.body
+  const {
+    uid,
+    amount,
+    type,
+    account,
+    date,
+    category: categoryField,
+    // budget: budgetField,
+  } = req.body
+
+  // budgetField will be an array of strings
 
   const [{ user_id }] = await db('users')
     .where({ uid })
     .select()
+
+  // TODO:
+  // Map over budgetField array and check if the values exist in budget table
+
+  // If a value doesn't exist, add it to budgets table and return budget id
+
+  // If all values exist in budget table return the ids of the rows as array.
+
+  // Set that array to budgetIds variable
 
   // get all categories
   const [allCategories] = await db
@@ -60,6 +79,7 @@ router.post('/', async (req, res, next) => {
     account,
     date,
     fk_category_id: categoryId,
+    fk_budget_id: [...budgetIds],
   }
 
   // Inset into database
@@ -114,7 +134,7 @@ router.post('/:transid', async (req, res, next) => {
     ])
     .where({ trans_id: transid })
 
-  console.log(updatedTransaction)
+  // console.log(updatedTransaction)
   res.json({ message: 'Updated transaction', updatedTransaction })
 })
 

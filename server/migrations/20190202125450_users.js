@@ -8,7 +8,6 @@ exports.up = async function(knex, Promise) {
       .string('email')
       .unique()
       .notNullable()
-
     table.string('username').notNullable()
     table.string('uid').notNullable()
     table.float('balance').notNullable()

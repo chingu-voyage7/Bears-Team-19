@@ -4,7 +4,12 @@ exports.up = async function(knex, Promise) {
       .increments('budget_id')
       .notNullable()
       .primary()
-    table.string('title').notNullable()
+    table.string('budget_name').notNullable()
+    table.integer('fk_user_id').notNullable()
+    table
+      .foreign('fk_user_id')
+      .references('user_id')
+      .inTable('users')
     table.timestamps(true, true)
   })
 }
