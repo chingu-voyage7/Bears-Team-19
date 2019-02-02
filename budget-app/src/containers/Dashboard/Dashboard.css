@@ -16,3 +16,7 @@ section.dashboard h3 {
   background: none;
   color: var(--primary-color-brighter);
 }
+
+.delete-transaction {
+  cursor: pointer;
+}

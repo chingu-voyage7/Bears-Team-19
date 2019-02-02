@@ -75,6 +75,10 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, ...payload }
     case 'ADD_TRANSACTION_ERROR':
       return { ...state, ...payload }
+    case 'DELETE_TRANSACTION_SUCCESS':
+      return { ...state, ...payload }
+    case 'DELETE_TRANSACTION_ERROR':
+      return { ...state, ...payload }
     default:
       return state
   }
