@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
@@ -6,6 +7,14 @@ import { deleteTransaction } from '../../store/actions/transactionActions'
 import './Dashboard.css'
 
 class Dashboard extends Component {
+  async componentDidMount() {
+    try {
+      const response = await axios.get('http://localhost:3030/users/')
+      console.log(response)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   handleDelete = id => {
     // call delete action here with the id
     this.props.deleteTransaction(id)
