@@ -10,7 +10,7 @@ exports.up = async function(knex, Promise) {
       .notNullable()
 
     table.string('username').notNullable()
-    table.string('password').notNullable()
+    table.string('uid').notNullable()
     table.float('balance').notNullable()
     table
       .boolean('notifications')
