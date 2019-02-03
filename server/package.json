@@ -10,7 +10,8 @@
     "migrate:prod:down": "npx knex-migrate rollback --env production",
     "migrate:dev:up": "npx knex-migrate up --env development",
     "migrate:dev:down": "npx knex-migrate rollback --env development",
-    "seed": "npx knex seed:run --env development",
+    "seed:prod": "npx knex seed:run --env production",
+    "seed:dev": "npx knex seed:run --env development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
