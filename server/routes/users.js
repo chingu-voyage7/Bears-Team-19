@@ -5,8 +5,14 @@ const router = express.Router()
 
 // Get all users
 router.get('/', async (req, res, next) => {
-  const users = await db.select().from('users')
-  res.json({ message: 'Users', data: users })
+  try {
+    const users = await db.select().from('users')
+
+    res.json({ message: 'Users', data: users })
+  } catch (error) {
+    console.error(error)
+    res.json({ message: 'Error', error })
+  }
 })
 
 // Get user based on id
