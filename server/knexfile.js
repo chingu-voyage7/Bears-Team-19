@@ -3,6 +3,8 @@ const path = require('path')
 require('dotenv').config()
 
 const { POSTGRES_URL_DEV, POSTGRES_URL } = process.env
+
+console.log(process.env, 'Process.env')
 console.log('URLS: ', POSTGRES_URL_DEV, POSTGRES_URL)
 module.exports = {
   development: {
