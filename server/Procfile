@@ -1,0 +1,1 @@
+web: npx knex-migrate rollback --env production && npx knex-migrate up --env production && node ./index.js
