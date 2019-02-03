@@ -2,7 +2,7 @@ const path = require('path')
 
 require('dotenv').config()
 
-const { POSTGRES_URL_DEV, POSTGRES_URI } = process.env
+const { POSTGRES_URL_DEV, POSTGRES_URL } = process.env
 
 module.exports = {
   development: {
@@ -17,7 +17,7 @@ module.exports = {
   },
   production: {
     client: 'pg',
-    connection: `${POSTGRES_URI}`,
+    connection: `${POSTGRES_URL}`,
     migrations: {
       directory: path.join(__dirname, '/migrations'),
     },
