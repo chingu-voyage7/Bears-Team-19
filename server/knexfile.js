@@ -1,9 +1,20 @@
 const path = require('path')
+const { POSTGRES_URL_DEV, POSTGRES_URI } = process.env
 
 module.exports = {
   development: {
-    client: 'postgresql', // Ensure you specify your particular client here
-    connection: `postgres://postgres:password@192.168.99.100:5432/bear19`, // Make sure to use your specific db connection here.
+    client: 'postgresql',
+    connection: `${POSTGRES_URL_DEV}`,
+    migrations: {
+      directory: path.join(__dirname, '/migrations'),
+    },
+    seeds: {
+      directory: path.join(__dirname, '/seeds'),
+    },
+  },
+  production: {
+    client: 'postgresql',
+    connection: `${POSTGRES_URI}`,
     migrations: {
       directory: path.join(__dirname, '/migrations'),
     },
