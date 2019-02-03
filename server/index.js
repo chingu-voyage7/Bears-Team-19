@@ -5,7 +5,7 @@ const transactions = require('./routes/transactions')
 
 const app = express()
 
-const port = 3030
+const port = process.env.PORT || 3030
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
