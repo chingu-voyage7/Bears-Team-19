@@ -4,8 +4,6 @@ require('dotenv').config()
 
 const { POSTGRES_URL_DEV, DATABASE_URL } = process.env
 
-console.log(process.env, 'Process.env')
-console.log('URLS: ', POSTGRES_URL_DEV, DATABASE_URL)
 module.exports = {
   development: {
     client: 'pg',
