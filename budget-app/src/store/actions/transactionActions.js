@@ -26,7 +26,7 @@ export const updateTransaction = payload => (dispatch, getState) => {
     .catch(err => {
       dispatch({
         type: 'UPDATE_TRANSACTION_ERROR',
-        err,
+        payload: err,
       })
     })
 }
@@ -54,13 +54,13 @@ export const addTransaction = payload => (dispatch, getState) => {
     .then(res => {
       dispatch({
         type: 'ADD_TRANSACTION_SUCCESS',
-        res,
+        payload: res,
       })
     })
     .catch(err => {
       dispatch({
         type: 'ADD_TRANSACTION_ERROR',
-        err,
+        payload: err,
       })
     })
 }
@@ -83,19 +83,32 @@ export const getTransactions = payload => (dispatch, getState) => {
     .catch(err => {
       dispatch({
         type: 'GET_TRANSACTIONS_ERROR',
-        err,
+        payload: err,
       })
     })
 }
 
 export const deleteTransaction = payload => (dispatch, getState) => {
   // Make call to API here
-  dispatch({
-    type: 'DELETE_TRANSACTION_SUCCESS',
-    payload,
+  console.log(payload, 'from del action')
+  axios({
+    method: 'delete',
+    url: `/transactions/${payload.id}`,
+    headers: {
+      uid: payload.uid,
+    },
   })
-  // dispatch({
-  //   type: 'DELETE_TRANSACTIONS_ERROR',
-  //   payload,
-  // })
+    .then(res => {
+      console.log(res, 'res')
+      dispatch({
+        type: 'DELETE_TRANSACTION_SUCCESS',
+        payload: res,
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: 'DELETE_TRANSACTIONS_ERROR',
+        payload: err,
+      })
+    })
 }
