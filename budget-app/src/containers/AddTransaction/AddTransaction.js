@@ -48,7 +48,12 @@ class AddTransaction extends Component {
     ) {
       console.log('Fill in the required fields')
     }
-    this.props.addTransaction(this.state)
+    const newTransaction = {
+      ...this.state,
+      uid: this.props.auth.uid,
+    }
+    console.log(newTransaction)
+    this.props.addTransaction(newTransaction)
     this.setState({
       toDashboard: true,
     })
