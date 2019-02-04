@@ -9,7 +9,7 @@ import './Dashboard.css'
 class Dashboard extends Component {
   async componentDidMount() {
     try {
-      const response = await axios.get('http://localhost:3030/users/')
+      const response = await axios.get(`/users`)
       console.log(response)
     } catch (error) {
       console.error(error)
