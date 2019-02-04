@@ -32,15 +32,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   // Get users uid
-  const {
-    uid,
-    amount,
-    type,
-    account,
-    date,
-    category: categoryField,
-    // budget: budgetField,
-  } = req.body
+  const { uid, amount, type, account, date, category: categoryField } = req.body
 
   // budgetField will be an array of strings
 
@@ -79,7 +71,6 @@ router.post('/', async (req, res, next) => {
     account,
     date,
     fk_category_id: categoryId,
-    fk_budget_id: [...budgetIds],
   }
 
   // Inset into database

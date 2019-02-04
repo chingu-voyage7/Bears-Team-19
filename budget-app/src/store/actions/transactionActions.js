@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const updateTransaction = payload => (dispatch, getState) => {
   // Make call to API here
   dispatch({
@@ -11,12 +13,38 @@ export const updateTransaction = payload => (dispatch, getState) => {
 }
 export const addTransaction = payload => (dispatch, getState) => {
   // Make call to API here
-  dispatch({
-    type: 'ADD_TRANSACTION_SUCCESS',
-  })
-  // dispatch({
-  //   type: 'ADD_TRANSACTION_ERROR',
-  // })
+  console.log(payload)
+  const {
+    account,
+    amount,
+    category,
+    selectedOption: type,
+    selectedDay: date,
+    uid,
+  } = payload
+
+  const newTransaction = {
+    account,
+    amount,
+    category,
+    type,
+    date,
+    uid,
+  }
+  axios
+    .post('/transactions', newTransaction)
+    .then(res => {
+      dispatch({
+        type: 'ADD_TRANSACTION_SUCCESS',
+        res,
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: 'ADD_TRANSACTION_ERROR',
+        err,
+      })
+    })
 }
 
 export const getTransactions = payload => (dispatch, getState) => {
