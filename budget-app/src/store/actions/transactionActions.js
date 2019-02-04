@@ -49,14 +49,25 @@ export const addTransaction = payload => (dispatch, getState) => {
 
 export const getTransactions = payload => (dispatch, getState) => {
   // Make call to API here
-  dispatch({
-    type: 'GET_TRANSACTIONS_SUCCESS',
-    payload,
+  axios({
+    method: 'get',
+    url: '/transactions',
+    headers: {
+      uid: payload,
+    },
   })
-  // dispatch({
-  //   type: 'GET_TRANSACTIONS_ERROR',
-  //   payload,
-  // })
+    .then(res => {
+      dispatch({
+        type: 'GET_TRANSACTIONS_SUCCESS',
+        payload: res,
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: 'GET_TRANSACTIONS_ERROR',
+        err,
+      })
+    })
 }
 
 export const deleteTransaction = payload => (dispatch, getState) => {
