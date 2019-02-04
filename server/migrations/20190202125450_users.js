@@ -9,7 +9,10 @@ exports.up = async function(knex, Promise) {
       .unique()
       .notNullable()
     table.string('username').notNullable()
-    table.string('uid').notNullable()
+    table
+      .string('uid')
+      .notNullable()
+      .unique()
     table
       .float('balance')
       .notNullable()

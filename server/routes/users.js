@@ -35,7 +35,7 @@ router.post('/user', async (req, res, next) => {
 
     res.json({ message: 'Created user', data: userId })
   } catch (error) {
-    res.json({ message: 'Error', error })
+    res.status(404).json({ message: 'Error', error })
   }
 })
 
