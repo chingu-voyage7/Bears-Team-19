@@ -1,5 +1,6 @@
 import React from 'react'
 import './Home.css'
+import { Link } from 'react-router-dom'
 
 const Home = () => (
   <>
@@ -9,7 +10,11 @@ const Home = () => (
         <p className="tagline">
           Far far away, behind the word mountains, far from the country.
         </p>
-        <button className="button is-success button-join">Join us</button>
+        <button className="button is-success button-join">
+          <Link className="join-link" to="/signup">
+            Join us
+          </Link>
+        </button>
       </article>
     </section>
     <section className="features">
