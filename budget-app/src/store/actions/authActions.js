@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const signUp = payload => (dispatch, getState, { getFirebase }) => {
   const firebase = getFirebase()
 
@@ -6,11 +8,26 @@ export const signUp = payload => (dispatch, getState, { getFirebase }) => {
     .createUserWithEmailAndPassword(payload.email, payload.password)
     .then(res => {
       // save to our database
-    })
-    .then(() => {
-      dispatch({
-        type: 'SIGNUP_SUCCESS',
-      })
+      const newUser = {
+        uid: res.user.uid,
+        username: payload.username,
+        email: payload.email,
+      }
+      axios
+        .post('/users/user', newUser)
+        .then(res => {
+          dispatch({
+            type: 'SIGNUP_SUCCESS',
+            res,
+          })
+        })
+        .catch(err => {
+          dispatch({
+            type: 'SIGNUP_ERROR',
+            err,
+          })
+        })
+      return res
     })
     .catch(err => {
       dispatch({

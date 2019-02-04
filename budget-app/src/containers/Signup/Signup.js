@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
-import { signUp } from '../../store/actions/authActions'
-
+import { Link, Redirect } from 'react-router-dom'
 import Icon from '../../components/Icons'
+import { signUp } from '../../store/actions/authActions'
 import './Signup.css'
 
 class Signup extends Component {
   state = {
     email: '',
     password: '',
+    username: '',
   }
 
   handleChange = e => {
@@ -25,6 +24,7 @@ class Signup extends Component {
     this.setState({
       email: '',
       password: '',
+      username: '',
     })
   }
   render() {
@@ -38,6 +38,22 @@ class Signup extends Component {
         <div className="container">
           <form onSubmit={this.handleSubmit}>
             <h3>Sign up</h3>
+
+            <div className="field">
+              <label htmlFor="username" className="label">
+                Username
+              </label>
+              <div className="control">
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="Username"
+                  id="username"
+                  value={this.state.username}
+                  onChange={this.handleChange}
+                />
+              </div>
+            </div>
             <div className="field">
               <label htmlFor="email" className="label">
                 Email
