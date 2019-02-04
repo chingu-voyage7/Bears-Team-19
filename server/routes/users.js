@@ -1,71 +1,66 @@
 const express = require('express')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const passport = require('passport')
-const client = require('../client')
-
-require('../config/passport')(passport)
+const db = require('../database/database.js')
 
 const router = express.Router()
-const db = [1, 2, 3]
-const encryptPassword = (password, saltRounds = 7) =>
-  bcrypt.hashSync(password, saltRounds)
-const errorHandler = error => {
-  const errObject = {}
-  if (error.response) {
-    errObject.status = error.response.status
-    errObject.statusText = error.response.statusText
+
+// Get all users
+router.get('/', async (req, res, next) => {
+  try {
+    const users = await db.select().from('users')
+
+    res.json({ message: 'Users', data: users })
+  } catch (error) {
+    console.error(error)
+    res.json({ message: 'Error', error })
   }
-  return errObject
-}
-
-router.get(
-  '/profile/:id',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.json(db)
-  },
-)
-
-router.get('/', (req, res) => {
-  client
-    .getUsers('/users')
-    .then(result => res.json(result.data))
-    .catch(error => res.json(errorHandler(error)))
 })
 
-router.post('/signup', (req, res) => {
-  const { email, name, username, password } = req.body
-  const encryptedPassword = encryptPassword(password)
-  const details = { email, name, username }
-  client
-    .postUser('/users', details)
-    .then(result => res.json(result))
-    .catch(error => res.json(errorHandler(error)))
+// Get user based on id
+router.get('/user/:id', async (req, res, next) => {
+  const { id } = req.params
+  const user = await db('users')
+    .where({ user_id: id })
+    .select()
+
+  res.json({ message: 'Got user', data: user })
 })
 
-router.post('/signin', (req, res) => {
-  const { email, password } = req.body
-  client
-    .getUsers('/users')
-    .then(result => {
-      const user = result.data.filter(item => item.email === email)[0]
-      const isValid = user
-        ? bcrypt.compareSync(password, user.encryptedPassword)
-        : false
+// Create new user
+router.post('/user', async (req, res, next) => {
+  const userDetails = req.body
+  try {
+    const [userId] = await db('users')
+      .returning('user_id')
+      .insert(userDetails)
 
-      if (isValid) {
-        const token = jwt.sign(
-          { email: user.email, name: user.name, id: user.id },
-          process.env.TOKEN_SECRET,
-          { expiresIn: 86400 * 7 },
-        )
-        res.json(token)
-      } else {
-        res.status(400).json({ msg: `Wrong credentials!` })
-      }
-    })
-    .catch(error => res.json(errorHandler(error)))
+    res.json({ message: 'Created user', data: userId })
+  } catch (error) {
+    res.json({ message: 'Error', error })
+  }
+})
+
+// Update user based on id
+router.post('/user/:id', async (req, res, next) => {
+  const { id } = req.params
+  const updateDetails = req.body
+
+  const [updatedUser] = await db('users')
+    .update(updateDetails)
+    .returning(['user_id', 'email', 'username', 'balance', 'notifications'])
+    .where({ user_id: id })
+
+  res.json({ message: 'Updated user', data: updatedUser })
+})
+
+// Delete user based on id
+router.delete('/user/:id', async (req, res, next) => {
+  const { id } = req.params
+
+  const deletedUser = await db('users')
+    .del()
+    .where({ user_id: id })
+
+  res.json({ message: 'Deleted user' })
 })
 
 module.exports = router
