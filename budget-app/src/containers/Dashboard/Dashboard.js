@@ -39,7 +39,19 @@ class Dashboard extends Component {
           <td>{category}</td>
           <td>{account}</td>
           <td>
-            <Link to={`/transaction/${trans_id}`}>
+            <Link
+              to={{
+                pathname: `/transaction/${trans_id}`,
+                state: {
+                  trans_id,
+                  date,
+                  type,
+                  amount,
+                  category,
+                  account,
+                },
+              }}
+            >
               <Icon name="edit" color="#6179C7" />
             </Link>
           </td>

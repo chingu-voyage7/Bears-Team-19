@@ -51,7 +51,8 @@ class EditTransaction extends Component {
       console.log('Fill in the required fields')
     }
     const fields = {
-      id: this.props.transaction.id,
+      uid: this.props.auth.uid,
+      id: this.props.transaction.trans_id,
       amount: this.state.amount,
       account: this.state.account,
       category: this.state.category,
@@ -65,7 +66,6 @@ class EditTransaction extends Component {
   }
   render() {
     const { auth } = this.props
-
     if (!auth.uid) {
       return <Redirect to="/signin" />
     }
@@ -169,14 +169,12 @@ class EditTransaction extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const {
-    match: {
-      params: { id },
-    },
-  } = props
-  const transaction = state.transaction.transactions.find(
-    transaction => transaction.id == id,
-  )
+  // const {
+  //   match: {
+  //     params: { id },
+  //   },
+  // } = props
+  const transaction = props.location.state
   return {
     auth: state.firebase.auth,
     transaction,
