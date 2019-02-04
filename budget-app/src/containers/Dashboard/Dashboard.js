@@ -1,45 +1,52 @@
-import axios from 'axios'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import Icon from '../../components/Icons'
-import { deleteTransaction } from '../../store/actions/transactionActions'
+import {
+  deleteTransaction,
+  getTransactions,
+} from '../../store/actions/transactionActions'
 import './Dashboard.css'
 
 class Dashboard extends Component {
   async componentDidMount() {
-    try {
-      const response = await axios.get(`/users`)
-      console.log(response)
-    } catch (error) {
-      console.error(error)
-    }
+    this.props.getTransactions(this.props.auth.uid)
   }
   handleDelete = id => {
     // call delete action here with the id
     this.props.deleteTransaction(id)
-    // console.log(id, 'id')
   }
   render() {
     const { auth, transactions } = this.props
-    const rows = transactions.map(transaction => {
-      const { id, date, amount, type, category, account } = transaction
+    if (!transactions) {
       return (
-        <tr key={id}>
+        <section className="dashboard">
+          <h3>Dashboard</h3>
+          <p>You have no transactions yet.</p>
+          <Link to="/transaction/create" className="add">
+            <Icon name="add" color="#23D160" /> <p>New transaction</p>
+          </Link>
+        </section>
+      )
+    }
+    const rows = transactions.map(transaction => {
+      const { trans_id, date, amount, type, category, account } = transaction
+      return (
+        <tr key={trans_id}>
           <td>{date}</td>
           <td>{type}</td>
           <td>{amount}</td>
           <td>{category}</td>
           <td>{account}</td>
           <td>
-            <Link to={`/transaction/${id}`}>
+            <Link to={`/transaction/${trans_id}`}>
               <Icon name="edit" color="#6179C7" />
             </Link>
           </td>
           <td>
             <div
               className="delete-transaction"
-              onClick={() => this.handleDelete(id)}
+              onClick={() => this.handleDelete(trans_id)}
             >
               <Icon name="delete" color="#E94B25" />
             </div>
@@ -104,18 +111,16 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => {
-  const transactions = state.transaction.transactions.filter(
-    transaction => transaction.authorid === state.firebase.auth.uid,
-  )
   return {
     auth: state.firebase.auth,
-    transactions,
+    transactions: state.transaction.transactions,
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     deleteTransaction: transactionId =>
       dispatch(deleteTransaction(transactionId)),
+    getTransactions: uid => dispatch(getTransactions(uid)),
   }
 }
 

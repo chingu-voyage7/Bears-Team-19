@@ -6,7 +6,7 @@ const router = express.Router()
 // Get all transactions for a user
 router.get('/', async (req, res, next) => {
   // get user based on uid
-  const uid = req.header('uid')
+  const { uid } = req.headers
 
   const [{ user_id }] = await db('users')
     .where({ uid })
