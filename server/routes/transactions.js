@@ -3,33 +3,33 @@ const db = require('../database/database.js')
 
 const router = express.Router()
 
-// Get all transactions for a user
+// GET TRANSACTIONS
 router.get('/', async (req, res, next) => {
-  // get user based on uid
   const { uid } = req.headers
+  if (!uid) {
+    res.status(404).json({ message: 'Not authorized' })
+  } else {
+    const userResponse = await db('users')
+      .where({ uid })
+      .select()
 
-  const [{ user_id }] = await db('users')
-    .where({ uid })
-    .select()
-
-  // const transactions = await db('transactions')
-  //   .where({ fk_user_id: user_id })
-  //   .orderBy('trans_id')
-  //   .select()
-
-  const transWithCat = await db('transactions')
-    .innerJoin('categories', 'fk_category_id', 'category_id')
-    .where({ fk_user_id: user_id })
-    .orderBy('trans_id')
-    .column('trans_id', 'amount', 'account', 'date', 'type', 'category', {
-      authorid: 'fk_user_id',
-    })
-  // look up in database table transactions which have the users id as a foreign key.
-  // console.log(transWithCat)
-  // console.log(transWithCat)
-  res.json({ message: 'Got transactions', transWithCat })
+    if (!userResponse.length) {
+      res.status(404).json({ message: 'Not authorized' })
+    } else {
+      const [{ user_id }] = userResponse
+      const transWithCat = await db('transactions')
+        .innerJoin('categories', 'fk_category_id', 'category_id')
+        .where({ fk_user_id: user_id })
+        .orderBy('trans_id')
+        .column('trans_id', 'amount', 'account', 'date', 'type', 'category', {
+          authorid: 'fk_user_id',
+        })
+      res.json({ message: 'Got transactions', transWithCat })
+    }
+  }
 })
 
+// CREATE TRANSACTION
 router.post('/', async (req, res, next) => {
   // Get users uid
   const { uid, amount, type, account, date, category: categoryField } = req.body
@@ -81,7 +81,7 @@ router.post('/', async (req, res, next) => {
   res.json({ message: 'Created transaction', transaction })
 })
 
-// Update a transaction based on its id
+// UPDATE TRANSACTION
 // TODO: Make sure you don't need to send all input fields
 router.post('/:transid', async (req, res, next) => {
   const { transid } = req.params
@@ -129,7 +129,7 @@ router.post('/:transid', async (req, res, next) => {
   res.json({ message: 'Updated transaction', updatedTransaction })
 })
 
-// Delete a transaction based on its id
+// DELETE TRANSACTION
 router.delete('/:transid', async (req, res, next) => {
   const { transid } = req.params
 
