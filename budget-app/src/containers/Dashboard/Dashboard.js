@@ -14,7 +14,7 @@ class Dashboard extends Component {
   }
   handleDelete = id => {
     // call delete action here with the id
-    this.props.deleteTransaction(id)
+    this.props.deleteTransaction({ id, uid: this.props.auth.uid })
   }
   render() {
     const { auth, transactions } = this.props

@@ -133,11 +133,11 @@ router.post('/:transid', async (req, res, next) => {
 router.delete('/:transid', async (req, res, next) => {
   const { transid } = req.params
 
-  const deletedTransaction = await db('transactions')
+  await db('transactions')
     .del()
     .where({ trans_id: transid })
 
-  res.json({ message: 'Deleted transaction', deletedTransaction })
+  res.json({ message: 'Deleted transaction', transid })
 })
 
 module.exports = router
