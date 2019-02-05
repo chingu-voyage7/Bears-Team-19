@@ -41,7 +41,7 @@ class Dashboard extends Component {
           <td>
             <Link
               to={{
-                pathname: `/transaction/${trans_id}`,
+                pathname: `/transaction/edit`,
                 state: {
                   trans_id,
                   date,
