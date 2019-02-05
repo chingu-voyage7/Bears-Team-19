@@ -158,13 +158,38 @@ router.post('/:transid', async (req, res, next) => {
 
 // DELETE TRANSACTION
 router.delete('/:transid', async (req, res, next) => {
+  const { uid } = req.headers
   const { transid } = req.params
 
-  await db('transactions')
-    .del()
-    .where({ trans_id: transid })
+  // Check if there is a user that is logged in that is making the request.
+  if (!uid) {
+    res.status(404).json({ message: 'Not authorized' })
+  } else {
+    // Check so there is a user in database
+    const userResponse = await db('users')
+      .where({ uid })
+      .select()
 
-  res.json({ message: 'Deleted transaction', transid })
+    if (!userResponse.length) {
+      res.status(404).json({ message: 'Not authorized' })
+    } else {
+      const [{ fk_user_id: authorid }] = await db('transactions')
+        .where({ trans_id: transid })
+        .select()
+      const [{ user_id }] = userResponse
+
+      // Check so the user is the owner of the transaction
+      if (user_id !== authorid) {
+        res.status(404).json({ message: 'Not authorized' })
+      } else {
+        await db('transactions')
+          .del()
+          .where({ trans_id: transid })
+
+        res.json({ message: 'Deleted transaction', transid })
+      }
+    }
+  }
 })
 
 module.exports = router
