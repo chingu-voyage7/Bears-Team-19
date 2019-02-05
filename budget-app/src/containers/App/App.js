@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import NotFound from '../../components/NotFound'
+import PrivateRoute from '../../components/PrivateRoute'
 import About from '../About/About'
 import AddTransaction from '../AddTransaction/AddTransaction'
 import Dashboard from '../Dashboard/Dashboard'
@@ -36,8 +37,15 @@ class App extends Component {
               <Route path="/about" component={About} />
               <Route path="/signup" component={Signup} />
               <Route path="/signin" component={Signin} />
-              <Route path="/transaction/create" component={AddTransaction} />
-              <Route path="/transaction/:id" component={EditTransaction} />
+              <PrivateRoute
+                path="/transaction/create"
+                component={AddTransaction}
+              />
+              {/* <Route path="/transaction/create" component={AddTransaction} /> */}
+              <PrivateRoute
+                path="/transaction/edit"
+                component={EditTransaction}
+              />
               <Route component={NotFound} />
             </Switch>
           </section>

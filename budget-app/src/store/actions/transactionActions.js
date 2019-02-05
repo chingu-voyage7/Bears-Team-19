@@ -90,7 +90,6 @@ export const getTransactions = payload => (dispatch, getState) => {
 
 export const deleteTransaction = payload => (dispatch, getState) => {
   // Make call to API here
-  console.log(payload, 'from del action')
   axios({
     method: 'delete',
     url: `/transactions/${payload.id}`,

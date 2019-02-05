@@ -65,10 +65,6 @@ class EditTransaction extends Component {
     })
   }
   render() {
-    const { auth } = this.props
-    if (!auth.uid) {
-      return <Redirect to="/signin" />
-    }
     if (this.state.toDashboard === true) {
       return <Redirect to="/" />
     }
@@ -169,11 +165,6 @@ class EditTransaction extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  // const {
-  //   match: {
-  //     params: { id },
-  //   },
-  // } = props
   const transaction = props.location.state
   return {
     auth: state.firebase.auth,

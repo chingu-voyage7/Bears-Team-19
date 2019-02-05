@@ -3,33 +3,33 @@ const db = require('../database/database.js')
 
 const router = express.Router()
 
-// Get all transactions for a user
+// GET TRANSACTIONS
 router.get('/', async (req, res, next) => {
-  // get user based on uid
   const { uid } = req.headers
+  if (!uid) {
+    res.status(404).json({ message: 'Not authorized' })
+  } else {
+    const userResponse = await db('users')
+      .where({ uid })
+      .select()
 
-  const [{ user_id }] = await db('users')
-    .where({ uid })
-    .select()
-
-  // const transactions = await db('transactions')
-  //   .where({ fk_user_id: user_id })
-  //   .orderBy('trans_id')
-  //   .select()
-
-  const transWithCat = await db('transactions')
-    .innerJoin('categories', 'fk_category_id', 'category_id')
-    .where({ fk_user_id: user_id })
-    .orderBy('trans_id')
-    .column('trans_id', 'amount', 'account', 'date', 'type', 'category', {
-      authorid: 'fk_user_id',
-    })
-  // look up in database table transactions which have the users id as a foreign key.
-  // console.log(transWithCat)
-  // console.log(transWithCat)
-  res.json({ message: 'Got transactions', transWithCat })
+    if (!userResponse.length) {
+      res.status(404).json({ message: 'Not authorized' })
+    } else {
+      const [{ user_id }] = userResponse
+      const transWithCat = await db('transactions')
+        .innerJoin('categories', 'fk_category_id', 'category_id')
+        .where({ fk_user_id: user_id })
+        .orderBy('trans_id')
+        .column('trans_id', 'amount', 'account', 'date', 'type', 'category', {
+          authorid: 'fk_user_id',
+        })
+      res.json({ message: 'Got transactions', transWithCat })
+    }
+  }
 })
 
+// CREATE TRANSACTION
 router.post('/', async (req, res, next) => {
   // Get users uid
   const { uid, amount, type, account, date, category: categoryField } = req.body
@@ -81,63 +81,115 @@ router.post('/', async (req, res, next) => {
   res.json({ message: 'Created transaction', transaction })
 })
 
-// Update a transaction based on its id
+// UPDATE TRANSACTION
 // TODO: Make sure you don't need to send all input fields
 router.post('/:transid', async (req, res, next) => {
+  const { uid } = req.headers
   const { transid } = req.params
   const { amount, date, account, type, category: categoryField } = req.body
 
-  // get all categories
-  const [allCategories] = await db
-    .select()
-    .from('categories')
-    .whereIn('category', [categoryField])
-
-  // Check if category exists in categories
-  let categoryId
-  if (!allCategories) {
-    ;[categoryId] = await db('categories')
-      .returning('category_id')
-      .insert({ category: categoryField })
+  // Check if there is a user that is logged in that is making the request.
+  if (!uid) {
+    res.status(404).json({ message: 'Not authorized' })
   } else {
-    categoryId = allCategories.category_id
+    // Check so there is a user in database
+    const userResponse = await db('users')
+      .where({ uid })
+      .select()
+
+    if (!userResponse.length) {
+      res.status(404).json({ message: 'Not authorized' })
+    } else {
+      const [{ fk_user_id: authorid }] = await db('transactions')
+        .where({ trans_id: transid })
+        .select()
+      const [{ user_id }] = userResponse
+
+      // Check so the user is the owner of the transaction
+      if (user_id !== authorid) {
+        res.status(404).json({ message: 'Not authorized' })
+      } else {
+        // get all categories
+        const [allCategories] = await db
+          .select()
+          .from('categories')
+          .whereIn('category', [categoryField])
+
+        // Check if category exists in categories
+        let categoryId
+        if (!allCategories) {
+          ;[categoryId] = await db('categories')
+            .returning('category_id')
+            .insert({ category: categoryField })
+        } else {
+          categoryId = allCategories.category_id
+        }
+
+        const updateDetails = {
+          amount,
+          date,
+          account,
+          type,
+          fk_category_id: categoryId,
+        }
+
+        // Update the transaction with new data
+        const [updatedTransaction] = await db('transactions')
+          .update(updateDetails)
+          .returning([
+            'trans_id',
+            'amount',
+            'account',
+            'type',
+            'fk_category_id',
+            'date',
+            'fk_user_id',
+          ])
+          .where({ trans_id: transid })
+
+        res.json({
+          message: 'Updated transaction',
+          updatedTransaction,
+        })
+      }
+    }
   }
-
-  const updateDetails = {
-    amount,
-    date,
-    account,
-    type,
-    fk_category_id: categoryId,
-  }
-
-  // Update the transaction with new data
-  const [updatedTransaction] = await db('transactions')
-    .update(updateDetails)
-    .returning([
-      'trans_id',
-      'amount',
-      'account',
-      'type',
-      'fk_category_id',
-      'date',
-      'fk_user_id',
-    ])
-    .where({ trans_id: transid })
-
-  // console.log(updatedTransaction)
-  res.json({ message: 'Updated transaction', updatedTransaction })
 })
 
-// Delete a transaction based on its id
+// DELETE TRANSACTION
 router.delete('/:transid', async (req, res, next) => {
+  const { uid } = req.headers
   const { transid } = req.params
 
-  await db('transactions')
-    .del()
-    .where({ trans_id: transid })
+  // Check if there is a user that is logged in that is making the request.
+  if (!uid) {
+    res.status(404).json({ message: 'Not authorized' })
+  } else {
+    // Check so there is a user in database
+    const userResponse = await db('users')
+      .where({ uid })
+      .select()
 
-  res.json({ message: 'Deleted transaction', transid })
+    if (!userResponse.length) {
+      res.status(404).json({ message: 'Not authorized' })
+    } else {
+      const [{ fk_user_id: authorid }] = await db('transactions')
+        .where({ trans_id: transid })
+        .select()
+      const [{ user_id }] = userResponse
+
+      // Check so the user is the owner of the transaction
+      if (user_id !== authorid) {
+        res.status(404).json({ message: 'Not authorized' })
+      } else {
+        await db('transactions')
+          .del()
+          .where({ trans_id: transid })
+
+        res.json({ message: 'Deleted transaction', transid })
+      }
+    }
+  }
 })
 
 module.exports = router

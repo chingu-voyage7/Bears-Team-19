@@ -52,7 +52,6 @@ class AddTransaction extends Component {
       ...this.state,
       uid: this.props.auth.uid,
     }
-    console.log(newTransaction)
     this.props.addTransaction(newTransaction)
     this.setState({
       toDashboard: true,
@@ -60,11 +59,6 @@ class AddTransaction extends Component {
   }
 
   render() {
-    const { auth } = this.props
-
-    if (!auth.uid) {
-      return <Redirect to="/signin" />
-    }
     if (this.state.toDashboard === true) {
       return <Redirect to="/" />
     }
