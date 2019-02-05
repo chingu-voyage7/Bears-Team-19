@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
@@ -33,7 +34,7 @@ class Dashboard extends Component {
       const { trans_id, date, amount, type, category, account } = transaction
       return (
         <tr key={trans_id}>
-          <td>{date}</td>
+          <td>{format(date, 'YYYY-MM-DD')}</td>
           <td>{type}</td>
           <td>{amount}</td>
           <td>{category}</td>
