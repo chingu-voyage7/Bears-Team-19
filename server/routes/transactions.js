@@ -84,49 +84,76 @@ router.post('/', async (req, res, next) => {
 // UPDATE TRANSACTION
 // TODO: Make sure you don't need to send all input fields
 router.post('/:transid', async (req, res, next) => {
+  const { uid } = req.headers
   const { transid } = req.params
   const { amount, date, account, type, category: categoryField } = req.body
 
-  // get all categories
-  const [allCategories] = await db
-    .select()
-    .from('categories')
-    .whereIn('category', [categoryField])
-
-  // Check if category exists in categories
-  let categoryId
-  if (!allCategories) {
-    ;[categoryId] = await db('categories')
-      .returning('category_id')
-      .insert({ category: categoryField })
+  // Check if there is a user that is logged in that is making the request.
+  if (!uid) {
+    res.status(404).json({ message: 'Not authorized' })
   } else {
-    categoryId = allCategories.category_id
+    // Check so there is a user in database
+    const userResponse = await db('users')
+      .where({ uid })
+      .select()
+
+    if (!userResponse.length) {
+      res.status(404).json({ message: 'Not authorized' })
+    } else {
+      const [{ fk_user_id: authorid }] = await db('transactions')
+        .where({ trans_id: transid })
+        .select()
+      const [{ user_id }] = userResponse
+
+      // Check so the user is the owner of the transaction
+      if (user_id !== authorid) {
+        res.status(404).json({ message: 'Not authorized' })
+      } else {
+        // get all categories
+        const [allCategories] = await db
+          .select()
+          .from('categories')
+          .whereIn('category', [categoryField])
+
+        // Check if category exists in categories
+        let categoryId
+        if (!allCategories) {
+          ;[categoryId] = await db('categories')
+            .returning('category_id')
+            .insert({ category: categoryField })
+        } else {
+          categoryId = allCategories.category_id
+        }
+
+        const updateDetails = {
+          amount,
+          date,
+          account,
+          type,
+          fk_category_id: categoryId,
+        }
+
+        // Update the transaction with new data
+        const [updatedTransaction] = await db('transactions')
+          .update(updateDetails)
+          .returning([
+            'trans_id',
+            'amount',
+            'account',
+            'type',
+            'fk_category_id',
+            'date',
+            'fk_user_id',
+          ])
+          .where({ trans_id: transid })
+
+        res.json({
+          message: 'Updated transaction',
+          updatedTransaction,
+        })
+      }
+    }
   }
-
-  const updateDetails = {
-    amount,
-    date,
-    account,
-    type,
-    fk_category_id: categoryId,
-  }
-
-  // Update the transaction with new data
-  const [updatedTransaction] = await db('transactions')
-    .update(updateDetails)
-    .returning([
-      'trans_id',
-      'amount',
-      'account',
-      'type',
-      'fk_category_id',
-      'date',
-      'fk_user_id',
-    ])
-    .where({ trans_id: transid })
-
-  // console.log(updatedTransaction)
-  res.json({ message: 'Updated transaction', updatedTransaction })
 })
 
 // DELETE TRANSACTION
