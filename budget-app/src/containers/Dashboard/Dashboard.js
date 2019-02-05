@@ -10,7 +10,7 @@ import {
 import './Dashboard.css'
 
 class Dashboard extends Component {
-  async componentDidMount() {
+  componentDidMount() {
     this.props.getTransactions(this.props.auth.uid)
   }
   handleDelete = id => {

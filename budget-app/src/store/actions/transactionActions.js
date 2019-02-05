@@ -18,6 +18,7 @@ export const updateTransaction = payload => (dispatch, getState) => {
     data: updateDetails,
   })
     .then(res => {
+      dispatch(getTransactions(payload.uid))
       dispatch({
         type: 'UPDATE_TRANSACTION_SUCCESS',
         payload: res,
@@ -52,6 +53,7 @@ export const addTransaction = payload => (dispatch, getState) => {
   axios
     .post('/transactions', newTransaction)
     .then(res => {
+      dispatch(getTransactions(uid))
       dispatch({
         type: 'ADD_TRANSACTION_SUCCESS',
         payload: res,
@@ -98,7 +100,6 @@ export const deleteTransaction = payload => (dispatch, getState) => {
     },
   })
     .then(res => {
-      console.log(res, 'res')
       dispatch({
         type: 'DELETE_TRANSACTION_SUCCESS',
         payload: res,
