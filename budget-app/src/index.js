@@ -6,14 +6,16 @@ import { Provider } from 'react-redux'
 import { getFirebase, reactReduxFirebase } from 'react-redux-firebase'
 import { applyMiddleware, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
-import { keys } from './config/backend.js'
 import fireConfig from './config/fireConfig.js'
 import App from './containers/App/App'
 import './index.css'
 import * as serviceWorker from './serviceWorker'
 import rootReducer from './store/reducers'
 
-axios.defaults.baseURL = keys.BACKEND_URL_LOCAL
+axios.defaults.baseURL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_BACKEND_URL_REMOTE
+    : process.env.REACT_APP_BACKEND_URL_LOCAL
 
 const store = createStore(
   rootReducer,
