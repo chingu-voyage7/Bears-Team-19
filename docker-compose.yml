@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db_postgres:
+    container_name: postgres_db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: bear19
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+    networks:
+      - netpostgresdb
+    extra_hosts:
+      - 'host.docker.internal:172.17.0.1'
+networks:
+  netpostgresdb:
+    driver: bridge

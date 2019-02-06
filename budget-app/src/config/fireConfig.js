@@ -1,0 +1,24 @@
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
+const {
+  REACT_APP_FIREBASE_APIKEY,
+  REACT_APP_FIREBASE_AUTHDOMAIN,
+  REACT_APP_FIREBASE_DATABASE_URL,
+  REACT_APP_FIREBASE_PROJECTID,
+  REACT_APP_FIREBASE_STORAGEBUCKET,
+  REACT_APP_FIREBASE_MESSAGINGSENDERID,
+} = process.env
+
+// Initialize Firebase
+const config = {
+  apiKey: REACT_APP_FIREBASE_APIKEY,
+  authDomain: REACT_APP_FIREBASE_AUTHDOMAIN,
+  databaseURL: REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: REACT_APP_FIREBASE_PROJECTID,
+  storageBucket: REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: REACT_APP_FIREBASE_MESSAGINGSENDERID,
+}
+firebase.initializeApp(config)
+
+export default firebase

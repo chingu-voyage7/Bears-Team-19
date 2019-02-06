@@ -4,7 +4,7 @@
   "description": "Budget app",
   "main": "index.js",
   "scripts": {
-    "dev-server": "npx nodemon ./server/index.js",
+    "dev-server": "npx nodemon ./server/bin/www",
     "lint-staged": "lint-staged",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,7 +16,7 @@
   },
   "keywords": [],
   "author": "Osycon, Paulina, Ufedo, Dmitri, Chsanch ",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -27,5 +27,6 @@
     "lint-staged": "^8.1.0",
     "nodemon": "^1.18.6",
     "prettier": "^1.15.2"
-  }
+  },
+  "dependencies": {}
 }

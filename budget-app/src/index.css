@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css?family=Cardo|Montserrat:400,600');
+
+:root {
+  --primary-color: #6179c7;
+  --primary-color-brighter: #879bdd;
+  --primary-color-brightest: #b6c4f0;
+  --primary-color-darker: #425baf;
+  --primary-color-darkest: #28439e;
+  --secondary-color: #ffd16b;
+  --secondary-color-brighter: #ffdc8f;
+  --secondary-color-brightest: #ffeaba;
+  --secondary-color-darker: #ffc74c;
+  --secondary-color-darkest: #e9ac25;
+  --grey-color: #c4c4c4;
+  --grey-color-brighter: #d8d4d4;
+  --grey-color-brightest: #e2e2e2;
+  --grey-color-darker: #7e7d7d;
+  --grey-color-darkest: #3e3c3c;
+
+  /* Fonts */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Cardo', serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  color: var(--grey-color-darkest);
+  font-size: 16px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 3rem;
+}
+h2 {
+  font-size: 2.5rem;
+}
+h3 {
+  font-size: 2rem;
+}
+
+@media (max-width: 700px) {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.7rem;
+  }
+  h3 {
+    font-size: 1.3rem;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+body {
+  font-family: var(--font-body);
+}
