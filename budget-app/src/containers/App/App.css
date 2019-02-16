@@ -8,3 +8,7 @@
     grid-template-rows: 100px minmax(calc(100vh - 300px), 1fr) 200px;
   }
 }
+
+.error-message {
+  color: red;
+}
