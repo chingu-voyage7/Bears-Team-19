@@ -1,32 +1,32 @@
-import React, { Component } from 'react'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { Component, default as React } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
+import * as yup from 'yup'
 import Icon from '../../components/Icons'
 import { signUp } from '../../store/actions/authActions'
 import './Signup.css'
 
+const schema = yup.object().shape({
+  username: yup
+    .string()
+    .min(2, 'Too short')
+    .max(10, 'Too long!')
+    .required('Required'),
+  email: yup
+    .string()
+    .trim('No whitespace!')
+    .lowercase('It has to be lowercase!')
+    .email('Invalid email!')
+    .required('Required'),
+  password: yup
+    .string()
+    .min(6, 'Too short')
+    .max(21, 'Too long!')
+    .required('Required'),
+})
+
 class Signup extends Component {
-  state = {
-    email: '',
-    password: '',
-    username: '',
-  }
-
-  handleChange = e => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    })
-  }
-
-  handleSubmit = e => {
-    e.preventDefault()
-    this.props.signUp(this.state)
-    this.setState({
-      email: '',
-      password: '',
-      username: '',
-    })
-  }
   render() {
     const { auth } = this.props
 
@@ -36,58 +36,69 @@ class Signup extends Component {
     return (
       <section className="signup">
         <div className="container">
-          <form onSubmit={this.handleSubmit}>
-            <h3>Sign up</h3>
-
-            <div className="field">
-              <label htmlFor="username" className="label">
-                Username
-              </label>
-              <div className="control">
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="Username"
-                  id="username"
-                  value={this.state.username}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label htmlFor="email" className="label">
-                Email
-              </label>
-              <div className="control has-icon-left has-icons-right">
-                <input
-                  type="email"
-                  className="input"
-                  placeholder="Email"
-                  id="email"
-                  value={this.state.email}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label htmlFor="password" className="label">
-                Password
-              </label>
-              <div className="control">
-                <input
-                  type="password"
-                  className="input"
-                  placeholder="Password"
-                  id="password"
-                  value={this.state.password}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="control">
-              <button className="button is-success">Sign up</button>
-            </div>
-          </form>
+          <Formik
+            initialValues={{ email: '', password: '', username: '' }}
+            validationSchema={schema}
+            onSubmit={(values, { setSubmitting }) => {
+              setTimeout(() => {
+                this.props.signUp(values)
+                setSubmitting(false)
+              }, 400)
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <div className="field">
+                  <label htmlFor="username" className="label">
+                    Username
+                    <div className="control">
+                      <Field type="text" name="username" id="username" />
+                    </div>
+                  </label>
+                  <ErrorMessage
+                    name="username"
+                    component="div"
+                    className="error-message"
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="email" className="label">
+                    Email
+                    <div className="control has-icon-left has-icons-right">
+                      <Field type="email" name="email" id="email" />
+                    </div>
+                  </label>
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="error-message"
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="password" className="label">
+                    Password
+                    <div className="control">
+                      <Field type="password" name="password" id="password" />
+                    </div>
+                  </label>
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="error-message"
+                  />
+                </div>
+                <div className="control">
+                  <button
+                    type="submit"
+                    className="button is-success"
+                    disabled={isSubmitting}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
           <div>
             <p>or sign up with:</p>
             <Link to="/">
