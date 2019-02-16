@@ -48,6 +48,7 @@ class Signup extends Component {
           >
             {({ isSubmitting }) => (
               <Form>
+                <h3>Sign up</h3>
                 <div className="field">
                   <label htmlFor="username" className="label">
                     Username
@@ -93,7 +94,7 @@ class Signup extends Component {
                     className="button is-success"
                     disabled={isSubmitting}
                   >
-                    Submit
+                    Sign up
                   </button>
                 </div>
               </Form>
