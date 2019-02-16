@@ -7,5 +7,11 @@
 
 label span {
   font-weight: 600;
-  margin-left: 0.3rem;
+}
+.label-radio {
+  display: flex;
+  align-items: center;
+}
+input[type='radio'] {
+  margin-left: 1rem;
 }

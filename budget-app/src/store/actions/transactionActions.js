@@ -5,7 +5,7 @@ export const updateTransaction = payload => (dispatch, getState) => {
   const updateDetails = {
     account: payload.account,
     amount: payload.amount,
-    date: payload.date,
+    date: payload.dateselect,
     category: payload.category,
     type: payload.type,
   }
@@ -33,14 +33,7 @@ export const updateTransaction = payload => (dispatch, getState) => {
 }
 export const addTransaction = payload => (dispatch, getState) => {
   // Make call to API here
-  const {
-    account,
-    amount,
-    category,
-    selectedOption: type,
-    selectedDay: date,
-    uid,
-  } = payload
+  const { account, amount, category, type, dateselect: date, uid } = payload
 
   const newTransaction = {
     account,
