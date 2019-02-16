@@ -1,32 +1,26 @@
+import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { Component } from 'react'
-import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
-import { signIn } from '../../store/actions/authActions'
-
+import { Link, NavLink, Redirect } from 'react-router-dom'
+import * as yup from 'yup'
 import Icon from '../../components/Icons/index'
+import { signIn } from '../../store/actions/authActions'
 import './Signin.css'
 
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .trim('No whitespace!')
+    .lowercase('It has to be lowercase!')
+    .email('Invalid email!')
+    .required('Required'),
+  password: yup
+    .string()
+    .min(6, 'Too short')
+    .max(21, 'Too long!')
+    .required('Required'),
+})
 class Signin extends Component {
-  state = {
-    email: '',
-    password: '',
-  }
-
-  handleChange = e => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    })
-  }
-
-  handleSubmit = e => {
-    e.preventDefault()
-    this.props.signIn(this.state)
-    this.setState({
-      email: '',
-      password: '',
-    })
-  }
   render() {
     const { auth } = this.props
 
@@ -36,54 +30,69 @@ class Signin extends Component {
     return (
       <section className="signin">
         <div className="container">
-          <form onSubmit={this.handleSubmit}>
-            <h3>Sign in</h3>
-            <div className="field">
-              <label htmlFor="email" className="label">
-                Email
-              </label>
-              <div className="control has-icon-left has-icons-right">
-                <input
-                  type="email"
-                  className="input"
-                  placeholder="Email"
-                  id="email"
-                  value={this.state.email}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label htmlFor="password" className="label">
-                Password
-              </label>
-              <div className="control">
-                <input
-                  type="password"
-                  className="input"
-                  placeholder="Password"
-                  id="password"
-                  value={this.state.password}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="control">
-              <button className="button is-success">Sign in</button>
-            </div>
-            <div>
-              <p>or log in with:</p>
-              <Link to="/">
-                <Icon name="facebook" color="#28439e" width="40" height="40" />
-              </Link>
-              <Link to="/">
-                <Icon name="google" color="#28439e" width="40" height="40" />
-              </Link>
-              <Link to="/">
-                <Icon name="twitter" color="#28439e" width="40" height="40" />
-              </Link>
-            </div>
-          </form>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            validationSchema={schema}
+            onSubmit={(values, { setSubmitting }) => {
+              setTimeout(() => {
+                this.props.signIn(values)
+                setSubmitting(false)
+              }, 400)
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <h3>Sign in</h3>
+                <div className="field">
+                  <label htmlFor="email" className="label">
+                    Email
+                    <div className="control has-icon-left has-icons-right">
+                      <Field type="email" name="email" id="email" />
+                    </div>
+                  </label>
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="error-message"
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="password" className="label">
+                    Password
+                    <div className="control">
+                      <Field type="password" name="password" id="password" />
+                    </div>
+                  </label>
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="error-message"
+                  />
+                </div>
+                <div className="control">
+                  <button
+                    type="submit"
+                    className="button is-success"
+                    disabled={isSubmitting}
+                  >
+                    Sign in
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+          <div>
+            <p>or log in with:</p>
+            <Link to="/">
+              <Icon name="facebook" color="#28439e" width="40" height="40" />
+            </Link>
+            <Link to="/">
+              <Icon name="google" color="#28439e" width="40" height="40" />
+            </Link>
+            <Link to="/">
+              <Icon name="twitter" color="#28439e" width="40" height="40" />
+            </Link>
+          </div>
           <div>
             <p>
               Don't have an account? <NavLink to="/signup">Sign up</NavLink>
