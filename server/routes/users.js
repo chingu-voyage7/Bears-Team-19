@@ -18,11 +18,28 @@ router.get('/', async (req, res, next) => {
 // Get user based on id
 router.get('/user/:id', async (req, res, next) => {
   const { id } = req.params
-  const user = await db('users')
+  const [user] = await db('users')
     .where({ user_id: id })
     .select()
 
-  res.json({ message: 'Got user', data: user })
+  // Set total balance
+  // Get all acounts for that user
+  const accounts = await db('accounts')
+    .select()
+    .where({ fk_user_id: id })
+
+  // Get all accounts for that user, if none, default to 0.00
+  let totalBalance = 0.0
+  if (accounts.length) {
+    totalBalance = accounts.reduce(
+      (a, b) => parseFloat(a) + parseFloat(b.balance),
+      0,
+    )
+  } else {
+    totalBalance = 0.0
+  }
+  const userWithBalance = { ...user, balance: totalBalance }
+  res.json({ message: 'Got user', data: userWithBalance })
 })
 
 // Create new user
