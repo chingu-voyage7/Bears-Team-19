@@ -21,9 +21,17 @@ router.get('/', async (req, res, next) => {
         .innerJoin('categories', 'fk_category_id', 'category_id')
         .where({ fk_user_id: user_id })
         .orderBy('trans_id')
-        .column('trans_id', 'amount', 'account', 'date', 'type', 'category', {
-          authorid: 'fk_user_id',
-        })
+        .column(
+          'trans_id',
+          'amount',
+          'fk_account_id',
+          'date',
+          'type',
+          'category',
+          {
+            authorid: 'fk_user_id',
+          },
+        )
       res.json({ message: 'Got transactions', transWithCat })
     }
   }
@@ -68,7 +76,8 @@ router.post('/', async (req, res, next) => {
     fk_user_id: user_id,
     amount,
     type,
-    account,
+    fk_account_id: account,
+    fk_budget_id: 1, // TODO: Change later
     date,
     fk_category_id: categoryId,
   }

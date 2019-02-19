@@ -92,7 +92,12 @@ router.delete('/', async (req, res, next) => {
     if (!userResponse.length) {
       res.status(404).json({ message: 'Not authorized' })
     } else {
-      res.json({ message: 'Budgets Delete' })
+      const { budgetId: budget_id } = req.body
+
+      const deletedBudget = await db('budgets')
+        .del()
+        .where({ budget_id })
+      res.json({ message: 'Budget deleted', deletedBudget })
     }
   }
 })
