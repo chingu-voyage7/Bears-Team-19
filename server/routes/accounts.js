@@ -78,7 +78,17 @@ router.patch('/', async (req, res, next) => {
     if (!userResponse.length) {
       res.status(404).json({ message: 'Not authorized' })
     } else {
-      res.json({ message: 'Accounts Patch' })
+      // Update account
+      const { accountId, accountName, balance } = req.body
+      const updatedAccount = await db('accounts')
+        .update({ account_name: accountName, balance })
+        .where({ account_id: accountId })
+        .returning(['account_id', 'account_name', 'balance'])
+
+      res.json({
+        message: 'Account updated',
+        updatedAccount,
+      })
     }
   }
 })
