@@ -72,7 +72,13 @@ router.patch('/', async (req, res, next) => {
     if (!userResponse.length) {
       res.status(404).json({ message: 'Not authorized' })
     } else {
-      res.json({ message: 'Budgets Patch' })
+      const { budgetId, budgetName } = req.body
+      const updatedBudget = await db('budgets')
+        .update({ budget_name: budgetName })
+        .where({ budget_id: budgetId })
+        .returning(['budget_id', 'budget_name'])
+
+      res.json({ message: 'Budget updated', updatedBudget })
     }
   }
 })
