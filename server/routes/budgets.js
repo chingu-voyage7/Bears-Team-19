@@ -19,10 +19,15 @@ router.get('/', async (req, res, next) => {
     if (!userResponse.length) {
       res.status(404).json({ message: 'Not authorized' })
     } else {
-      res.json({ message: 'Budgets' })
+      const [{ user_id }] = userResponse
+
+      // Get all budgets for that user.
+      const budgets = await db('budgets')
+        .select()
+        .where({ fk_user_id: user_id })
+      res.json({ message: 'Budgets', budgets })
     }
   }
-  // Get all budgets for that user.
 })
 
 // Create budget
