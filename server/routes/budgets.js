@@ -40,7 +40,14 @@ router.post('/', async (req, res, next) => {
     if (!userResponse.length) {
       res.status(404).json({ message: 'Not authorized' })
     } else {
-      res.json({ message: 'Budgets Post' })
+      const { budgetName } = req.body
+      const [{ user_id }] = userResponse
+
+      const newBudget = await db('budgets')
+        .insert({ budget_name: budgetName, fk_user_id: user_id })
+        .returning(['budget_name', 'budget_id'])
+
+      res.json({ message: 'Budget created', newBudget })
     }
   }
 })
