@@ -98,7 +98,12 @@ router.delete('/', async (req, res, next) => {
     if (!userResponse.length) {
       res.status(404).json({ message: 'Not authorized' })
     } else {
-      res.json({ message: 'Accounts Delete' })
+      const { account_id } = req.body
+
+      const deletedAccount = await db('accounts')
+        .del()
+        .where({ account_id })
+      res.json({ message: 'Account deleted', deletedAccount })
     }
   }
 })
