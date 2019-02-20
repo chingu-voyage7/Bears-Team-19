@@ -42,7 +42,7 @@ router.post('/', isAuthenticated, async (req, res, next) => {
   const isValid = await isValidBudgetAndAccount(accountId, budgetId, userId)
   if (!isValid) {
     res.status(401).json({
-      message: `Transaction not created, budget or account doesn't exist or doesn't belong to you.`,
+      error: `Transaction not created, budget or account doesn't exist or doesn't belong to you.`,
     })
   } else {
     // get all categories
@@ -103,7 +103,7 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
     const isValid = await isValidBudgetAndAccount(accountId, budgetId, userId)
     if (!isValid) {
       res.status(401).json({
-        message: `Transaction not updated, budget or account doesn't exist or doesn't belong to you.`,
+        error: `Transaction not updated, budget or account doesn't exist or doesn't belong to you.`,
       })
     } else {
       // get all categories
@@ -164,7 +164,7 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
     .where({ trans_id: transId, fk_user_id: userId })
 
   if (!result) {
-    res.status(404).json({ message: 'Not authorized' })
+    res.status(404).json({ error: 'Not authorized' })
   }
   res.json({ message: 'Deleted transaction', transId })
 })

@@ -40,12 +40,15 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
 // Delete budget
 router.delete('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
-  const { budgetId: budget_id } = req.body
+  const { budgetId } = req.body
 
-  const deletedBudget = await db('budgets')
+  const result = await db('budgets')
     .del()
-    .where({ budget_id, fk_user_id: userId })
-  res.json({ message: 'Budget deleted', deletedBudget })
+    .where({ budget_id: budgetId, fk_user_id: userId })
+  if (!result) {
+    res.status(404).json({ error: 'Not authorized' })
+  }
+  res.json({ message: 'Budget deleted' })
 })
 
 module.exports = router

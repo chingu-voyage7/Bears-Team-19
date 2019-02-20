@@ -4,7 +4,7 @@ const isAuthenticated = async (req, res, next) => {
   // check that user exists
   const { uid } = req.headers
   if (!uid) {
-    res.status(404).json({ message: 'Not authorized' })
+    res.status(404).json({ error: 'Not authorized' })
   } else {
     // Check so there is a user in database
     const userResponse = await db('users')
@@ -12,7 +12,7 @@ const isAuthenticated = async (req, res, next) => {
       .select()
 
     if (!userResponse.length) {
-      res.status(404).json({ message: 'Not authorized' })
+      res.status(404).json({ error: 'Not authorized' })
     } else {
       // User is authenticated and exists.
       const [{ user_id }] = userResponse
