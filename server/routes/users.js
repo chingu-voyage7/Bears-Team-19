@@ -1,4 +1,6 @@
 const express = require('express')
+const { isAuthenticated } = require('../middleware/authMiddleware')
+const { getTotalBalance } = require('../helpers/helpers')
 const db = require('../database/database.js')
 
 const router = express.Router()
@@ -16,34 +18,19 @@ router.get('/', async (req, res, next) => {
 })
 
 // Get user based on id
-router.get('/user/:id', async (req, res, next) => {
-  const { id } = req.params
+router.get('/user/', isAuthenticated, async (req, res, next) => {
+  const { userId } = req
   const [user] = await db('users')
-    .where({ user_id: id })
+    .where({ user_id: userId })
     .select()
 
-  // Set total balance
-  // Get all acounts for that user
-  const accounts = await db('accounts')
-    .select()
-    .where({ fk_user_id: id })
-
-  // Get all accounts for that user, if none, default to 0.00
-  let totalBalance = 0.0
-  if (accounts.length) {
-    totalBalance = accounts.reduce(
-      (a, b) => parseFloat(a) + parseFloat(b.balance),
-      0,
-    )
-  } else {
-    totalBalance = 0.0
-  }
+  const totalBalance = await getTotalBalance(userId)
   const userWithBalance = { ...user, balance: totalBalance }
   res.json({ message: 'Got user', data: userWithBalance })
 })
 
 // Create new user
-router.post('/user', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   const userDetails = req.body
   try {
     const [userId] = await db('users')
@@ -57,26 +44,31 @@ router.post('/user', async (req, res, next) => {
 })
 
 // Update user based on id
-router.post('/user/:id', async (req, res, next) => {
-  const { id } = req.params
+router.patch('/', isAuthenticated, async (req, res, next) => {
+  const { userId } = req
   const updateDetails = req.body
 
   const [updatedUser] = await db('users')
     .update(updateDetails)
-    .returning(['user_id', 'email', 'username', 'balance', 'notifications'])
-    .where({ user_id: id })
+    .returning(['user_id', 'email', 'username', 'notifications'])
+    .where({ user_id: userId })
 
-  res.json({ message: 'Updated user', data: updatedUser })
+  const totalBalance = await getTotalBalance(userId)
+  const userWithBalance = { ...updatedUser, balance: totalBalance }
+  res.json({ message: 'Updated user', data: userWithBalance })
 })
 
 // Delete user based on id
-router.delete('/user/:id', async (req, res, next) => {
-  const { id } = req.params
+router.delete('/', isAuthenticated, async (req, res, next) => {
+  const { userId } = req
 
   const deletedUser = await db('users')
     .del()
-    .where({ user_id: id })
+    .where({ user_id: userId })
 
+  if (!deletedUser) {
+    res.json({ error: `Couldn't delete user` })
+  }
   res.json({ message: 'Deleted user' })
 })
 
