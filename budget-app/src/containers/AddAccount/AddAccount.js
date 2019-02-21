@@ -41,7 +41,7 @@ class AddAccount extends Component {
                   ...values,
                   uid: this.props.auth.uid,
                 }
-                // this.props.addAccount(newAccount)
+                this.props.addAccount(newAccount)
                 setSubmitting(false)
                 // this.setState({
                 //   toDashboard: true,
