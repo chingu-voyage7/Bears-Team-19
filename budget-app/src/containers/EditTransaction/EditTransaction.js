@@ -1,11 +1,11 @@
+import { addDays, format } from 'date-fns'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { connect } from 'react-redux'
-import * as yup from 'yup'
-import { format, addDays } from 'date-fns'
 import { Redirect } from 'react-router-dom'
+import * as yup from 'yup'
 import { updateTransaction } from '../../store/actions/transactionActions'
 import './EditTransaction.css'
 
@@ -53,7 +53,7 @@ class EditTransaction extends Component {
                 const updatedTransaction = {
                   ...values,
                   uid: this.props.auth.uid,
-                  id: this.props.transaction.trans_id,
+                  transId: this.props.transaction.trans_id,
                 }
                 this.props.updateTransaction(updatedTransaction)
                 setSubmitting(false)

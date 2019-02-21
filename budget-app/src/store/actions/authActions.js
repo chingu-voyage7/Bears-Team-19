@@ -14,7 +14,7 @@ export const signUp = payload => (dispatch, getState, { getFirebase }) => {
         email: payload.email,
       }
       axios
-        .post('/users/user', newUser)
+        .post('/users', newUser)
         .then(res => {
           dispatch({
             type: 'SIGNUP_SUCCESS',

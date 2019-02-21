@@ -3,15 +3,17 @@ import axios from 'axios'
 export const updateTransaction = payload => (dispatch, getState) => {
   // Make call to API here
   const updateDetails = {
-    account: payload.account,
+    trandId: payload.id,
+    accountId: payload.account,
     amount: payload.amount,
     date: payload.dateselect,
     category: payload.category,
     type: payload.type,
+    budgetId: payload.budget,
   }
   axios({
-    method: 'post',
-    url: `/transactions/${payload.id}`,
+    method: 'patch',
+    url: `/transactions/`,
     headers: {
       uid: payload.uid,
     },
@@ -33,18 +35,33 @@ export const updateTransaction = payload => (dispatch, getState) => {
 }
 export const addTransaction = payload => (dispatch, getState) => {
   // Make call to API here
-  const { account, amount, category, type, dateselect: date, uid } = payload
+  const {
+    accountId,
+    budgetId,
+    amount,
+    category,
+    type,
+    dateselect: date,
+    uid,
+  } = payload
 
   const newTransaction = {
-    account,
+    accountId,
     amount,
     category,
     type,
     date,
     uid,
+    budgetId,
   }
-  axios
-    .post('/transactions', newTransaction)
+  axios({
+    method: 'post',
+    url: `/transactions`,
+    headers: {
+      uid: payload.uid,
+    },
+    data: newTransaction,
+  })
     .then(res => {
       dispatch(getTransactions(uid))
       dispatch({
@@ -87,10 +104,11 @@ export const deleteTransaction = payload => (dispatch, getState) => {
   // Make call to API here
   axios({
     method: 'delete',
-    url: `/transactions/${payload.id}`,
+    url: `/transactions`,
     headers: {
       uid: payload.uid,
     },
+    data: payload.transId,
   })
     .then(res => {
       dispatch({

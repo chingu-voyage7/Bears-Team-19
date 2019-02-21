@@ -31,9 +31,16 @@ class Dashboard extends Component {
       )
     }
     const rows = transactions.map(transaction => {
-      const { trans_id, date, amount, type, category, account } = transaction
+      const {
+        trans_id: transId,
+        date,
+        amount,
+        type,
+        category,
+        account,
+      } = transaction
       return (
-        <tr key={trans_id}>
+        <tr key={transId}>
           <td>{format(date, 'YYYY-MM-DD')}</td>
           <td>{type}</td>
           <td>{amount}</td>
@@ -44,7 +51,7 @@ class Dashboard extends Component {
               to={{
                 pathname: `/transaction/edit`,
                 state: {
-                  trans_id,
+                  transId,
                   date,
                   type,
                   amount,
@@ -59,7 +66,7 @@ class Dashboard extends Component {
           <td>
             <div
               className="delete-transaction"
-              onClick={() => this.handleDelete(trans_id)}
+              onClick={() => this.handleDelete(transId)}
             >
               <Icon name="delete" color="#E94B25" />
             </div>
