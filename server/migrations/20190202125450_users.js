@@ -14,10 +14,6 @@ exports.up = async function(knex, Promise) {
       .notNullable()
       .unique()
     table
-      .float('balance')
-      .notNullable()
-      .defaultTo(0.0)
-    table
       .boolean('notifications')
       .notNullable()
       .defaultTo(true)

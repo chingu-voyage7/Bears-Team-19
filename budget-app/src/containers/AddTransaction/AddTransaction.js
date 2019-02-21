@@ -1,11 +1,11 @@
+import { addDays, format } from 'date-fns'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { connect } from 'react-redux'
-import * as yup from 'yup'
-import { format, addDays } from 'date-fns'
 import { Redirect } from 'react-router-dom'
+import * as yup from 'yup'
 import { addTransaction } from '../../store/actions/transactionActions'
 import './AddTransaction.css'
 
@@ -14,7 +14,7 @@ const schema = yup.object().shape({
     .number('Value must be a number.')
     .min(0.01, 'Number has to be higher than 0.')
     .required('Required'),
-  account: yup.string().required('Required'),
+  account: yup.number().required('Required'),
   category: yup
     .string()
     .trim('No whitespace!')
@@ -41,12 +41,15 @@ class AddTransaction extends Component {
             initialValues={{
               amount: 0,
               category: '',
-              account: '',
+              accountId: 1,
               type: '',
+              budgetId: 1,
               dateselect: format(new Date()),
             }}
             validationSchema={schema}
             onSubmit={(values, { setSubmitting }) => {
+              console.log('got here')
+              console.log(values)
               setTimeout(() => {
                 const newTransaction = {
                   ...values,
@@ -102,19 +105,19 @@ class AddTransaction extends Component {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="account" className="label">
+                  <label htmlFor="accountId" className="label">
                     Account
                     <div className="control">
                       <Field
-                        type="text"
-                        name="account"
-                        id="account"
-                        placeholder="Ex. Spending account"
+                        type="number"
+                        name="accountId"
+                        id="accountId"
+                        placeholder="2"
                       />
                     </div>
                   </label>
                   <ErrorMessage
-                    name="account"
+                    name="accountId"
                     component="div"
                     className="error-message"
                   />
