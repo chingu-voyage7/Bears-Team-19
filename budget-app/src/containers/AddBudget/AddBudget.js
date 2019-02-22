@@ -30,7 +30,6 @@ class AddBudget extends Component {
             }}
             validationSchema={schema}
             onSubmit={(values, { setSubmitting }) => {
-              console.log(values)
               setTimeout(() => {
                 const newBudget = {
                   ...values,

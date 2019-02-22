@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 export const addBudget = payload => (dispatch, getState) => {
-  console.log(payload)
   axios({
     method: 'post',
     url: `/budgets`,
