@@ -81,7 +81,7 @@ class Dashboard extends Component {
     return (
       <section className="dashboard">
         <h3>Dashboard</h3>
-        <BudgetList />
+        <BudgetList uid={this.props.auth.uid} />
         <Link to="/budget/create">Add new budget</Link>
         <table className="table">
           <thead>

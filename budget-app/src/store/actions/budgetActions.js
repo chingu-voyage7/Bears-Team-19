@@ -22,3 +22,25 @@ export const addBudget = payload => (dispatch, getState) => {
       })
     })
 }
+
+export const getBudgets = payload => (dispatch, getState) => {
+  axios({
+    method: 'get',
+    url: `/budgets`,
+    headers: {
+      uid: payload,
+    },
+  })
+    .then(res => {
+      dispatch({
+        type: 'GET_BUDGETS_SUCCESS',
+        payload: res,
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: 'GET_BUDGETS_ERROR',
+        payload: err,
+      })
+    })
+}

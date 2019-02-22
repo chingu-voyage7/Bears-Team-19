@@ -1,14 +1,33 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { getBudgets } from '../store/actions/budgetActions'
 import Budget from './Budget'
 
 class BudgetList extends Component {
+  componentDidMount() {
+    this.props.getBudgets(this.props.uid)
+  }
   render() {
-    return (
-      <div>
-        <Budget />
-      </div>
-    )
+    const budgets = this.props.budgets
+      ? this.props.budgets.map(budget => <Budget budget={budget} />)
+      : ''
+    return <div>{budgets}</div>
   }
 }
 
-export default BudgetList
+const mapStateToProps = state => {
+  return {
+    budgets: state.budget.budgets,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getBudgets: uid => dispatch(getBudgets(uid)),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(BudgetList)
