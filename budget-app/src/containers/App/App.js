@@ -7,6 +7,7 @@ import NotFound from '../../components/NotFound'
 import PrivateRoute from '../../components/PrivateRoute'
 import About from '../About/About'
 import AddAccount from '../AddAccount/AddAccount'
+import AddBudget from '../AddBudget/AddBudget'
 import AddTransaction from '../AddTransaction/AddTransaction'
 import Dashboard from '../Dashboard/Dashboard'
 import EditTransaction from '../EditTransaction/EditTransaction'
@@ -43,6 +44,7 @@ class App extends Component {
                 component={AddTransaction}
               />
               <PrivateRoute path="/account/create" component={AddAccount} />
+              <PrivateRoute path="/budget/create" component={AddBudget} />
               <PrivateRoute
                 path="/transaction/edit"
                 component={EditTransaction}
