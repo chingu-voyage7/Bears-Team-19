@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
+import BudgetList from '../../components/BudgetList'
 import Icon from '../../components/Icons'
 import {
   deleteTransaction,
@@ -80,6 +81,8 @@ class Dashboard extends Component {
     return (
       <section className="dashboard">
         <h3>Dashboard</h3>
+        <BudgetList />
+        <Link to="/budget/create">Add new budget</Link>
         <table className="table">
           <thead>
             <tr>
