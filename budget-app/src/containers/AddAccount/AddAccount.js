@@ -35,7 +35,6 @@ class AddAccount extends Component {
             }}
             validationSchema={schema}
             onSubmit={(values, { setSubmitting }) => {
-              console.log(values)
               setTimeout(() => {
                 const newAccount = {
                   ...values,
