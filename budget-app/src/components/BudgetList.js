@@ -10,7 +10,7 @@ class BudgetList extends Component {
   render() {
     const budgets = this.props.budgets
       ? this.props.budgets.map(budget => (
-          <Budget name={budget.budget_name} key={budget.budget_id} />
+          <Budget budget={budget} key={budget.budget_id} />
         ))
       : ''
     return <ul>{budgets}</ul>

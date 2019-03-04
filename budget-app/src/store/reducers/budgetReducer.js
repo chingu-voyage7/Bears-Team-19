@@ -12,6 +12,10 @@ export default (state = initialState, { type, payload }) => {
     case 'GET_BUDGETS_ERROR':
       return { ...state, ...payload }
 
+    case 'UPDATE_BUDGET_SUCCESS':
+      return { ...state, ...payload }
+    case 'UPDATE_BUDGET_ERROR':
+      return { ...state, ...payload }
     default:
       return state
   }

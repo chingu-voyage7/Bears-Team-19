@@ -44,3 +44,26 @@ export const getAccounts = payload => (dispatch, getState) => {
       })
     })
 }
+
+export const editAccount = payload => (dispatch, getState) => {
+  axios({
+    method: 'patch',
+    url: `/accounts`,
+    headers: {
+      uid: payload.uid,
+    },
+    data: payload,
+  })
+    .then(res => {
+      dispatch({
+        type: 'UPDATE_ACCOUNT_SUCCESS',
+        payload: res,
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: 'UPDATE_ACCOUNT_ERROR',
+        payload: err,
+      })
+    })
+}

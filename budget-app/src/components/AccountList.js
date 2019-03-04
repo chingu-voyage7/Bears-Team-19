@@ -10,7 +10,7 @@ class AccountList extends Component {
   render() {
     const accounts = this.props.accounts
       ? this.props.accounts.map(account => (
-          <Account name={account.account_name} key={account.account_id} />
+          <Account account={account} key={account.account_id} />
         ))
       : ''
     return <ul>{accounts}</ul>
