@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
+import AccountList from '../../components/AccountList'
 import BudgetList from '../../components/BudgetList'
 import Icon from '../../components/Icons'
 import {
@@ -83,6 +84,8 @@ class Dashboard extends Component {
         <h3>Dashboard</h3>
         <BudgetList uid={this.props.auth.uid} />
         <Link to="/budget/create">Add new budget</Link>
+        <AccountList uid={this.props.auth.uid} />
+        <Link to="/account/create">Add new account</Link>
         <table className="table">
           <thead>
             <tr>
