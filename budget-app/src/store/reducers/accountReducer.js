@@ -7,6 +7,10 @@ export default (state = initialState, { type, payload }) => {
     case 'ADD_ACCOUNT_ERROR':
       return { ...state, ...payload }
 
+    case 'GET_ACCOUNTS_SUCCESS':
+      return { ...state, ...payload.data }
+    case 'GET_ACCOUNTS_ERROR':
+      return { ...state, ...payload }
     default:
       return state
   }

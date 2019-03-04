@@ -22,3 +22,25 @@ export const addAccount = payload => (dispatch, getState) => {
       })
     })
 }
+
+export const getAccounts = payload => (dispatch, getState) => {
+  axios({
+    method: 'get',
+    url: `/accounts`,
+    headers: {
+      uid: payload,
+    },
+  })
+    .then(res => {
+      dispatch({
+        type: 'GET_ACCOUNTS_SUCCESS',
+        payload: res,
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: 'GET_ACCOUNTS_ERROR',
+        payload: err,
+      })
+    })
+}
