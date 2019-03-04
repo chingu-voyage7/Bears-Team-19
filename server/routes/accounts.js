@@ -63,6 +63,7 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
   }
   res.json({
     message: 'Account deleted',
+    accountId,
   })
 })
 

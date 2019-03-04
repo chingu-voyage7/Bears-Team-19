@@ -67,3 +67,26 @@ export const editAccount = payload => (dispatch, getState) => {
       })
     })
 }
+
+export const deleteAccount = payload => (dispatch, getState) => {
+  axios({
+    method: 'delete',
+    url: `/accounts`,
+    headers: {
+      uid: payload.uid,
+    },
+    data: payload,
+  })
+    .then(res => {
+      dispatch({
+        type: 'DELETE_ACCOUNT_SUCCESS',
+        payload: res,
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: 'DELETE_ACCOUNT_ERROR',
+        payload: err,
+      })
+    })
+}

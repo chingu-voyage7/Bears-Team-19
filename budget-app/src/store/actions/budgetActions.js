@@ -67,3 +67,26 @@ export const editBudget = payload => (dispatch, getState) => {
       })
     })
 }
+
+export const deleteBudget = payload => (dispatch, getState) => {
+  axios({
+    method: 'delete',
+    url: `/budgets`,
+    headers: {
+      uid: payload.uid,
+    },
+    data: payload,
+  })
+    .then(res => {
+      dispatch({
+        type: 'DELETE_BUDGET_SUCCESS',
+        payload: res,
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: 'DELETE_BUDGET_ERROR',
+        payload: err,
+      })
+    })
+}

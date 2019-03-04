@@ -48,7 +48,7 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
   if (!result) {
     res.status(404).json({ error: 'Not authorized' })
   }
-  res.json({ message: 'Budget deleted' })
+  res.json({ message: 'Budget deleted', budgetId })
 })
 
 module.exports = router
