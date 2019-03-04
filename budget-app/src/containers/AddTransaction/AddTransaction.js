@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import * as yup from 'yup'
 import { addTransaction } from '../../store/actions/transactionActions'
 import './AddTransaction.css'
@@ -105,6 +105,7 @@ class AddTransaction extends Component {
                   />
                 </div>
                 <div className="field">
+                  <Link to="/account/create">Add new account</Link>
                   <label htmlFor="accountId" className="label">
                     Account
                     <div className="control">
@@ -118,6 +119,25 @@ class AddTransaction extends Component {
                   </label>
                   <ErrorMessage
                     name="accountId"
+                    component="div"
+                    className="error-message"
+                  />
+                </div>
+                <div className="field">
+                  <Link to="/budget/create">Add new budget</Link>
+                  <label htmlFor="budgetId" className="label">
+                    Budget
+                    <div className="control">
+                      <Field
+                        type="number"
+                        name="budgetId"
+                        id="budgetId"
+                        placeholder="2"
+                      />
+                    </div>
+                  </label>
+                  <ErrorMessage
+                    name="budgetId"
                     component="div"
                     className="error-message"
                   />
