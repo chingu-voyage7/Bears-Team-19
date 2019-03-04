@@ -16,6 +16,14 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, ...payload }
     case 'UPDATE_BUDGET_ERROR':
       return { ...state, ...payload }
+
+    case 'DELETE_BUDGET_SUCCESS':
+      const filteredBudgets = state.budgets.filter(
+        budget => budget.budget_id !== parseInt(payload.data.budgetId),
+      )
+      return { ...state, budgets: filteredBudgets }
+    case 'DELETE_BUDGET_ERROR':
+      return { ...state, ...payload }
     default:
       return state
   }
