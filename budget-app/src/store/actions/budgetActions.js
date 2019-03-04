@@ -44,3 +44,26 @@ export const getBudgets = payload => (dispatch, getState) => {
       })
     })
 }
+
+export const editBudget = payload => (dispatch, getState) => {
+  axios({
+    method: 'patch',
+    url: `/budgets`,
+    headers: {
+      uid: payload.uid,
+    },
+    data: payload,
+  })
+    .then(res => {
+      dispatch({
+        type: 'UPDATE_BUDGET_SUCCESS',
+        payload: res,
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: 'UPDATE_BUDGET_ERROR',
+        payload: err,
+      })
+    })
+}

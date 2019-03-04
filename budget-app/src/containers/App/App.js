@@ -11,6 +11,7 @@ import AddBudget from '../AddBudget/AddBudget'
 import AddTransaction from '../AddTransaction/AddTransaction'
 import Dashboard from '../Dashboard/Dashboard'
 import EditAccount from '../EditAccount/EditAccount'
+import EditBudget from '../EditBudget/EditBudget'
 import EditTransaction from '../EditTransaction/EditTransaction'
 import Home from '../Home/Home'
 import Signin from '../Signin/Signin'
@@ -47,6 +48,7 @@ class App extends Component {
               <PrivateRoute path="/account/create" component={AddAccount} />
               <PrivateRoute path="/account/edit" component={EditAccount} />
               <PrivateRoute path="/budget/create" component={AddBudget} />
+              <PrivateRoute path="/budget/edit" component={EditBudget} />
               <PrivateRoute
                 path="/transaction/edit"
                 component={EditTransaction}
