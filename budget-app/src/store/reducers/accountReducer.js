@@ -16,6 +16,14 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, ...payload }
     case 'UPDATE_ACCOUNT_ERROR':
       return { ...state, ...payload }
+
+    case 'DELETE_ACCOUNT_SUCCESS':
+      const filteredAccounts = state.accounts.filter(
+        account => account.account_id !== parseInt(payload.data.accountId),
+      )
+      return { ...state, accounts: filteredAccounts }
+    case 'DELETE_ACCOUNT_ERROR':
+      return { ...state, ...payload }
     default:
       return state
   }

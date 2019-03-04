@@ -18,6 +18,12 @@ const Account = props => {
       >
         <Icon name="edit" color="#6179C7" />
       </Link>
+      <div
+        className="delete-account"
+        onClick={() => props.handleDelete(props.account.account_id)}
+      >
+        <Icon name="delete" color="#E94B25" />
+      </div>
     </li>
   )
 }
