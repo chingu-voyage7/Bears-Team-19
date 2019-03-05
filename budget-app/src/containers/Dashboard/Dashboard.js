@@ -17,7 +17,7 @@ class Dashboard extends Component {
   }
   handleDelete = id => {
     // call delete action here with the id
-    this.props.deleteTransaction({ id, uid: this.props.auth.uid })
+    this.props.deleteTransaction({ transId: id, uid: this.props.auth.uid })
   }
   render() {
     const { auth, transactions } = this.props
@@ -34,12 +34,15 @@ class Dashboard extends Component {
     }
     const rows = transactions.map(transaction => {
       const {
-        trans_id: transId,
+        transId,
         date,
         amount,
         type,
         category,
-        account,
+        accountId,
+        budgetId,
+        budgetName,
+        accountName,
       } = transaction
       return (
         <tr key={transId}>
@@ -47,7 +50,8 @@ class Dashboard extends Component {
           <td>{type}</td>
           <td>{amount}</td>
           <td>{category}</td>
-          <td>{account}</td>
+          <td>{accountName}</td>
+          <td>{budgetName}</td>
           <td>
             <Link
               to={{
@@ -58,7 +62,8 @@ class Dashboard extends Component {
                   type,
                   amount,
                   category,
-                  account,
+                  accountId,
+                  budgetId,
                 },
               }}
             >
@@ -100,6 +105,9 @@ class Dashboard extends Component {
               <th>
                 <abbr title="Account">Account</abbr>
               </th>
+              <th>
+                <abbr title="Budget">Budget</abbr>
+              </th>
               <th>Edit</th>
               <th>
                 <abbr title="Delete">Del</abbr>
@@ -118,6 +126,9 @@ class Dashboard extends Component {
               </th>
               <th>
                 <abbr title="Account">Account</abbr>
+              </th>
+              <th>
+                <abbr title="Budget">Budget</abbr>
               </th>
               <th>Edit</th>
               <th>

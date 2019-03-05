@@ -108,7 +108,7 @@ export const deleteTransaction = payload => (dispatch, getState) => {
     headers: {
       uid: payload.uid,
     },
-    data: payload.transId,
+    data: payload,
   })
     .then(res => {
       dispatch({
