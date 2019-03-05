@@ -4,8 +4,10 @@ import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { connect } from 'react-redux'
-import { Redirect, Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import * as yup from 'yup'
+import { addAccount, getAccounts } from '../../store/actions/accountActions'
+import { addBudget, getBudgets } from '../../store/actions/budgetActions'
 import { addTransaction } from '../../store/actions/transactionActions'
 import './AddTransaction.css'
 
@@ -14,7 +16,8 @@ const schema = yup.object().shape({
     .number('Value must be a number.')
     .min(0.01, 'Number has to be higher than 0.')
     .required('Required'),
-  account: yup.number().required('Required'),
+  accountId: yup.number().required('Required'),
+  budgetId: yup.number().required('Required'),
   category: yup
     .string()
     .trim('No whitespace!')
@@ -29,11 +32,14 @@ class AddTransaction extends Component {
   state = {
     toDashboard: false,
   }
+  componentDidMount() {
+    this.props.getAccounts(this.props.auth.uid)
+    this.props.getBudgets(this.props.auth.uid)
+  }
   render() {
     if (this.state.toDashboard === true) {
       return <Redirect to="/" />
     }
-
     return (
       <section className="add-transaction">
         <div className="container">
@@ -41,15 +47,13 @@ class AddTransaction extends Component {
             initialValues={{
               amount: 0,
               category: '',
-              accountId: 1,
+              accountId: undefined,
               type: '',
-              budgetId: 1,
+              budgetId: undefined,
               dateselect: format(new Date()),
             }}
             validationSchema={schema}
             onSubmit={(values, { setSubmitting }) => {
-              console.log('got here')
-              console.log(values)
               setTimeout(() => {
                 const newTransaction = {
                   ...values,
@@ -110,11 +114,25 @@ class AddTransaction extends Component {
                     Account
                     <div className="control">
                       <Field
-                        type="number"
+                        defaultValue="Choose account"
                         name="accountId"
                         id="accountId"
-                        placeholder="2"
-                      />
+                        component="select"
+                        placeholder="Account"
+                      >
+                        <option disabled hidden>
+                          Choose account
+                        </option>
+                        {this.props.accounts &&
+                          this.props.accounts.map(account => (
+                            <option
+                              key={account.account_id}
+                              value={account.account_id}
+                            >
+                              {account.account_name}
+                            </option>
+                          ))}
+                      </Field>
                     </div>
                   </label>
                   <ErrorMessage
@@ -129,11 +147,25 @@ class AddTransaction extends Component {
                     Budget
                     <div className="control">
                       <Field
-                        type="number"
+                        defaultValue="Choose budget"
                         name="budgetId"
                         id="budgetId"
-                        placeholder="2"
-                      />
+                        component="select"
+                        placeholder="Budget"
+                      >
+                        <option disabled hidden>
+                          Choose budget
+                        </option>
+                        {this.props.budgets &&
+                          this.props.budgets.map(budget => (
+                            <option
+                              key={budget.budget_id}
+                              value={budget.budget_id}
+                            >
+                              {budget.budget_name}
+                            </option>
+                          ))}
+                      </Field>
                     </div>
                   </label>
                   <ErrorMessage
@@ -202,12 +234,18 @@ class AddTransaction extends Component {
 
 const mapStateToProps = state => {
   return {
+    accounts: state.account.accounts,
+    budgets: state.budget.budgets,
     auth: state.firebase.auth,
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   addTransaction: transaction => dispatch(addTransaction(transaction)),
+  addAccount: account => dispatch(addAccount(account)),
+  addBudget: budget => dispatch(addBudget(budget)),
+  getAccounts: uid => dispatch(getAccounts(uid)),
+  getBudgets: uid => dispatch(getBudgets(uid)),
 })
 
 export default connect(
