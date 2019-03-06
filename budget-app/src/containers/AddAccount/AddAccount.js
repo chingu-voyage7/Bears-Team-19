@@ -42,9 +42,7 @@ class AddAccount extends Component {
                 }
                 this.props.addAccount(newAccount)
                 setSubmitting(false)
-                // this.setState({
-                //   toDashboard: true,
-                // })
+                this.props.history.goBack()
               }, 400)
             }}
           >

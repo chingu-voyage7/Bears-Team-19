@@ -37,9 +37,7 @@ class AddBudget extends Component {
                 }
                 this.props.addBudget(newBudget)
                 setSubmitting(false)
-                // this.setState({
-                //   toDashboard: true,
-                // })
+                this.props.history.goBack()
               }, 400)
             }}
           >
