@@ -10,19 +10,33 @@ router.get('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const transWithCat = await db('transactions')
     .innerJoin('categories', 'fk_category_id', 'category_id')
-    .where({ fk_user_id: userId })
+    .innerJoin('budgets', 'fk_budget_id', 'budget_id')
+    .innerJoin('accounts', 'fk_account_id', 'account_id')
+    .whereIn('transactions.fk_user_id', [userId])
     .orderBy('trans_id')
     .column(
-      'trans_id',
+      {
+        transId: 'trans_id',
+      },
       'amount',
-      'fk_account_id',
       'date',
       'type',
       'category',
       {
-        authorid: 'fk_user_id',
+        authorid: 'transactions.fk_user_id',
       },
-      'fk_budget_id',
+      {
+        budgetId: 'fk_budget_id',
+      },
+      {
+        accountId: 'fk_account_id',
+      },
+      {
+        budgetName: 'budget_name',
+      },
+      {
+        accountName: 'account_name',
+      },
     )
   res.json({ message: 'Got transactions', transWithCat })
 })

@@ -3,13 +3,13 @@ import axios from 'axios'
 export const updateTransaction = payload => (dispatch, getState) => {
   // Make call to API here
   const updateDetails = {
-    trandId: payload.id,
-    accountId: payload.account,
+    transId: payload.transId,
+    accountId: payload.accountId,
     amount: payload.amount,
     date: payload.dateselect,
     category: payload.category,
     type: payload.type,
-    budgetId: payload.budget,
+    budgetId: payload.budgetId,
   }
   axios({
     method: 'patch',
@@ -108,7 +108,7 @@ export const deleteTransaction = payload => (dispatch, getState) => {
     headers: {
       uid: payload.uid,
     },
-    data: payload.transId,
+    data: payload,
   })
     .then(res => {
       dispatch({

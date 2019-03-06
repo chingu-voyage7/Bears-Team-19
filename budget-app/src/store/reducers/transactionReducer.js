@@ -20,7 +20,7 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, ...payload }
     case 'DELETE_TRANSACTION_SUCCESS':
       const newTransactions = state.transactions.filter(
-        transaction => transaction.trans_id !== parseInt(payload.data.transid),
+        transaction => transaction.transId !== parseInt(payload.data.transId),
       )
       return { ...state, transactions: newTransactions }
     case 'DELETE_TRANSACTION_ERROR':
