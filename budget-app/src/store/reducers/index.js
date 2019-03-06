@@ -4,6 +4,7 @@ import accountReducer from './accountReducer'
 import authReducer from './authReducer'
 import budgetReducer from './budgetReducer'
 import transactionReducer from './transactionReducer'
+import userReducer from './userReducer'
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   firebase: firebaseReducer,
   budget: budgetReducer,
   account: accountReducer,
+  user: userReducer,
 })
 
 export default rootReducer

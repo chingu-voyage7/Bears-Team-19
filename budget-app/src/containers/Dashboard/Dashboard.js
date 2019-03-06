@@ -3,28 +3,38 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import AccountList from '../../components/AccountList'
+import Balance from '../../components/Balance'
 import BudgetList from '../../components/BudgetList'
 import Icon from '../../components/Icons'
 import {
   deleteTransaction,
   getTransactions,
 } from '../../store/actions/transactionActions'
+import { getUser } from '../../store/actions/userActions'
 import './Dashboard.css'
 
 class Dashboard extends Component {
   componentDidMount() {
     this.props.getTransactions(this.props.auth.uid)
+    this.props.getUser(this.props.auth.uid)
   }
   handleDelete = id => {
     // call delete action here with the id
     this.props.deleteTransaction({ transId: id, uid: this.props.auth.uid })
   }
+
   render() {
-    const { auth, transactions } = this.props
+    const {
+      auth,
+      transactions,
+      user: { balance: totalBalance },
+    } = this.props
+
     if (!transactions) {
       return (
         <section className="dashboard">
           <h3>Dashboard</h3>
+          <Balance balance={totalBalance} />
           <p>You have no transactions yet.</p>
           <Link to="/transaction/create" className="add">
             <Icon name="add" color="#23D160" /> <p>New transaction</p>
@@ -87,6 +97,7 @@ class Dashboard extends Component {
     return (
       <section className="dashboard">
         <h3>Dashboard</h3>
+        <Balance balance={totalBalance} />
         <BudgetList uid={this.props.auth.uid} />
         <Link to="/budget/create">Add new budget</Link>
         <AccountList uid={this.props.auth.uid} />
@@ -151,6 +162,7 @@ const mapStateToProps = state => {
   return {
     auth: state.firebase.auth,
     transactions: state.transaction.transactions,
+    user: state.user,
   }
 }
 const mapDispatchToProps = dispatch => {
@@ -158,6 +170,7 @@ const mapDispatchToProps = dispatch => {
     deleteTransaction: transactionId =>
       dispatch(deleteTransaction(transactionId)),
     getTransactions: uid => dispatch(getTransactions(uid)),
+    getUser: uid => dispatch(getUser(uid)),
   }
 }
 
