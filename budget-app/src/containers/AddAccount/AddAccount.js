@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import * as yup from 'yup'
 import { addAccount } from '../../store/actions/accountActions'
-import './AddAccount.css'
 
 const schema = yup.object().shape({
   balance: yup
@@ -26,7 +25,7 @@ class AddAccount extends Component {
     }
 
     return (
-      <section className="add-account">
+      <section className="form-container">
         <div className="container">
           <Formik
             initialValues={{
@@ -58,13 +57,14 @@ class AddAccount extends Component {
                         name="accountName"
                         id="accountName"
                         placeholder="Ex. Spending"
+                        className="input"
                       />
                     </div>
                   </label>
                   <ErrorMessage
                     name="accountName"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
@@ -78,16 +78,21 @@ class AddAccount extends Component {
                         placeholder="Ex. 12.99"
                         min="0"
                         step="0.01"
+                        className="input"
                       />
                     </div>
                   </label>
                   <ErrorMessage
                     name="balance"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
-                <button type="submit" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="button is-success"
+                >
                   Add Account
                 </button>
               </Form>
