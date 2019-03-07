@@ -85,3 +85,7 @@ code {
 body {
   font-family: var(--font-body);
 }
+
+form input[type='radio'] {
+  margin-left: 1rem;
+}
