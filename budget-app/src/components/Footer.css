@@ -8,6 +8,10 @@ footer .container {
   padding: 1rem 1rem 0 1rem;
 }
 
+.main-footer a {
+  color: white;
+}
+
 a:hover {
   background: var(--primary-color);
 }

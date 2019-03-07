@@ -6,6 +6,10 @@
   align-items: center;
   padding: 0 1rem;
 }
+.main-header h3 {
+  color: white;
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -34,6 +38,7 @@
   display: block;
 }
 a,
+a span,
 a:hover {
   color: white;
 }
