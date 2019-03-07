@@ -53,6 +53,7 @@ select,
 textarea {
   font-family: var(--font-heading);
   font-weight: 600;
+  color: var(--grey-color-darkest);
 }
 
 h1 {

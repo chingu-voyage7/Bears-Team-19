@@ -12,3 +12,14 @@
 .error-message {
   color: red;
 }
+
+.form-container {
+  margin-top: 2rem;
+}
+form h3 {
+  text-transform: uppercase;
+}
+
+.link-btn {
+  padding-top: 1rem;
+}

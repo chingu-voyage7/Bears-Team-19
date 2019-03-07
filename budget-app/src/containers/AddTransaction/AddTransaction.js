@@ -9,7 +9,6 @@ import * as yup from 'yup'
 import { addAccount, getAccounts } from '../../store/actions/accountActions'
 import { addBudget, getBudgets } from '../../store/actions/budgetActions'
 import { addTransaction } from '../../store/actions/transactionActions'
-import './AddTransaction.css'
 
 const schema = yup.object().shape({
   amount: yup
@@ -41,7 +40,7 @@ class AddTransaction extends Component {
       return <Redirect to="/" />
     }
     return (
-      <section className="add-transaction">
+      <section className="form-container">
         <div className="container">
           <Formik
             initialValues={{
@@ -81,6 +80,7 @@ class AddTransaction extends Component {
                         placeholder="Ex. 12.99"
                         min="0"
                         step="0.01"
+                        className="input"
                       />
                     </div>
                   </label>
@@ -99,6 +99,7 @@ class AddTransaction extends Component {
                         name="category"
                         id="category"
                         placeholder="Ex. Groceries"
+                        className="input"
                       />
                     </div>
                   </label>
@@ -109,32 +110,39 @@ class AddTransaction extends Component {
                   />
                 </div>
                 <div className="field">
-                  <Link to="/account/create">Add new account</Link>
                   <label htmlFor="accountId" className="label">
                     Account
-                    <div className="control">
-                      <Field
-                        defaultValue="Choose account"
-                        name="accountId"
-                        id="accountId"
-                        component="select"
-                        placeholder="Account"
-                      >
-                        <option disabled hidden>
-                          Choose account
-                        </option>
-                        {this.props.accounts &&
-                          this.props.accounts.map(account => (
-                            <option
-                              key={account.account_id}
-                              value={account.account_id}
-                            >
-                              {account.account_name}
-                            </option>
-                          ))}
-                      </Field>
-                    </div>
                   </label>
+                  <div className="control select">
+                    <Field
+                      defaultValue="Choose account"
+                      name="accountId"
+                      id="accountId"
+                      component="select"
+                      placeholder="Account"
+                    >
+                      <option disabled hidden>
+                        Choose account
+                      </option>
+                      {this.props.accounts &&
+                        this.props.accounts.map(account => (
+                          <option
+                            key={account.account_id}
+                            value={account.account_id}
+                          >
+                            {account.account_name}
+                          </option>
+                        ))}
+                    </Field>
+                  </div>
+                  <div className="link-btn">
+                    <Link
+                      to="/account/create"
+                      className="button is-link is-outlined"
+                    >
+                      Add new account
+                    </Link>
+                  </div>
                   <ErrorMessage
                     name="accountId"
                     component="div"
@@ -142,32 +150,39 @@ class AddTransaction extends Component {
                   />
                 </div>
                 <div className="field">
-                  <Link to="/budget/create">Add new budget</Link>
                   <label htmlFor="budgetId" className="label">
                     Budget
-                    <div className="control">
-                      <Field
-                        defaultValue="Choose budget"
-                        name="budgetId"
-                        id="budgetId"
-                        component="select"
-                        placeholder="Budget"
-                      >
-                        <option disabled hidden>
-                          Choose budget
-                        </option>
-                        {this.props.budgets &&
-                          this.props.budgets.map(budget => (
-                            <option
-                              key={budget.budget_id}
-                              value={budget.budget_id}
-                            >
-                              {budget.budget_name}
-                            </option>
-                          ))}
-                      </Field>
-                    </div>
                   </label>
+                  <div className="control select">
+                    <Field
+                      defaultValue="Choose budget"
+                      name="budgetId"
+                      id="budgetId"
+                      component="select"
+                      placeholder="Budget"
+                    >
+                      <option disabled hidden>
+                        Choose budget
+                      </option>
+                      {this.props.budgets &&
+                        this.props.budgets.map(budget => (
+                          <option
+                            key={budget.budget_id}
+                            value={budget.budget_id}
+                          >
+                            {budget.budget_name}
+                          </option>
+                        ))}
+                    </Field>
+                  </div>
+                  <div className="link-btn">
+                    <Link
+                      to="/budget/create"
+                      className="button is-link is-outlined"
+                    >
+                      Add new budget
+                    </Link>
+                  </div>
                   <ErrorMessage
                     name="budgetId"
                     component="div"
@@ -176,8 +191,8 @@ class AddTransaction extends Component {
                 </div>
                 <div className="field">
                   <div className="control">
-                    <label htmlFor="income" className="label label-radio">
-                      Income
+                    <label htmlFor="income" className="radio">
+                      <strong>Income</strong>
                       <Field
                         type="radio"
                         name="type"
@@ -185,8 +200,8 @@ class AddTransaction extends Component {
                         id="income"
                       />
                     </label>
-                    <label htmlFor="expense" className="label label-radio">
-                      Expense
+                    <label htmlFor="expense" className="radio">
+                      <strong>Expense</strong>
                       <Field
                         type="radio"
                         name="type"
@@ -213,6 +228,7 @@ class AddTransaction extends Component {
                         maxDate={new Date()}
                         placeholderText="Click to set the transaction date"
                         dateFormat="yyyy-MM-dd"
+                        className="input"
                       />
                     </div>
                   </label>
@@ -220,7 +236,11 @@ class AddTransaction extends Component {
                     <div className="error-message">{errors.dateselect}</div>
                   )}
                 </div>
-                <button type="submit" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="is-success button"
+                >
                   Add Transaction
                 </button>
               </Form>
