@@ -87,7 +87,7 @@ class AddTransaction extends Component {
                   <ErrorMessage
                     name="amount"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
@@ -106,7 +106,7 @@ class AddTransaction extends Component {
                   <ErrorMessage
                     name="category"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
@@ -146,7 +146,7 @@ class AddTransaction extends Component {
                   <ErrorMessage
                     name="accountId"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
@@ -186,7 +186,7 @@ class AddTransaction extends Component {
                   <ErrorMessage
                     name="budgetId"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
@@ -213,7 +213,7 @@ class AddTransaction extends Component {
                   <ErrorMessage
                     name="type"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
@@ -233,7 +233,7 @@ class AddTransaction extends Component {
                     </div>
                   </label>
                   {errors.dateselect && (
-                    <div className="error-message">{errors.dateselect}</div>
+                    <div className="help is-danger">{errors.dateselect}</div>
                   )}
                 </div>
                 <button
