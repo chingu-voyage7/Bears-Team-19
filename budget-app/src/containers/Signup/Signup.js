@@ -5,7 +5,6 @@ import { Link, Redirect } from 'react-router-dom'
 import * as yup from 'yup'
 import Icon from '../../components/Icons'
 import { signUp } from '../../store/actions/authActions'
-import './Signup.css'
 
 const schema = yup.object().shape({
   username: yup
@@ -34,7 +33,7 @@ class Signup extends Component {
       return <Redirect to="/" />
     }
     return (
-      <section className="signup">
+      <section className="form-container">
         <div className="container">
           <Formik
             initialValues={{ email: '', password: '', username: '' }}
@@ -53,39 +52,54 @@ class Signup extends Component {
                   <label htmlFor="username" className="label">
                     Username
                     <div className="control">
-                      <Field type="text" name="username" id="username" />
+                      <Field
+                        type="text"
+                        name="username"
+                        id="username"
+                        className="input"
+                      />
                     </div>
                   </label>
                   <ErrorMessage
                     name="username"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
                   <label htmlFor="email" className="label">
                     Email
                     <div className="control has-icon-left has-icons-right">
-                      <Field type="email" name="email" id="email" />
+                      <Field
+                        type="email"
+                        name="email"
+                        id="email"
+                        className="input"
+                      />
                     </div>
                   </label>
                   <ErrorMessage
                     name="email"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
                   <label htmlFor="password" className="label">
                     Password
                     <div className="control">
-                      <Field type="password" name="password" id="password" />
+                      <Field
+                        type="password"
+                        name="password"
+                        id="password"
+                        className="input"
+                      />
                     </div>
                   </label>
                   <ErrorMessage
                     name="password"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="control">
