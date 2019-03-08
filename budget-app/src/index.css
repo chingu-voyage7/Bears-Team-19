@@ -86,6 +86,66 @@ body {
   font-family: var(--font-body);
 }
 
+form {
+  max-width: 300px;
+}
+
 form input[type='radio'] {
   margin-left: 1rem;
+}
+
+form h3 {
+  text-transform: uppercase;
+}
+
+.react-datepicker__input-container {
+  width: 300px;
+}
+
+.select select {
+  width: 300px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: minmax(150px, 200px) 30px 30px;
+}
+
+.dashboard {
+  margin: 0 auto;
+  max-width: 60rem;
+}
+section.dashboard h2 {
+  text-transform: uppercase;
+}
+
+.dashboard a {
+  color: var(--primary-color-darker);
+}
+
+.dashboard a:hover {
+  background: none;
+  color: var(--primary-color-brighter);
+}
+
+.form-container {
+  margin: 2rem auto 0;
+  max-width: 300px;
+}
+
+.link-btn {
+  padding-top: 1rem;
+}
+
+.budget-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.small-width {
+  max-width: 300px;
+}
+
+.delete-item {
+  cursor: pointer;
 }

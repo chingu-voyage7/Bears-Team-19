@@ -2,9 +2,12 @@ import React from 'react'
 
 const Balance = ({ balance }) => {
   return (
-    <div>
-      <p>{balance}</p>
-    </div>
+    <section className="section">
+      <div className="container">
+        <h4>Total balance</h4>
+        <p>{balance}</p>
+      </div>
+    </section>
   )
 }
 

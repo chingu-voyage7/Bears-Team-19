@@ -11,7 +11,6 @@ import {
   getTransactions,
 } from '../../store/actions/transactionActions'
 import { getUser } from '../../store/actions/userActions'
-import './Dashboard.css'
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -96,12 +95,10 @@ class Dashboard extends Component {
     }
     return (
       <section className="dashboard">
-        <h3>Dashboard</h3>
+        <h2>Dashboard</h2>
         <Balance balance={totalBalance} />
         <BudgetList uid={this.props.auth.uid} />
-        <Link to="/budget/create">Add new budget</Link>
         <AccountList uid={this.props.auth.uid} />
-        <Link to="/account/create">Add new account</Link>
         <table className="table">
           <thead>
             <tr>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { deleteAccount, getAccounts } from '../store/actions/accountActions'
 import Account from './Account'
 
@@ -21,7 +22,13 @@ class AccountList extends Component {
           />
         ))
       : ''
-    return <ul>{accounts}</ul>
+    return (
+      <section className="section small-width">
+        <h4>Accounts</h4>
+        {accounts}
+        <Link to="/account/create">Add new account</Link>
+      </section>
+    )
   }
 }
 

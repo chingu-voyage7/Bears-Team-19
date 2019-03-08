@@ -5,7 +5,6 @@ import { Link, NavLink, Redirect } from 'react-router-dom'
 import * as yup from 'yup'
 import Icon from '../../components/Icons/index'
 import { signIn } from '../../store/actions/authActions'
-import './Signin.css'
 
 const schema = yup.object().shape({
   email: yup
@@ -28,7 +27,7 @@ class Signin extends Component {
       return <Redirect to="/" />
     }
     return (
-      <section className="signin">
+      <section className="form-container section">
         <div className="container">
           <Formik
             initialValues={{ email: '', password: '' }}
@@ -47,26 +46,36 @@ class Signin extends Component {
                   <label htmlFor="email" className="label">
                     Email
                     <div className="control has-icon-left has-icons-right">
-                      <Field type="email" name="email" id="email" />
+                      <Field
+                        type="email"
+                        name="email"
+                        id="email"
+                        className="input"
+                      />
                     </div>
                   </label>
                   <ErrorMessage
                     name="email"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
                   <label htmlFor="password" className="label">
                     Password
                     <div className="control">
-                      <Field type="password" name="password" id="password" />
+                      <Field
+                        type="password"
+                        name="password"
+                        id="password"
+                        className="input"
+                      />
                     </div>
                   </label>
                   <ErrorMessage
                     name="password"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="control">
