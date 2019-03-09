@@ -4,10 +4,14 @@ import Icon from './Icons'
 
 const Account = props => {
   return (
-    <div className="conatiner">
-      <div className="budget-info">
-        <h6>{props.account.account_name}</h6>
-        <p>{props.account.balance}</p>
+    <div className="pad">
+      <div className="columns is-mobile">
+        <div className="column">
+          <h6>{props.account.account_name}</h6>
+        </div>
+        <div className="column has-text-right">
+          <p>{props.account.balance}</p>
+        </div>
       </div>
       <div className="actions">
         <div>

@@ -6,6 +6,7 @@ import AccountList from '../../components/AccountList'
 import Balance from '../../components/Balance'
 import BudgetList from '../../components/BudgetList'
 import Icon from '../../components/Icons'
+import TransactionList from '../../components/TransactionList'
 import {
   deleteTransaction,
   getTransactions,
@@ -99,57 +100,7 @@ class Dashboard extends Component {
         <Balance balance={totalBalance} />
         <BudgetList uid={this.props.auth.uid} />
         <AccountList uid={this.props.auth.uid} />
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>
-                <abbr title="Amount">Amt</abbr>
-              </th>
-              <th>
-                <abbr title="Category">Cat</abbr>
-              </th>
-              <th>
-                <abbr title="Account">Account</abbr>
-              </th>
-              <th>
-                <abbr title="Budget">Budget</abbr>
-              </th>
-              <th>Edit</th>
-              <th>
-                <abbr title="Delete">Del</abbr>
-              </th>
-            </tr>
-          </thead>
-          <tfoot>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>
-                <abbr title="Amount">Amt</abbr>
-              </th>
-              <th>
-                <abbr title="Category">Cat</abbr>
-              </th>
-              <th>
-                <abbr title="Account">Account</abbr>
-              </th>
-              <th>
-                <abbr title="Budget">Budget</abbr>
-              </th>
-              <th>Edit</th>
-              <th>
-                <abbr title="Delete">Del</abbr>
-              </th>
-            </tr>
-          </tfoot>
-          <tbody>{rows}</tbody>
-        </table>
-
-        <Link to="/transaction/create" className="add">
-          <Icon name="add" color="#23D160" /> <p>New transaction</p>
-        </Link>
+        <TransactionList uid={this.props.auth.uid} />
       </section>
     )
   }

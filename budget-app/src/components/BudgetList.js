@@ -24,7 +24,7 @@ class BudgetList extends Component {
         ))
       : ''
     return (
-      <section className="section small-width">
+      <section className="section">
         <h4>Budgets</h4>
         {budgets}
         <Link to="/budget/create">Add new budget</Link>

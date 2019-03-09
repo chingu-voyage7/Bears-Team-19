@@ -106,15 +106,21 @@ form h3 {
   width: 300px;
 }
 
-.actions {
-  display: grid;
-  grid-template-columns: minmax(150px, 200px) 30px 30px;
-}
-
-.dashboard {
+.content {
   margin: 0 auto;
   max-width: 60rem;
 }
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.actions div {
+  margin-left: 2rem;
+}
+.dashboard > section {
+}
+
 section.dashboard h2 {
   text-transform: uppercase;
 }
@@ -137,15 +143,17 @@ section.dashboard h2 {
   padding-top: 1rem;
 }
 
-.budget-info {
-  display: flex;
-  justify-content: space-between;
-}
-
-.small-width {
-  max-width: 300px;
-}
-
 .delete-item {
   cursor: pointer;
+}
+
+.pad {
+  border-bottom: 1px solid var(--grey-color-brighter);
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 700px) {
+  .dashboard > section {
+    padding: 1rem 4rem;
+  }
 }

@@ -4,7 +4,7 @@ import Icon from './Icons'
 
 const Budget = ({ budget: { budget_name, budget_id }, handleDelete }) => {
   return (
-    <div className="container">
+    <div className="pad">
       <h6>{budget_name}</h6>
       <div className="actions">
         <div>
