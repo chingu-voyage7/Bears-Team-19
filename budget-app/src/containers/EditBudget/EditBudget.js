@@ -21,7 +21,10 @@ class EditBudget extends Component {
       return <Redirect to="/" />
     }
 
-    const { budgetName, budgetId } = this.props.budget
+    const {
+      budget_name: budgetName,
+      budget_id: budgetId,
+    } = this.props.budget.item
     return (
       <section className="edit-budget">
         <div className="container">

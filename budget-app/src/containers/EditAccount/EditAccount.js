@@ -25,7 +25,11 @@ class EditAccount extends Component {
       return <Redirect to="/" />
     }
 
-    const { balance, accountName, accountId } = this.props.account
+    const {
+      balance,
+      account_name: accountName,
+      account_id: accountId,
+    } = this.props.account.item
     return (
       <section className="form-container">
         <div className="container">
