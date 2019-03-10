@@ -20,6 +20,7 @@ class BudgetList extends Component {
             budget={budget}
             key={budget.budget_id}
             handleDelete={this.handleDelete}
+            transactions={this.props.transactions}
           />
         ))
       : ''

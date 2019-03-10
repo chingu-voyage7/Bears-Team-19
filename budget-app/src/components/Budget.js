@@ -1,29 +1,20 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import Icon from './Icons'
+import { inUse } from '../helpers/helpers'
+import NavActions from './NavActions'
 
-const Budget = ({ budget: { budget_name, budget_id }, handleDelete }) => {
+const Budget = ({ budget, handleDelete, transactions }) => {
+  const { budget_name: budgetName, budget_id: budgetId } = budget
+  const isUsed = inUse(budgetId, transactions, 'budgetId')
   return (
     <div className="pad">
-      <h6>{budget_name}</h6>
-      <div className="actions">
-        <div>
-          <Link
-            to={{
-              pathname: `/budget/edit`,
-              state: {
-                budgetId: budget_id,
-                budgetName: budget_name,
-              },
-            }}
-          >
-            <Icon name="edit" color="#6179C7" />
-          </Link>
-        </div>
-        <div className="delete-item" onClick={() => handleDelete(budget_id)}>
-          <Icon name="delete" color="#E94B25" />
-        </div>
-      </div>
+      <h6>{budgetName}</h6>
+      <NavActions
+        id={budgetId}
+        itemLink="budget"
+        item={budget}
+        handleDelete={handleDelete}
+        inUse={isUsed}
+      />
     </div>
   )
 }
