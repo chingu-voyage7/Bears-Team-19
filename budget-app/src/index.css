@@ -111,13 +111,6 @@ form h3 {
   max-width: 60rem;
 }
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
-}
-.actions div {
-  margin-left: 2rem;
-}
 .dashboard > section {
 }
 
@@ -150,10 +143,22 @@ section.dashboard h2 {
 .pad {
   border-bottom: 1px solid var(--grey-color-brighter);
   margin-bottom: 1rem;
+  padding-bottom: 1rem;
 }
 
 @media (min-width: 700px) {
   .dashboard > section {
     padding: 1rem 4rem;
   }
+}
+
+.category,
+.account,
+.budget {
+  color: var(--grey-color-darker);
+}
+
+.date {
+  text-transform: uppercase;
+  color: var(--grey-color);
 }
