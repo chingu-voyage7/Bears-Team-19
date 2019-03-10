@@ -1,62 +1,53 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { Link } from 'react-router-dom'
-import Icon from './Icons'
+import NavActions from './NavActions'
 
-const Transaction = ({ transaction, handleDelete }) => {
+const Transaction = ({
+  location: {
+    state: { transaction },
+    handleDelete,
+  },
+  history,
+}) => {
   const {
     transId,
     date,
     amount,
     type,
     category,
-    accountId,
-    budgetId,
     budgetName,
     accountName,
   } = transaction
 
-  const upperCaseFirst = string => {
-    return string.charAt(0).toUpperCase() + string.slice(1)
+  const amountWithType = (amount, type) => {
+    if (type === 'income') {
+      return amount.toFixed(2)
+    }
+    return `-${amount.toFixed(2)}`
   }
   return (
-    <div className="pad">
+    <section className="section">
       <div className="columns is-mobile">
         <div className="column">
-          <h5>{amount.toFixed(2)}</h5>
-          <p>{format(date, 'YYYY-MM-DD')}</p>
-          <p>{category}</p>
+          <p>
+            <span className="date">{format(date, 'DD MMM')}</span> <br />
+          </p>
+          <p className="account">Account: {accountName}</p>
+          <p className="budget">Budget: {budgetName}</p>
         </div>
         <div className="column has-text-right">
-          <p>{upperCaseFirst(type)}</p>
-          <p>{accountName} account</p>
-          <p>{budgetName} budget</p>
+          <h5>{amountWithType(amount, type)}</h5>
+          <p className="category">{category}</p>
         </div>
       </div>
-      <div className="actions">
-        <div>
-          <Link
-            to={{
-              pathname: `/transaction/edit`,
-              state: {
-                transId,
-                date,
-                type,
-                amount,
-                category,
-                accountId,
-                budgetId,
-              },
-            }}
-          >
-            <Icon name="edit" color="#6179C7" />
-          </Link>
-        </div>
-        <div className="delete-item" onClick={() => handleDelete(transId)}>
-          <Icon name="delete" color="#E94B25" />
-        </div>
-      </div>
-    </div>
+      <NavActions
+        id={transId}
+        itemLink="transaction"
+        item={transaction}
+        history={history}
+        handleDelete={handleDelete}
+      />
+    </section>
   )
 }
 

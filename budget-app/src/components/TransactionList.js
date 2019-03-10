@@ -6,7 +6,7 @@ import {
   getTransactions,
 } from '../store/actions/transactionActions'
 import Icon from './Icons'
-import Transaction from './Transaction'
+import TransactionItem from './TransactionItem'
 
 class TransactionList extends Component {
   componentDidMount() {
@@ -20,7 +20,7 @@ class TransactionList extends Component {
   render() {
     const transactions = this.props.transactions
       ? this.props.transactions.map(transaction => (
-          <Transaction
+          <TransactionItem
             transaction={transaction}
             key={transaction.transId}
             handleDelete={this.handleDelete}
