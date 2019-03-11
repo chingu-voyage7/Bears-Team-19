@@ -1,35 +1,28 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import Icon from './Icons'
+import { inUse } from '../helpers/helpers'
+import NavActions from './NavActions'
 
-const Account = props => {
+const Account = ({ account, handleDelete, transactions }) => {
+  const { account_id: accountId, account_name: accountName, balance } = account
+  const isUsed = inUse(accountId, transactions, 'accountId')
   return (
-    <li>
-      <div>
-        <p>Name: {props.account.account_name}</p>
-        <p>Balance: {props.account.balance}</p>
+    <div className="pad">
+      <div className="columns is-mobile">
+        <div className="column">
+          <h6>{accountName}</h6>
+        </div>
+        <div className="column has-text-right">
+          <p>{balance}</p>
+        </div>
       </div>
-      <div>
-        <Link
-          to={{
-            pathname: `/account/edit`,
-            state: {
-              accountId: props.account.account_id,
-              accountName: props.account.account_name,
-              balance: props.account.balance,
-            },
-          }}
-        >
-          <Icon name="edit" color="#6179C7" />
-        </Link>
-      </div>
-      <div
-        className="delete-account"
-        onClick={() => props.handleDelete(props.account.account_id)}
-      >
-        <Icon name="delete" color="#E94B25" />
-      </div>
-    </li>
+      <NavActions
+        id={accountId}
+        item={account}
+        handleDelete={handleDelete}
+        itemLink="account"
+        inUse={isUsed}
+      />
+    </div>
   )
 }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { deleteBudget, getBudgets } from '../store/actions/budgetActions'
 import Budget from './Budget'
 
@@ -19,10 +20,17 @@ class BudgetList extends Component {
             budget={budget}
             key={budget.budget_id}
             handleDelete={this.handleDelete}
+            transactions={this.props.transactions}
           />
         ))
       : ''
-    return <ul>{budgets}</ul>
+    return (
+      <section className="section">
+        <h4>Budgets</h4>
+        {budgets}
+        <Link to="/budget/create">Add new budget</Link>
+      </section>
+    )
   }
 }
 

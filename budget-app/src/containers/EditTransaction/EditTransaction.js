@@ -9,7 +9,6 @@ import * as yup from 'yup'
 import { addAccount, getAccounts } from '../../store/actions/accountActions'
 import { addBudget, getBudgets } from '../../store/actions/budgetActions'
 import { updateTransaction } from '../../store/actions/transactionActions'
-import './EditTransaction.css'
 
 const schema = yup.object().shape({
   amount: yup
@@ -48,10 +47,9 @@ class EditTransaction extends Component {
       budgetId,
       type,
       date,
-    } = this.props.transaction
-
+    } = this.props.transaction.item
     return (
-      <section className="update-transaction">
+      <section className="form-container">
         <div className="container">
           <Formik
             initialValues={{
@@ -70,7 +68,7 @@ class EditTransaction extends Component {
                   accountId: parseInt(values.accountId),
                   budgetId: parseInt(values.budgetId),
                   uid: this.props.auth.uid,
-                  transId: this.props.transaction.transId,
+                  transId: this.props.transaction.item.transId,
                 }
                 this.props.updateTransaction(updatedTransaction)
                 setSubmitting(false)
@@ -94,13 +92,14 @@ class EditTransaction extends Component {
                         placeholder="Ex. 12.99"
                         min="0"
                         step="0.01"
+                        className="input"
                       />
                     </div>
                   </label>
                   <ErrorMessage
                     name="amount"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
@@ -112,84 +111,78 @@ class EditTransaction extends Component {
                         name="category"
                         id="category"
                         placeholder="Ex. Groceries"
+                        className="input"
                       />
                     </div>
                   </label>
                   <ErrorMessage
                     name="category"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
                   <label htmlFor="accountId" className="label">
                     Account
-                    <div className="control">
-                      <Field
-                        // defaultValue="Choose account"
-                        name="accountId"
-                        id="accountId"
-                        component="select"
-                        placeholder="Account"
-                      >
-                        {/* <option disabled hidden>
-                          Choose account
-                        </option> */}
-                        {this.props.accounts &&
-                          this.props.accounts.map(account => (
-                            <option
-                              key={account.account_id}
-                              value={account.account_id}
-                            >
-                              {account.account_name}
-                            </option>
-                          ))}
-                      </Field>
-                    </div>
                   </label>
+                  <div className="control select">
+                    <Field
+                      name="accountId"
+                      id="accountId"
+                      component="select"
+                      placeholder="Account"
+                    >
+                      {this.props.accounts &&
+                        this.props.accounts.map(account => (
+                          <option
+                            key={account.account_id}
+                            value={account.account_id}
+                          >
+                            {account.account_name}
+                          </option>
+                        ))}
+                    </Field>
+                  </div>
+
                   <ErrorMessage
                     name="accountId"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
-                  {/* <Link to="/budget/create">Add new budget</Link> */}
                   <label htmlFor="budgetId" className="label">
                     Budget
-                    <div className="control">
-                      <Field
-                        // defaultValue="Choose budget"
-                        name="budgetId"
-                        id="budgetId"
-                        component="select"
-                        placeholder="Budget"
-                      >
-                        {/* <option disabled hidden>
-                          Choose budget
-                        </option> */}
-                        {this.props.budgets &&
-                          this.props.budgets.map(budget => (
-                            <option
-                              key={budget.budget_id}
-                              value={budget.budget_id}
-                            >
-                              {budget.budget_name}
-                            </option>
-                          ))}
-                      </Field>
-                    </div>
                   </label>
+                  <div className="control select">
+                    <Field
+                      name="budgetId"
+                      id="budgetId"
+                      component="select"
+                      placeholder="Budget"
+                    >
+                      {this.props.budgets &&
+                        this.props.budgets.map(budget => (
+                          <option
+                            key={budget.budget_id}
+                            value={budget.budget_id}
+                          >
+                            {budget.budget_name}
+                          </option>
+                        ))}
+                    </Field>
+                  </div>
+
                   <ErrorMessage
                     name="budgetId"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
                   <div className="control">
-                    <label htmlFor="income" className="label label-radio">
-                      Income
+                    <label htmlFor="income" className="radio">
+                      <strong>Income</strong>
                       <Field
                         type="radio"
                         name="type"
@@ -198,8 +191,8 @@ class EditTransaction extends Component {
                         checked={values.type === 'income'}
                       />
                     </label>
-                    <label htmlFor="expense" className="label label-radio">
-                      Expense
+                    <label htmlFor="expense" className="radio">
+                      <strong>Expense</strong>
                       <Field
                         type="radio"
                         name="type"
@@ -212,7 +205,7 @@ class EditTransaction extends Component {
                   <ErrorMessage
                     name="type"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
@@ -227,14 +220,19 @@ class EditTransaction extends Component {
                         maxDate={new Date()}
                         placeholderText="Click to set the transaction date"
                         dateFormat="yyyy-MM-dd"
+                        className="input"
                       />
                     </div>
                   </label>
                   {errors.dateselect && (
-                    <div className="error-message">{errors.dateselect}</div>
+                    <div className="help is-danger">{errors.dateselect}</div>
                   )}
                 </div>
-                <button type="submit" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="is-info button"
+                >
                   Update Transaction
                 </button>
               </Form>

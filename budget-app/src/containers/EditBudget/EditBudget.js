@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import * as yup from 'yup'
 import { editBudget } from '../../store/actions/budgetActions'
-import './EditBudget.css'
 
 const schema = yup.object().shape({
   budgetName: yup
@@ -22,7 +21,10 @@ class EditBudget extends Component {
       return <Redirect to="/" />
     }
 
-    const { budgetName, budgetId } = this.props.budget
+    const {
+      budget_name: budgetName,
+      budget_id: budgetId,
+    } = this.props.budget.item
     return (
       <section className="edit-budget">
         <div className="container">
@@ -56,16 +58,21 @@ class EditBudget extends Component {
                         name="budgetName"
                         id="budgetName"
                         placeholder="Ex. 2019"
+                        className="input"
                       />
                     </div>
                   </label>
                   <ErrorMessage
                     name="budgetName"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
-                <button type="submit" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="button is-info"
+                >
                   Save Budget
                 </button>
               </Form>

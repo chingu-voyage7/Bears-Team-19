@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import * as yup from 'yup'
 import { editAccount } from '../../store/actions/accountActions'
-import './EditAccount.css'
 
 const schema = yup.object().shape({
   balance: yup
@@ -26,9 +25,13 @@ class EditAccount extends Component {
       return <Redirect to="/" />
     }
 
-    const { balance, accountName, accountId } = this.props.account
+    const {
+      balance,
+      account_name: accountName,
+      account_id: accountId,
+    } = this.props.account.item
     return (
-      <section className="edit-account">
+      <section className="form-container">
         <div className="container">
           <Formik
             initialValues={{
@@ -63,13 +66,14 @@ class EditAccount extends Component {
                         name="accountName"
                         id="accountName"
                         placeholder="Ex. Spending"
+                        className="input"
                       />
                     </div>
                   </label>
                   <ErrorMessage
                     name="accountName"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
                 <div className="field">
@@ -83,16 +87,21 @@ class EditAccount extends Component {
                         placeholder="Ex. 12.99"
                         min="0"
                         step="0.01"
+                        className="input"
                       />
                     </div>
                   </label>
                   <ErrorMessage
                     name="balance"
                     component="div"
-                    className="error-message"
+                    className="help is-danger"
                   />
                 </div>
-                <button type="submit" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="button is-info"
+                >
                   Save Account
                 </button>
               </Form>

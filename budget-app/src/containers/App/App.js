@@ -5,6 +5,7 @@ import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import NotFound from '../../components/NotFound'
 import PrivateRoute from '../../components/PrivateRoute'
+import Transaction from '../../components/Transaction'
 import About from '../About/About'
 import AddAccount from '../AddAccount/AddAccount'
 import AddBudget from '../AddBudget/AddBudget'
@@ -16,7 +17,6 @@ import EditTransaction from '../EditTransaction/EditTransaction'
 import Home from '../Home/Home'
 import Signin from '../Signin/Signin'
 import Signup from '../Signup/Signup'
-import './App.css'
 
 class App extends Component {
   constructor() {
@@ -45,14 +45,15 @@ class App extends Component {
                 path="/transaction/create"
                 component={AddTransaction}
               />
-              <PrivateRoute path="/account/create" component={AddAccount} />
-              <PrivateRoute path="/account/edit" component={EditAccount} />
-              <PrivateRoute path="/budget/create" component={AddBudget} />
-              <PrivateRoute path="/budget/edit" component={EditBudget} />
               <PrivateRoute
                 path="/transaction/edit"
                 component={EditTransaction}
               />
+              <PrivateRoute path="/transaction/:id" component={Transaction} />
+              <PrivateRoute path="/account/create" component={AddAccount} />
+              <PrivateRoute path="/account/edit" component={EditAccount} />
+              <PrivateRoute path="/budget/create" component={AddBudget} />
+              <PrivateRoute path="/budget/edit" component={EditBudget} />
               <Route component={NotFound} />
             </Switch>
           </section>
