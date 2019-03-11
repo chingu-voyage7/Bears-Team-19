@@ -47,8 +47,7 @@ class EditTransaction extends Component {
       budgetId,
       type,
       date,
-    } = this.props.transaction
-
+    } = this.props.transaction.item
     return (
       <section className="form-container">
         <div className="container">
@@ -69,7 +68,7 @@ class EditTransaction extends Component {
                   accountId: parseInt(values.accountId),
                   budgetId: parseInt(values.budgetId),
                   uid: this.props.auth.uid,
-                  transId: this.props.transaction.transId,
+                  transId: this.props.transaction.item.transId,
                 }
                 this.props.updateTransaction(updatedTransaction)
                 setSubmitting(false)
