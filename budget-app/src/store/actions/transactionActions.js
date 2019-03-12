@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { getAccounts } from './accountActions'
+import { getUser } from './userActions'
 
 export const updateTransaction = payload => (dispatch, getState) => {
   // Make call to API here
@@ -64,6 +66,8 @@ export const addTransaction = payload => (dispatch, getState) => {
   })
     .then(res => {
       dispatch(getTransactions(uid))
+      dispatch(getAccounts(uid))
+      dispatch(getUser(uid))
       dispatch({
         type: 'ADD_TRANSACTION_SUCCESS',
         payload: res,

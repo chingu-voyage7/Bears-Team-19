@@ -74,6 +74,25 @@ router.post('/', isAuthenticated, async (req, res, next) => {
     } else {
       categoryId = allCategories.category_id
     }
+    // Get the balance of the account
+    const [{ balance }] = await db('accounts')
+      .select('balance')
+      .where({ account_id: accountId })
+
+    // Check if amount is positive or negative and increase or decrease balance based on that.
+    let balanceAfterAmount = 0
+    if (type === 'expense') {
+      balanceAfterAmount = Number(balance) - Number(amount)
+    }
+    if (type === 'income') {
+      balanceAfterAmount = Number(balance) + Number(amount)
+    }
+
+    // Update accounts balance
+    await db('accounts')
+      .update({ balance: balanceAfterAmount })
+      .where({ account_id: accountId, fk_user_id: userId })
+
     const transactionInfo = {
       fk_user_id: userId,
       amount,
