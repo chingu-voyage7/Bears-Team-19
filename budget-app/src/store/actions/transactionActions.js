@@ -23,6 +23,8 @@ export const updateTransaction = payload => (dispatch, getState) => {
   })
     .then(res => {
       dispatch(getTransactions(payload.uid))
+      dispatch(getAccounts(payload.uid))
+      dispatch(getUser(payload.uid))
       dispatch({
         type: 'UPDATE_TRANSACTION_SUCCESS',
         payload: res,
@@ -115,6 +117,8 @@ export const deleteTransaction = payload => (dispatch, getState) => {
     data: payload,
   })
     .then(res => {
+      dispatch(getAccounts(payload.uid))
+      dispatch(getUser(payload.uid))
       dispatch({
         type: 'DELETE_TRANSACTION_SUCCESS',
         payload: res,
