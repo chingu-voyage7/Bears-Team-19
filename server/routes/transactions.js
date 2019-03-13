@@ -13,7 +13,7 @@ router.get('/', isAuthenticated, async (req, res, next) => {
     .innerJoin('budgets', 'fk_budget_id', 'budget_id')
     .innerJoin('accounts', 'fk_account_id', 'account_id')
     .whereIn('transactions.fk_user_id', [userId])
-    .orderBy('trans_id')
+    .orderBy('date', 'desc')
     .column(
       {
         transId: 'trans_id',
@@ -125,7 +125,14 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
     budgetId,
   } = req.body
 
-  const [{ fk_user_id: authorid }] = await db('transactions')
+  const [
+    {
+      fk_user_id: authorid,
+      fk_account_id: oldAccountID,
+      amount: oldAmount,
+      type: oldType,
+    },
+  ] = await db('transactions')
     .where({ trans_id: transId })
     .select()
 
@@ -154,6 +161,31 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
       } else {
         categoryId = allCategories.category_id
       }
+
+      const [{ balance }] = await db('accounts')
+        .select()
+        .where({ account_id: oldAccountID })
+
+      let cleanedBalance = 0
+      if (oldType === 'expense') {
+        cleanedBalance = Number(balance) + Number(oldAmount)
+      } else {
+        cleanedBalance = Number(balance) - Number(oldAmount)
+      }
+
+      // Check if amount is positive or negative and increase or decrease balance based on that.
+      let balanceAfterAmount = 0
+      if (type === 'expense') {
+        balanceAfterAmount = Number(cleanedBalance) - Number(amount)
+      }
+      if (type === 'income') {
+        balanceAfterAmount = Number(cleanedBalance) + Number(amount)
+      }
+
+      // Update accounts balance
+      await db('accounts')
+        .update({ balance: balanceAfterAmount })
+        .where({ account_id: accountId, fk_user_id: userId })
 
       const updateDetails = {
         amount,
@@ -191,6 +223,29 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
 router.delete('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const { transId } = req.body
+
+  const [{ amount, type, fk_account_id: accountId }] = await db('transactions')
+    .select()
+    .where({ trans_id: transId })
+
+  // Get the balance of the account
+  const [{ balance }] = await db('accounts')
+    .select('balance')
+    .where({ account_id: accountId })
+
+  // Check if amount is positive or negative and increase or decrease balance based on that.
+  let balanceAfterAmount = 0
+  if (type === 'expense') {
+    balanceAfterAmount = Number(balance) + Number(amount)
+  }
+  if (type === 'income') {
+    balanceAfterAmount = Number(balance) - Number(amount)
+  }
+
+  // Update accounts balance
+  await db('accounts')
+    .update({ balance: balanceAfterAmount })
+    .where({ account_id: accountId, fk_user_id: userId })
 
   const result = await db('transactions')
     .del()
