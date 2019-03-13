@@ -13,7 +13,7 @@ router.get('/', isAuthenticated, async (req, res, next) => {
     .innerJoin('budgets', 'fk_budget_id', 'budget_id')
     .innerJoin('accounts', 'fk_account_id', 'account_id')
     .whereIn('transactions.fk_user_id', [userId])
-    .orderBy('trans_id')
+    .orderBy('date', 'desc')
     .column(
       {
         transId: 'trans_id',
