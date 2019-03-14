@@ -17,6 +17,10 @@ exports.up = async function(knex, Promise) {
       .boolean('notifications')
       .notNullable()
       .defaultTo(true)
+    table
+      .string('currency')
+      .notNullable()
+      .defaultTo('')
 
     table.timestamps(true, true)
   })
