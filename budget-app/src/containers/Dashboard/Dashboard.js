@@ -5,6 +5,7 @@ import AccountList from '../../components/AccountList'
 import Balance from '../../components/Balance'
 import BudgetList from '../../components/BudgetList'
 import Icon from '../../components/Icons'
+import SetCurrency from '../../components/SetCurrency'
 import TransactionList from '../../components/TransactionList'
 import { getTransactions } from '../../store/actions/transactionActions'
 import { getUser } from '../../store/actions/userActions'
@@ -43,6 +44,7 @@ class Dashboard extends Component {
       <section className="dashboard">
         <h2>Dashboard</h2>
         <Balance balance={totalBalance} />
+        <SetCurrency />
         <BudgetList uid={this.props.auth.uid} transactions={transactions} />
         <AccountList uid={this.props.auth.uid} transactions={transactions} />
         <TransactionList uid={this.props.auth.uid} />
