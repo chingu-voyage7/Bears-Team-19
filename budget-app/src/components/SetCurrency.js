@@ -1,29 +1,39 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import * as yup from 'yup'
 import { locales } from '../helpers/helpers.js'
+import { updateUser } from '../store/actions/userActions.js'
 
 const schema = yup.object().shape({
   currency: yup.string().required('Required'),
 })
 class SetCurrency extends Component {
+  state = {
+    currency: undefined,
+  }
+  componentDidMount() {
+    this.setState({
+      currency: this.props.userCurrency,
+    })
+  }
   render() {
+    const { userCurrency } = this.props
     return (
       <section className="form-container">
         <div className="container">
           <Formik
             initialValues={{
-              currency: undefined,
+              currency: this.state.currency,
             }}
             validationSchema={schema}
             onSubmit={(values, { setSubmitting }) => {
               setTimeout(() => {
-                // const currencyDetails = {
-                //   ...values,
-                //   uid: this.props.auth.uid,
-                // }
-                console.log(values)
-                // this.props.updateUser(currencyDetails)
+                const currencyDetails = {
+                  data: { ...values },
+                  uid: this.props.auth.uid,
+                }
+                this.props.updateUser(currencyDetails)
                 setSubmitting(false)
               }, 400)
             }}
@@ -35,7 +45,6 @@ class SetCurrency extends Component {
                     Set currency
                     <div className="control select">
                       <Field
-                        defaultValue="Select a currency"
                         component="select"
                         name="currency"
                         id="currency"
@@ -44,9 +53,9 @@ class SetCurrency extends Component {
                         <option disabled hidden>
                           Choose currency
                         </option>
-                        {locales.map(currency => (
-                          <option key={currency} value={currency}>
-                            {currency}
+                        {locales.map(locale => (
+                          <option key={locale} value={locale}>
+                            {locale}
                           </option>
                         ))}
                       </Field>
@@ -74,4 +83,17 @@ class SetCurrency extends Component {
   }
 }
 
-export default SetCurrency
+const mapStateToProps = state => {
+  return {
+    auth: state.firebase.auth,
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  updateUser: data => dispatch(updateUser(data)),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SetCurrency)

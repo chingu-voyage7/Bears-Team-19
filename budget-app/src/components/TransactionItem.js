@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 // TODO: Only show date, amount, category and type on transactions.
 // Todo: Click to get more details. Works on mobile and desktop
-const TransactionItem = ({ transaction, handleDelete }) => {
+const TransactionItem = ({ transaction, handleDelete, userCurrency }) => {
   const { transId, date, amount, type, category } = transaction
 
   const amountWithType = type => {
@@ -19,7 +19,7 @@ const TransactionItem = ({ transaction, handleDelete }) => {
       <Link
         to={{
           pathname: `/transaction/${transId}`,
-          state: { transaction },
+          state: { transaction, userCurrency },
           handleDelete,
         }}
       >
@@ -32,7 +32,10 @@ const TransactionItem = ({ transaction, handleDelete }) => {
           <div className="column has-text-right">
             <h5>
               {amountWithType(type)}
-              <Currency quantity={amount ? amount : 0} currency={'USD'} />
+              <Currency
+                quantity={amount ? amount : 0}
+                currency={userCurrency}
+              />
             </h5>
           </div>
           <div className="column has-text-right">

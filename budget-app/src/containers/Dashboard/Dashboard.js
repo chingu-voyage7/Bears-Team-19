@@ -43,11 +43,21 @@ class Dashboard extends Component {
     return (
       <section className="dashboard">
         <h2>Dashboard</h2>
-        <Balance balance={totalBalance} />
-        <SetCurrency />
+        <Balance
+          balance={totalBalance}
+          userCurrency={this.props.user.currency}
+        />
+        <SetCurrency userCurrency={this.props.user.currency} />
         <BudgetList uid={this.props.auth.uid} transactions={transactions} />
-        <AccountList uid={this.props.auth.uid} transactions={transactions} />
-        <TransactionList uid={this.props.auth.uid} />
+        <AccountList
+          uid={this.props.auth.uid}
+          transactions={transactions}
+          userCurrency={this.props.user.currency}
+        />
+        <TransactionList
+          uid={this.props.auth.uid}
+          userCurrency={this.props.user.currency}
+        />
       </section>
     )
   }
