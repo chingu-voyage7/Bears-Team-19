@@ -1,4 +1,5 @@
 import React from 'react'
+import Currency from 'react-currency-formatter'
 import { inUse } from '../helpers/helpers'
 import NavActions from './NavActions'
 
@@ -12,7 +13,7 @@ const Account = ({ account, handleDelete, transactions }) => {
           <h6>{accountName}</h6>
         </div>
         <div className="column has-text-right">
-          <p>{balance}</p>
+          <Currency quantity={balance ? Number(balance) : 0} currency={'USD'} />
         </div>
       </div>
       <NavActions
