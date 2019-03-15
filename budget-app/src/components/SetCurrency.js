@@ -3,28 +3,22 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as yup from 'yup'
 import { locales } from '../helpers/helpers.js'
-import { updateUser } from '../store/actions/userActions.js'
+import { getUser, updateUser } from '../store/actions/userActions.js'
 
 const schema = yup.object().shape({
   currency: yup.string().required('Required'),
 })
 class SetCurrency extends Component {
-  state = {
-    currency: undefined,
-  }
   componentDidMount() {
-    this.setState({
-      currency: this.props.userCurrency,
-    })
+    this.props.getUser(this.props.auth.uid)
   }
   render() {
-    const { userCurrency } = this.props
     return (
       <section className="form-container">
         <div className="container">
           <Formik
             initialValues={{
-              currency: this.state.currency,
+              currency: this.props.user.currency,
             }}
             validationSchema={schema}
             onSubmit={(values, { setSubmitting }) => {
@@ -86,11 +80,13 @@ class SetCurrency extends Component {
 const mapStateToProps = state => {
   return {
     auth: state.firebase.auth,
+    user: state.user,
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   updateUser: data => dispatch(updateUser(data)),
+  getUser: uid => dispatch(getUser(uid)),
 })
 
 export default connect(

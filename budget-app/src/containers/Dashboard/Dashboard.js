@@ -47,7 +47,10 @@ class Dashboard extends Component {
           balance={totalBalance}
           userCurrency={this.props.user.currency}
         />
-        <SetCurrency userCurrency={this.props.user.currency} />
+        <SetCurrency
+          userCurrency={this.props.user.currency}
+          uid={this.props.auth.uid}
+        />
         <BudgetList uid={this.props.auth.uid} transactions={transactions} />
         <AccountList
           uid={this.props.auth.uid}
