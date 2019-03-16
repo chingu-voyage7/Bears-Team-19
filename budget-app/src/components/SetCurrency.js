@@ -14,65 +14,67 @@ class SetCurrency extends Component {
   }
   render() {
     return (
-      <section className="form-container">
-        <div className="container">
-          <Formik
-            initialValues={{
-              currency: this.props.user.currency,
-            }}
-            validationSchema={schema}
-            onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
-                const currencyDetails = {
-                  data: { ...values },
-                  uid: this.props.auth.uid,
-                }
-                this.props.updateUser(currencyDetails)
-                setSubmitting(false)
-              }, 400)
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <div className="field">
-                  <label htmlFor="currency" className="label">
-                    Set currency
-                    <div className="control select">
-                      <Field
-                        component="select"
-                        name="currency"
-                        id="currency"
-                        placeholder="Ex. USD"
-                      >
-                        <option disabled hidden>
-                          Choose currency
-                        </option>
-                        {locales.map(locale => (
-                          <option key={locale} value={locale}>
-                            {locale}
-                          </option>
-                        ))}
-                      </Field>
-                    </div>
-                  </label>
-                  <ErrorMessage
-                    name="currency"
-                    component="div"
-                    className="help is-danger"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="button is-success"
-                >
+      <div className="column">
+        {/* <section className="form-container">
+          <div className="container"> */}
+        <Formik
+          initialValues={{
+            currency: this.props.user.currency,
+          }}
+          validationSchema={schema}
+          onSubmit={(values, { setSubmitting }) => {
+            setTimeout(() => {
+              const currencyDetails = {
+                data: { ...values },
+                uid: this.props.auth.uid,
+              }
+              this.props.updateUser(currencyDetails)
+              setSubmitting(false)
+            }, 400)
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="field">
+                <label htmlFor="currency" className="label">
                   Set currency
-                </button>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </section>
+                  <div className="control select">
+                    <Field
+                      component="select"
+                      name="currency"
+                      id="currency"
+                      placeholder="Ex. USD"
+                    >
+                      <option disabled hidden>
+                        Choose currency
+                      </option>
+                      {locales.map(locale => (
+                        <option key={locale} value={locale}>
+                          {locale}
+                        </option>
+                      ))}
+                    </Field>
+                  </div>
+                </label>
+                <ErrorMessage
+                  name="currency"
+                  component="div"
+                  className="help is-danger"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="button is-success"
+              >
+                Set currency
+              </button>
+            </Form>
+          )}
+        </Formik>
+        {/* </div>
+        </section> */}
+      </div>
     )
   }
 }
