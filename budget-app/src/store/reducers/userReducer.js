@@ -7,6 +7,10 @@ export default (state = initialState, { type, payload }) => {
     case 'GET_USER_ERROR':
       return { ...state, ...payload }
 
+    case 'UPDATE_USER_SUCCESS':
+      return { ...state, ...payload.data.data }
+    case 'UPDATE_USER_ERROR':
+      return { ...state, ...payload }
     default:
       return state
   }

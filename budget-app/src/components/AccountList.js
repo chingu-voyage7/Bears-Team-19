@@ -20,6 +20,7 @@ class AccountList extends Component {
             key={account.account_id}
             handleDelete={this.handleDelete}
             transactions={this.props.transactions}
+            userCurrency={this.props.userCurrency}
           />
         ))
       : ''

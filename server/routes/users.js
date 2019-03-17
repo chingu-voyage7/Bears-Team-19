@@ -50,7 +50,7 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
 
   const [updatedUser] = await db('users')
     .update(updateDetails)
-    .returning(['user_id', 'email', 'username', 'notifications'])
+    .returning(['user_id', 'email', 'username', 'notifications', 'currency'])
     .where({ user_id: userId })
 
   const totalBalance = await getTotalBalance(userId)

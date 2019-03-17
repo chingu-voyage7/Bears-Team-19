@@ -24,6 +24,7 @@ class TransactionList extends Component {
             transaction={transaction}
             key={transaction.transId}
             handleDelete={this.handleDelete}
+            userCurrency={this.props.userCurrency}
           />
         ))
       : null

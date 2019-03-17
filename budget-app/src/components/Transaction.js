@@ -1,10 +1,11 @@
 import { format } from 'date-fns'
 import React from 'react'
+import Currency from 'react-currency-formatter'
 import NavActions from './NavActions'
 
 const Transaction = ({
   location: {
-    state: { transaction },
+    state: { transaction, userCurrency },
     handleDelete,
   },
   history,
@@ -19,11 +20,11 @@ const Transaction = ({
     accountName,
   } = transaction
 
-  const amountWithType = (amount, type) => {
+  const amountWithType = type => {
     if (type === 'income') {
-      return amount.toFixed(2)
+      return ''
     }
-    return `-${amount.toFixed(2)}`
+    return `-`
   }
   return (
     <section className="section">
@@ -36,7 +37,10 @@ const Transaction = ({
           <p className="budget">Budget: {budgetName}</p>
         </div>
         <div className="column has-text-right">
-          <h5>{amountWithType(amount, type)}</h5>
+          <h5>
+            {amountWithType(type)}
+            <Currency quantity={amount ? amount : 0} currency={userCurrency} />
+          </h5>
           <p className="category">{category}</p>
         </div>
       </div>
