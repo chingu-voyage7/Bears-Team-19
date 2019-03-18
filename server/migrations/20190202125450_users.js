@@ -20,7 +20,7 @@ exports.up = async function(knex, Promise) {
     table
       .string('currency')
       .notNullable()
-      .defaultTo('')
+      .defaultTo('USD')
 
     table.timestamps(true, true)
   })
