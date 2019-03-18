@@ -15,8 +15,6 @@ class SetCurrency extends Component {
   render() {
     return (
       <div className="column">
-        {/* <section className="form-container">
-          <div className="container"> */}
         <Formik
           initialValues={{
             currency: this.props.user.currency,
@@ -72,8 +70,6 @@ class SetCurrency extends Component {
             </Form>
           )}
         </Formik>
-        {/* </div>
-        </section> */}
       </div>
     )
   }
