@@ -100,7 +100,19 @@ export const signIn = payload => (dispatch, getState, { getFirebase }) => {
       break
 
     case 'google':
-      console.log('got google', payload)
+      const provider = new firebase.auth.GoogleAuthProvider()
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(function(result) {
+          const user = result.user
+          dispatch({
+            type: 'SIGNIN_SUCCESS',
+          })
+        })
+        .catch(err => {
+          dispatch({ type: 'SIGNIN_ERROR', err })
+        })
       break
     default:
       break
