@@ -121,10 +121,10 @@ class Signup extends Component {
           <div>
             <p>or sign up with:</p>
             <button
-              className="btn"
+              className="button is-light"
               onClick={() => this.props.signUp({ signupType: 'google' })}
             >
-              <Icon name="google" color="#28439e" width="40" height="40" />
+              <Icon name="google" color="#28439e" width="24" height="24" />
             </button>
           </div>
         </div>
