@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link, NavLink, Redirect } from 'react-router-dom'
+import { NavLink, Redirect } from 'react-router-dom'
 import * as yup from 'yup'
 import Icon from '../../components/Icons/index'
 import { signIn } from '../../store/actions/authActions'
@@ -34,7 +34,11 @@ class Signin extends Component {
             validationSchema={schema}
             onSubmit={(values, { setSubmitting }) => {
               setTimeout(() => {
-                this.props.signIn(values)
+                const data = {
+                  ...values,
+                  signinType: 'email',
+                }
+                this.props.signIn(data)
                 setSubmitting(false)
               }, 400)
             }}
@@ -92,15 +96,12 @@ class Signin extends Component {
           </Formik>
           <div>
             <p>or log in with:</p>
-            <Link to="/">
-              <Icon name="facebook" color="#28439e" width="40" height="40" />
-            </Link>
-            <Link to="/">
-              <Icon name="google" color="#28439e" width="40" height="40" />
-            </Link>
-            <Link to="/">
-              <Icon name="twitter" color="#28439e" width="40" height="40" />
-            </Link>
+            <button
+              className="button is-light"
+              onClick={() => this.props.signIn({ signinType: 'google' })}
+            >
+              <Icon name="google" color="#28439e" width="24" height="24" />
+            </button>
           </div>
           <div>
             <p>
