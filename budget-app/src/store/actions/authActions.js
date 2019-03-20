@@ -105,7 +105,6 @@ export const signIn = payload => (dispatch, getState, { getFirebase }) => {
         .auth()
         .signInWithPopup(provider)
         .then(function(result) {
-          const user = result.user
           dispatch({
             type: 'SIGNIN_SUCCESS',
           })
