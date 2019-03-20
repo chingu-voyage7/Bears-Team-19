@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 import AccountList from '../../components/AccountList'
 import Balance from '../../components/Balance'
 import BudgetList from '../../components/BudgetList'
+import Charts from '../../components/Charts'
 import Icon from '../../components/Icons'
 import SetCurrency from '../../components/SetCurrency'
 import TransactionList from '../../components/TransactionList'
@@ -23,20 +24,6 @@ class Dashboard extends Component {
       user: { balance: totalBalance },
     } = this.props
 
-    if (!transactions) {
-      return (
-        <section className="dashboard">
-          <h3>Dashboard</h3>
-          <Balance balance={totalBalance} />
-          <p>You have no transactions yet.</p>
-          <Link to="/transaction/create">
-            <Icon name="add" color="#23D160" />
-            New transaction
-          </Link>
-        </section>
-      )
-    }
-
     if (!auth.uid) {
       return <Redirect to="/signin" />
     }
@@ -55,16 +42,31 @@ class Dashboard extends Component {
             />
           </div>
         </section>
-        <BudgetList uid={this.props.auth.uid} transactions={transactions} />
-        <AccountList
-          uid={this.props.auth.uid}
-          transactions={transactions}
-          userCurrency={this.props.user.currency}
-        />
-        <TransactionList
-          uid={this.props.auth.uid}
-          userCurrency={this.props.user.currency}
-        />
+        {transactions && <Charts transactions={transactions} />}
+        {transactions && (
+          <BudgetList uid={this.props.auth.uid} transactions={transactions} />
+        )}
+        {transactions && (
+          <AccountList
+            uid={this.props.auth.uid}
+            transactions={transactions}
+            userCurrency={this.props.user.currency}
+          />
+        )}
+        {transactions ? (
+          <TransactionList
+            uid={this.props.auth.uid}
+            userCurrency={this.props.user.currency}
+          />
+        ) : (
+          <section className="section">
+            <p>You have no transactions yet.</p>
+            <Link to="/transaction/create">
+              <Icon name="add" color="#23D160" />
+              New transaction
+            </Link>
+          </section>
+        )}
       </section>
     )
   }
