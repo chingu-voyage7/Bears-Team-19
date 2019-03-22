@@ -59,6 +59,12 @@ router.post('/', isAuthenticated, async (req, res, next) => {
       error: `Transaction not created, budget or account doesn't exist or doesn't belong to you.`,
     })
   } else {
+    // Set amount to positive or negative
+    let amountWithSign = 0
+    type === 'expense'
+      ? (amountWithSign = Number(`-${amount}`))
+      : (amountWithSign = Number(amount))
+
     // get all categories
     const [allCategories] = await db
       .select()
@@ -74,28 +80,19 @@ router.post('/', isAuthenticated, async (req, res, next) => {
     } else {
       categoryId = allCategories.category_id
     }
+
     // Get the balance of the account
-    const [{ balance }] = await db('accounts')
-      .select('balance')
-      .where({ account_id: accountId })
+    const balancelog = await db('balancelog')
+      .select('balance', 'balancelog_id')
+      .where({ fk_account_id: accountId })
 
-    // Check if amount is positive or negative and increase or decrease balance based on that.
-    let balanceAfterAmount = 0
-    if (type === 'expense') {
-      balanceAfterAmount = Number(balance) - Number(amount)
-    }
-    if (type === 'income') {
-      balanceAfterAmount = Number(balance) + Number(amount)
-    }
+    const [{ balance }] = balancelog.slice(-1)
+    const balanceAfterAmount = Number(balance) + amountWithSign
 
-    // Update accounts balance
-    await db('accounts')
-      .update({ balance: balanceAfterAmount })
-      .where({ account_id: accountId, fk_user_id: userId })
-
+    // create transaction
     const transactionInfo = {
       fk_user_id: userId,
-      amount,
+      amount: amountWithSign,
       type,
       fk_account_id: accountId,
       fk_budget_id: budgetId,
@@ -108,7 +105,27 @@ router.post('/', isAuthenticated, async (req, res, next) => {
       .returning(['trans_id', 'fk_category_id'])
       .insert(transactionInfo)
 
-    res.json({ message: 'Created transaction', transaction })
+    // Add new balance log record.
+    const [newBalanceLog] = await db('balancelog')
+      .returning([
+        'balancelog_id',
+        'fk_account_id',
+        'balance',
+        'date',
+        'fk_user_id',
+      ])
+      .insert({
+        fk_user_id: userId,
+        balance: balanceAfterAmount,
+        fk_account_id: accountId,
+        fk_transaction_id: transaction.trans_id,
+        date,
+      })
+
+    res.json({
+      message: 'Created transaction',
+      transaction,
+    })
   }
 })
 
@@ -125,6 +142,11 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
     budgetId,
   } = req.body
 
+  let amountWithSign = 0
+  type === 'expense'
+    ? (amountWithSign = Number(`-${amount}`))
+    : (amountWithSign = Number(amount))
+
   const [
     {
       fk_user_id: authorid,
@@ -135,7 +157,7 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
   ] = await db('transactions')
     .where({ trans_id: transId })
     .select()
-
+  console.log(transId)
   // Check so the user is the owner of the transaction
   if (userId !== authorid) {
     res.status(404).json({ message: 'Not authorized' })
@@ -162,33 +184,21 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
         categoryId = allCategories.category_id
       }
 
-      const [{ balance }] = await db('accounts')
+      const [{ balance, balancelog_id }] = await db('balancelog')
         .select()
-        .where({ account_id: oldAccountID })
+        .where({ fk_transaction_id: transId })
 
-      let cleanedBalance = 0
-      if (oldType === 'expense') {
-        cleanedBalance = Number(balance) + Number(oldAmount)
-      } else {
-        cleanedBalance = Number(balance) - Number(oldAmount)
-      }
+      const cleanedBalance = balance - oldAmount
 
-      // Check if amount is positive or negative and increase or decrease balance based on that.
-      let balanceAfterAmount = 0
-      if (type === 'expense') {
-        balanceAfterAmount = Number(cleanedBalance) - Number(amount)
-      }
-      if (type === 'income') {
-        balanceAfterAmount = Number(cleanedBalance) + Number(amount)
-      }
+      const balanceAfterAmount = cleanedBalance + amountWithSign
 
       // Update accounts balance
-      await db('accounts')
+      await db('balancelog')
         .update({ balance: balanceAfterAmount })
-        .where({ account_id: accountId, fk_user_id: userId })
+        .where({ balancelog_id, fk_user_id: userId })
 
       const updateDetails = {
-        amount,
+        amount: amountWithSign,
         date,
         fk_account_id: accountId,
         fk_budget_id: budgetId,
@@ -224,28 +234,10 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const { transId } = req.body
 
-  const [{ amount, type, fk_account_id: accountId }] = await db('transactions')
-    .select()
-    .where({ trans_id: transId })
-
-  // Get the balance of the account
-  const [{ balance }] = await db('accounts')
-    .select('balance')
-    .where({ account_id: accountId })
-
-  // Check if amount is positive or negative and increase or decrease balance based on that.
-  let balanceAfterAmount = 0
-  if (type === 'expense') {
-    balanceAfterAmount = Number(balance) + Number(amount)
-  }
-  if (type === 'income') {
-    balanceAfterAmount = Number(balance) - Number(amount)
-  }
-
-  // Update accounts balance
-  await db('accounts')
-    .update({ balance: balanceAfterAmount })
-    .where({ account_id: accountId, fk_user_id: userId })
+  // Remove the balancelog corresponding to the transaction
+  await db('balancelog')
+    .del()
+    .where({ fk_transaction_id: transId })
 
   const result = await db('transactions')
     .del()
