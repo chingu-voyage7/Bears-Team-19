@@ -15,14 +15,6 @@ exports.up = async function(knex, Promise) {
       .foreign('fk_user_id')
       .references('user_id')
       .inTable('users')
-    // table
-    //   .foreign('fk_budget_id')
-    //   .references('budget_id')
-    //   .inTable('budgets')
-    // table
-    //   .foreign('fk_account_id')
-    //   .references('account_id')
-    //   .inTable('accounts')
     table.timestamps(true, true)
   })
 }
