@@ -8,6 +8,7 @@ import Charts from '../../components/Charts'
 import Icon from '../../components/Icons'
 import SetCurrency from '../../components/SetCurrency'
 import TransactionList from '../../components/TransactionList'
+import { getBalanceLogs } from '../../store/actions/balanceActions'
 import { getTransactions } from '../../store/actions/transactionActions'
 import { getUser } from '../../store/actions/userActions'
 
@@ -15,6 +16,7 @@ class Dashboard extends Component {
   componentDidMount() {
     this.props.getTransactions(this.props.auth.uid)
     this.props.getUser(this.props.auth.uid)
+    this.props.getBalanceLogs(this.props.auth.uid)
   }
 
   render() {
@@ -22,6 +24,7 @@ class Dashboard extends Component {
       auth,
       transactions,
       user: { balance: totalBalance },
+      balancelogs,
     } = this.props
 
     if (!auth.uid) {
@@ -42,7 +45,8 @@ class Dashboard extends Component {
             />
           </div>
         </section>
-        {transactions && <Charts transactions={transactions} />}
+
+        {balancelogs && <Charts balancelogs={balancelogs} />}
         {transactions && (
           <BudgetList uid={this.props.auth.uid} transactions={transactions} />
         )}
@@ -77,12 +81,14 @@ const mapStateToProps = state => {
     auth: state.firebase.auth,
     transactions: state.transaction.transactions,
     user: state.user,
+    balancelogs: state.balancelog.logs,
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     getTransactions: uid => dispatch(getTransactions(uid)),
     getUser: uid => dispatch(getUser(uid)),
+    getBalanceLogs: uid => dispatch(getBalanceLogs(uid)),
   }
 }
 
