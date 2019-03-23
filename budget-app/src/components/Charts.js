@@ -1,17 +1,41 @@
+import { format } from 'date-fns'
 import React, { Component } from 'react'
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
-
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
+import { compareDates } from '../helpers/helpers'
 export default class Charts extends Component {
   render() {
-    // TODO fix the transaction sorting of date.
+    const { balancelogs } = this.props
+    // Sort the dates oldest to newest.
+    const sortedByDateAsc = balancelogs.sort(compareDates).map(log => {
+      // Clean up date with format.
+      const dateFormated = format(log.date, 'YYYY-MM-DD')
+      return { ...log, date: dateFormated }
+    })
+    console.log(sortedByDateAsc)
     return (
       <section className="section small-width">
-        <LineChart width={600} height={400} data={this.props.transactions}>
-          <Line type="monotone" dataKey="amount" stroke="#8884d8" />
+        <LineChart width={600} height={400} data={sortedByDateAsc}>
           <CartesianGrid stroke="#ccc" />
+          <Tooltip />
+          <Legend />
           <XAxis dataKey="date" />
-          <YAxis />
+          <YAxis type="number" />
+          <Line
+            type="monotone"
+            dataKey="balance"
+            stroke="#8884d8"
+            activeDot={true}
+          />
         </LineChart>
+        <div>hey</div>
       </section>
     )
   }

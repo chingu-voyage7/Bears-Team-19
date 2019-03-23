@@ -1,7 +1,12 @@
+import { compareAsc } from 'date-fns'
+
 export const inUse = (id, transactions, type) => {
   return transactions.some(transaction => transaction[type] === id)
 }
 
+export const compareDates = (a, b) => {
+  return compareAsc(a.date, b.date)
+}
 export const locales = [
   'AED',
   'AFN',
