@@ -53,7 +53,7 @@ class EditTransaction extends Component {
         <div className="container">
           <Formik
             initialValues={{
-              amount,
+              amount: Math.abs(amount),
               category,
               accountId,
               budgetId,
@@ -248,7 +248,7 @@ const mapStateToProps = (state, props) => {
   const transaction = props.location.state
   return {
     auth: state.firebase.auth,
-    accounts: state.account.accounts,
+    accounts: state.account.accountsWithBalance,
     budgets: state.budget.budgets,
     transaction,
   }

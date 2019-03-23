@@ -14,18 +14,11 @@ const Transaction = ({
     transId,
     date,
     amount,
-    type,
     category,
     budgetName,
     accountName,
   } = transaction
 
-  const amountWithType = type => {
-    if (type === 'income') {
-      return ''
-    }
-    return `-`
-  }
   return (
     <section className="section">
       <div className="columns is-mobile">
@@ -38,7 +31,6 @@ const Transaction = ({
         </div>
         <div className="column has-text-right">
           <h5>
-            {amountWithType(type)}
             <Currency quantity={amount ? amount : 0} currency={userCurrency} />
           </h5>
           <p className="category">{category}</p>

@@ -36,7 +36,7 @@ class AccountList extends Component {
 
 const mapStateToProps = state => {
   return {
-    accounts: state.account.accounts,
+    accounts: state.account.accountsWithBalance,
   }
 }
 

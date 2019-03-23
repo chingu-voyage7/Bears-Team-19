@@ -78,6 +78,7 @@ export const deleteAccount = payload => (dispatch, getState) => {
     data: payload,
   })
     .then(res => {
+      dispatch(getAccounts(payload.uid))
       dispatch({
         type: 'DELETE_ACCOUNT_SUCCESS',
         payload: res,

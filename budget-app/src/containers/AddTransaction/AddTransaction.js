@@ -254,7 +254,7 @@ class AddTransaction extends Component {
 
 const mapStateToProps = state => {
   return {
-    accounts: state.account.accounts,
+    accounts: state.account.accountsWithBalance,
     budgets: state.budget.budgets,
     auth: state.firebase.auth,
   }
