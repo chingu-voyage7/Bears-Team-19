@@ -11,11 +11,16 @@ const router = express.Router()
 router.get('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
 
-  const accountsWithBalance = await getAccountsWithBalance(userId)
+  const accounts = await db('accounts')
+    .select()
+    .where({ fk_user_id: userId })
+
+  // const accountsWithBalance = await getAccountsWithBalance(userId)
 
   res.json({
     message: 'Accounts',
-    accountsWithBalance,
+    // accountsWithBalance,
+    accounts,
   })
 })
 
@@ -24,22 +29,46 @@ router.post('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const { account, balance } = req.body
 
+  const newDate = new Date()
   // Create account
-  const [{ account_id }] = await db('accounts')
+  const [{ account_id: accountId }] = await db('accounts')
     .returning(['account_id'])
     .insert({ fk_user_id: userId, account_name: account })
-  const [newBalanceLog] = await db('balancelog')
+  // Add record to accounts balance table
+  const [newAccountBalanceRecord] = await db('accountbalance')
     .returning(['fk_account_id', 'balance', 'date', 'fk_user_id'])
     .insert({
       fk_user_id: userId,
       balance,
-      fk_account_id: account_id,
-      date: new Date(),
+      fk_account_id: accountId,
+      date: newDate,
     })
+
+  // Get last record of total balance table
+  const oldTotal = await db('totalbalance')
+    .select()
+    .where({ fk_user_id: userId })
+    .orderBy('date', 'desc')
+    .limit(1)
+
+  // Use the old balance add add the new accounts balance to it.
+  const cleanedBalance =
+    oldTotal.length > 0
+      ? Number(oldTotal[0].balance) + Number(balance)
+      : Number(0 + balance)
+
+  // Add record to total balance table
+  await db('totalbalance').insert({
+    balance: cleanedBalance,
+    date: newDate,
+    fk_user_id: userId,
+    fk_account_id: accountId,
+  })
+
   res.json({
     message: 'Accounts created',
-    account_id,
-    balance: newBalanceLog,
+    accountId,
+    balance: newAccountBalanceRecord,
   })
 })
 
@@ -64,7 +93,10 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const { accountId } = req.body
 
-  await db('balancelog')
+  await db('accountbalance')
+    .del()
+    .where({ fk_account_id: accountId, fk_user_id: userId })
+  await db('totalbalance')
     .del()
     .where({ fk_account_id: accountId, fk_user_id: userId })
   await db('transactions')
