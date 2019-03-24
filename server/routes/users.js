@@ -24,9 +24,17 @@ router.get('/user/', isAuthenticated, async (req, res, next) => {
     .where({ user_id: userId })
     .select()
 
-  const totalBalance = await getTotalBalance(userId)
-  const userWithBalance = { ...user, balance: totalBalance }
-  res.json({ message: 'Got user', data: userWithBalance })
+  const totalBalance = await db('totalbalance')
+    .select()
+    .where({ fk_user_id: userId })
+    .orderBy('date', 'desc')
+    .limit(1)
+
+  const userWithBalance = { ...user, balance: totalBalance[0].balance }
+  res.json({
+    message: 'Got user',
+    data: userWithBalance,
+  })
 })
 
 // Create new user
@@ -53,8 +61,13 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
     .returning(['user_id', 'email', 'username', 'notifications', 'currency'])
     .where({ user_id: userId })
 
-  const totalBalance = await getTotalBalance(userId)
-  const userWithBalance = { ...updatedUser, balance: totalBalance }
+  const totalBalance = await db('totalbalance')
+    .select()
+    .where({ fk_user_id: userId })
+    .orderBy('date', 'desc')
+    .limit(1)
+
+  const userWithBalance = { ...updatedUser, balance: totalBalance[0].balance }
   res.json({ message: 'Updated user', data: userWithBalance })
 })
 
