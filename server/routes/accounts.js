@@ -90,24 +90,56 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const { accountId } = req.body
 
-  await db('balance')
-    .del()
-    .where({ fk_account_id: accountId, fk_user_id: userId })
-  await db('transactions')
-    .del()
-    .where({ fk_account_id: accountId, fk_user_id: userId })
+  // If there is then do not allow to delete the account.
+  const haveTransactions = await db('transactions')
+    .select()
+    .where({ fk_account_id: accountId })
 
-  const result = await db('accounts')
-    .del()
-    .where({ account_id: accountId, fk_user_id: userId })
+  if (haveTransactions.length > 0) {
+    res
+      .status(404)
+      .json({ error: 'Can not delete, need to remove transactions first.' })
+  } else {
+    // If there isn't then remove the account and update all total balance records after it was created with removing the amount from the balance
 
-  if (!result) {
-    res.status(404).json({ error: 'Not authorized' })
+    //Get total balance
+    const [balanceForAccount] = await db('balance')
+      .select()
+      .where({ fk_account_id: accountId, type: 'account' })
+
+    // Get all total Balance records for user that comes after the accounts initial record and decrement their balance by the balance of the account
+    const filteredTotalBalanceForUser = await db('balance')
+      .where({ fk_user_id: userId, type: 'total' })
+      .andWhere('balance_id', '>', balanceForAccount.balance_id)
+      .decrement({ balance: balanceForAccount.balance })
+      .returning([
+        'balance',
+        'balance_id',
+        'type',
+        'date',
+        'fk_user_id',
+        'fk_transaction_id',
+        'fk_account_id',
+      ])
+
+    // Remove the balance records for both account and total
+    await db('balance')
+      .del()
+      .where({ fk_account_id: accountId, fk_user_id: userId })
+
+    // Remove The account Record
+    const result = await db('accounts')
+      .del()
+      .where({ account_id: accountId, fk_user_id: userId })
+
+    if (!result) {
+      res.status(404).json({ error: 'Not authorized' })
+    }
+    res.json({
+      message: 'Account deleted',
+      accountId,
+    })
   }
-  res.json({
-    message: 'Account deleted',
-    accountId,
-  })
 })
 
 module.exports = router
