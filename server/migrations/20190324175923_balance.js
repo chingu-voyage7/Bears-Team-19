@@ -1,17 +1,22 @@
 exports.up = async function(knex, Promise) {
-  await knex.schema.createTable('accountbalance', table => {
+  await knex.schema.createTable('balance', table => {
     table
-      .increments('accountbalance_id')
+      .increments('balance_id')
       .notNullable()
       .primary()
-    table.integer('fk_account_id').notNullable()
-    table.integer('fk_transaction_id')
-    table.integer('fk_user_id')
     table
       .decimal('balance', 10, 2)
       .notNullable()
       .defaultTo(0.0)
+    table.string('type').notNullable()
     table.string('date').notNullable()
+    table.integer('fk_user_id').notNullable()
+    table.integer('fk_transaction_id')
+    table.integer('fk_account_id').notNullable()
+    table
+      .foreign('fk_user_id')
+      .references('user_id')
+      .inTable('users')
     table
       .foreign('fk_account_id')
       .references('account_id')
@@ -21,5 +26,5 @@ exports.up = async function(knex, Promise) {
 }
 
 exports.down = async function(knex, Promise) {
-  await knex.schema.dropTableIfExists('accountbalance')
+  await knex.schema.dropTableIfExists('balance')
 }
