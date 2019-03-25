@@ -82,12 +82,22 @@ router.post('/', isAuthenticated, async (req, res, next) => {
     }
 
     // Get the balance of the account
-    const balancelog = await db('balancelog')
-      .select('balance', 'balancelog_id')
+    const [{ balance: oldAccountBalance }] = await db('accountbalance')
+      .select('balance', 'accountbalance_id')
       .where({ fk_account_id: accountId })
+      .orderBy('accountbalance_id', 'desc')
+      .limit(1)
 
-    const [{ balance }] = balancelog.slice(-1)
-    const balanceAfterAmount = Number(balance) + amountWithSign
+    // Get the total balance
+    const [{ balance: oldTotalBalance }] = await db('totalbalance')
+      .select('balance', 'totalbalance_id')
+      .where({ fk_user_id: userId })
+      .orderBy('totalbalance_id', 'desc')
+      .limit(1)
+
+    // Create new balance for account and total based on new transaction
+    const accountBalanceAfterAmount = Number(oldAccountBalance) + amountWithSign
+    const totalBalanceAfterAmount = Number(oldTotalBalance) + amountWithSign
 
     // create transaction
     const transactionInfo = {
@@ -105,10 +115,10 @@ router.post('/', isAuthenticated, async (req, res, next) => {
       .returning(['trans_id', 'fk_category_id'])
       .insert(transactionInfo)
 
-    // Add new balance log record.
-    const [newBalanceLog] = await db('balancelog')
+    // Add new account balance record.
+    await db('accountbalance')
       .returning([
-        'balancelog_id',
+        'accountbalance_id',
         'fk_account_id',
         'balance',
         'date',
@@ -116,7 +126,25 @@ router.post('/', isAuthenticated, async (req, res, next) => {
       ])
       .insert({
         fk_user_id: userId,
-        balance: balanceAfterAmount,
+        balance: accountBalanceAfterAmount,
+        fk_account_id: accountId,
+        fk_transaction_id: transaction.trans_id,
+        date,
+      })
+
+    // Add new total balance record
+    await db('totalbalance')
+      .returning([
+        'totalbalance_id',
+        'balance',
+        'fk_user_id',
+        'date',
+        'fk_account_id',
+        'fk_transaction_id',
+      ])
+      .insert({
+        fk_user_id: userId,
+        balance: totalBalanceAfterAmount,
         fk_account_id: accountId,
         fk_transaction_id: transaction.trans_id,
         date,
@@ -234,8 +262,13 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const { transId } = req.body
 
-  // Remove the balancelog corresponding to the transaction
-  await db('balancelog')
+  // Remove the account balance record corresponding to the transaction
+  await db('accountbalance')
+    .del()
+    .where({ fk_transaction_id: transId })
+
+  // Remove the total balance record corresponding to the transaction
+  await db('totalbalance')
     .del()
     .where({ fk_transaction_id: transId })
 
