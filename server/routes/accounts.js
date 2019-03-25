@@ -30,20 +30,21 @@ router.post('/', isAuthenticated, async (req, res, next) => {
     .returning(['account_id'])
     .insert({ fk_user_id: userId, account_name: account })
   // Add record to accounts balance table
-  const [newAccountBalanceRecord] = await db('accountbalance')
-    .returning(['fk_account_id', 'balance', 'date', 'fk_user_id'])
+  const [newAccountBalanceRecord] = await db('balance')
+    .returning(['fk_account_id', 'balance', 'date', 'type', 'fk_user_id'])
     .insert({
       fk_user_id: userId,
       balance,
       fk_account_id: accountId,
       date: newDate,
+      type: 'account',
     })
 
   // Get last record of total balance table
-  const oldTotal = await db('totalbalance')
+  const oldTotal = await db('balance')
     .select()
-    .where({ fk_user_id: userId })
-    .orderBy('totalbalance_id', 'desc')
+    .where({ fk_user_id: userId, type: 'total' })
+    .orderBy('balance_id', 'desc')
     .limit(1)
 
   // Use the old balance add add the new accounts balance to it.
@@ -53,11 +54,12 @@ router.post('/', isAuthenticated, async (req, res, next) => {
       : Number(0 + balance)
 
   // Add record to total balance table
-  await db('totalbalance').insert({
+  await db('balance').insert({
     balance: cleanedBalance,
     date: newDate,
     fk_user_id: userId,
     fk_account_id: accountId,
+    type: 'total',
   })
 
   res.json({
@@ -88,10 +90,7 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const { accountId } = req.body
 
-  await db('accountbalance')
-    .del()
-    .where({ fk_account_id: accountId, fk_user_id: userId })
-  await db('totalbalance')
+  await db('balance')
     .del()
     .where({ fk_account_id: accountId, fk_user_id: userId })
   await db('transactions')
