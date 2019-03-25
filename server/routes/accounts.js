@@ -11,16 +11,11 @@ const router = express.Router()
 router.get('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
 
-  const accounts = await db('accounts')
-    .select()
-    .where({ fk_user_id: userId })
-
-  // const accountsWithBalance = await getAccountsWithBalance(userId)
+  const accountsWithBalance = await getAccountsWithBalance(userId)
 
   res.json({
     message: 'Accounts',
-    // accountsWithBalance,
-    accounts,
+    accountsWithBalance,
   })
 })
 
@@ -48,7 +43,7 @@ router.post('/', isAuthenticated, async (req, res, next) => {
   const oldTotal = await db('totalbalance')
     .select()
     .where({ fk_user_id: userId })
-    .orderBy('date', 'desc')
+    .orderBy('totalbalance_id', 'desc')
     .limit(1)
 
   // Use the old balance add add the new accounts balance to it.
