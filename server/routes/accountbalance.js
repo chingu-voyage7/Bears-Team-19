@@ -14,9 +14,9 @@ router.get('/', isAuthenticated, async (req, res, next) => {
   //   .select()
   //   .orderBy('date', 'desc')
 
-  const accountBalance = await db('accountbalance')
+  const accountBalance = await db('balance')
     .select()
-    .where({ fk_user_id: userId })
+    .where({ fk_user_id: userId, type: 'account' })
 
   res.json({
     message: 'Account Balance',

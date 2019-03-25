@@ -14,9 +14,9 @@ router.get('/', isAuthenticated, async (req, res, next) => {
   //   .select()
   //   .orderBy('date', 'desc')
 
-  const totalBalance = await db('totalbalance')
+  const totalBalance = await db('balance')
     .select()
-    .where({ fk_user_id: userId })
+    .where({ fk_user_id: userId, type: 'total' })
 
   res.json({
     message: 'Total Balance',

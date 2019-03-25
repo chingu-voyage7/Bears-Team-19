@@ -24,13 +24,16 @@ router.get('/user/', isAuthenticated, async (req, res, next) => {
     .where({ user_id: userId })
     .select()
 
-  const totalBalance = await db('totalbalance')
+  const totalBalance = await db('balance')
     .select()
-    .where({ fk_user_id: userId })
-    .orderBy('date', 'desc')
+    .where({ fk_user_id: userId, type: 'total' })
+    .orderBy('balance_id', 'desc')
     .limit(1)
 
-  const userWithBalance = { ...user, balance: totalBalance[0].balance }
+  const userWithBalance = {
+    ...user,
+    balance: totalBalance.length > 0 ? totalBalance[0].balance : 0.0,
+  }
   res.json({
     message: 'Got user',
     data: userWithBalance,

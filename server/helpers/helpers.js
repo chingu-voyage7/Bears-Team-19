@@ -22,12 +22,14 @@ const getAccountsWithBalance = async userId => {
     .where({ fk_user_id: userId })
   const accountsWithBalance = await Promise.all(
     accounts.map(async account => {
-      const [{ balance, accountbalance_id: accountBalanceId }] = await db(
-        'accountbalance',
-      )
+      const [{ balance, balance_id: accountBalanceId }] = await db('balance')
         .select()
-        .where({ fk_user_id: userId, fk_account_id: account.account_id })
-        .orderBy('accountbalance_id', 'desc')
+        .where({
+          fk_user_id: userId,
+          fk_account_id: account.account_id,
+          type: 'account',
+        })
+        .orderBy('balance_id', 'desc')
         .limit(1)
 
       const accountWithBalance = {
