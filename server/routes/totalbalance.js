@@ -17,6 +17,7 @@ router.get('/', isAuthenticated, async (req, res, next) => {
   const totalBalance = await db('balance')
     .select()
     .where({ fk_user_id: userId, type: 'total' })
+    .orderBy('balance_id', 'asc')
 
   res.json({
     message: 'Total Balance',
