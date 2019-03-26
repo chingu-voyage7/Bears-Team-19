@@ -82,17 +82,17 @@ router.post('/', isAuthenticated, async (req, res, next) => {
     }
 
     // Get the balance of the account
-    const [{ balance: oldAccountBalance }] = await db('accountbalance')
-      .select('balance', 'accountbalance_id')
-      .where({ fk_account_id: accountId })
-      .orderBy('accountbalance_id', 'desc')
+    const [{ balance: oldAccountBalance }] = await db('balance')
+      .select('balance', 'balance_id')
+      .where({ fk_account_id: accountId, type: 'account' })
+      .orderBy('balance_id', 'desc')
       .limit(1)
 
     // Get the total balance
-    const [{ balance: oldTotalBalance }] = await db('totalbalance')
-      .select('balance', 'totalbalance_id')
-      .where({ fk_user_id: userId })
-      .orderBy('totalbalance_id', 'desc')
+    const [{ balance: oldTotalBalance }] = await db('balance')
+      .select('balance', 'balance_id')
+      .where({ fk_user_id: userId, type: 'total' })
+      .orderBy('balance_id', 'desc')
       .limit(1)
 
     // Create new balance for account and total based on new transaction
@@ -116,9 +116,9 @@ router.post('/', isAuthenticated, async (req, res, next) => {
       .insert(transactionInfo)
 
     // Add new account balance record.
-    await db('accountbalance')
+    await db('balance')
       .returning([
-        'accountbalance_id',
+        'balance_id',
         'fk_account_id',
         'balance',
         'date',
@@ -130,12 +130,13 @@ router.post('/', isAuthenticated, async (req, res, next) => {
         fk_account_id: accountId,
         fk_transaction_id: transaction.trans_id,
         date,
+        type: 'account',
       })
 
     // Add new total balance record
-    await db('totalbalance')
+    await db('balance')
       .returning([
-        'totalbalance_id',
+        'balance_id',
         'balance',
         'fk_user_id',
         'date',
@@ -148,6 +149,7 @@ router.post('/', isAuthenticated, async (req, res, next) => {
         fk_account_id: accountId,
         fk_transaction_id: transaction.trans_id,
         date,
+        type: 'total',
       })
 
     res.json({
@@ -185,7 +187,7 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
   ] = await db('transactions')
     .where({ trans_id: transId })
     .select()
-  console.log(transId)
+
   // Check so the user is the owner of the transaction
   if (userId !== authorid) {
     res.status(404).json({ message: 'Not authorized' })
@@ -212,18 +214,55 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
         categoryId = allCategories.category_id
       }
 
-      const [{ balance, balancelog_id }] = await db('balancelog')
+      //TODO Get old transaction
+      //TODO Check if amount or accountId has changed from old transaction to updated transaction
+      //If yes
+      //TODO Get old accont balance when that transaction occured
+      //TODO Get old total balance when that transaction occured
+
+      //TODO Compare transaction amount to updated transaction amount
+
+      //TODO Update all records for that accounts balance after that transaction with the difference of the amount
+      //TODO Update all records for total balance after that transaction with the difference of the amount
+
+      //Jump here if update doesn't concern amount or accountId
+      //TODO Update transaction record with new amount
+      // Get old account balance
+      const [{ balance: oldAccountBalance, balance_id }] = await db('balance')
         .select()
         .where({ fk_transaction_id: transId })
 
-      const cleanedBalance = balance - oldAmount
+      const cleanedAccountBalance = oldAccountBalance - oldAmount
 
-      const balanceAfterAmount = cleanedBalance + amountWithSign
+      const accountBalanceAfterAmount = cleanedAccountBalance + amountWithSign
 
       // Update accounts balance
-      await db('balancelog')
-        .update({ balance: balanceAfterAmount })
-        .where({ balancelog_id, fk_user_id: userId })
+      await db('accountbalance')
+        .update({
+          balance: accountBalanceAfterAmount,
+          fk_account_id: accountId,
+          date,
+        })
+        .where({ accountbalance_id, fk_user_id: userId })
+
+      const [{ balance: oldTotalBalance, totalbalance_id }] = await db(
+        'totalbalance',
+      )
+        .select()
+        .where({ fk_transaction_id: transId })
+
+      const cleanedTotalBalance = oldTotalBalance - oldAmount
+      const totalBalanceAfterAmount = cleanedTotalBalance + amountWithSign
+
+      await db('totalbalance')
+        .update({
+          balance: totalBalanceAfterAmount,
+          fk_account_id: accountId,
+          date,
+        })
+        .where({ totalbalance_id, fk_user_id: userId })
+
+      //TODO: Loop through all balance records for total and account and update them updating the amount that was in the transaction
 
       const updateDetails = {
         amount: amountWithSign,
@@ -262,16 +301,60 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const { transId } = req.body
 
-  // Remove the account balance record corresponding to the transaction
-  await db('accountbalance')
+  const [transaction] = await db('transactions')
+    .select()
+    .where({ trans_id: transId })
+
+  //Get account balance when that transaction occured
+  const [balanceForAccount] = await db('balance')
+    .select()
+    .where({ fk_transaction_id: transId, type: 'account' })
+
+  //Get total balance when that transaction occured
+  const [balanceForTotal] = await db('balance')
+    .select()
+    .where({ fk_transaction_id: transId, type: 'total' })
+
+  // Get all account balance records after the transaction and update them to reflect removing the transaction
+  const filteredAccountBalance = await db('balance')
+    .where({
+      fk_user_id: userId,
+      fk_account_id: transaction.fk_account_id,
+      type: 'account',
+    })
+    .andWhere('balance_id', '>', balanceForAccount.balance_id)
+    .decrement({ balance: transaction.amount })
+    .returning([
+      'balance',
+      'balance_id',
+      'type',
+      'date',
+      'fk_user_id',
+      'fk_transaction_id',
+      'fk_account_id',
+    ])
+
+  // Get all total balance records after the transaction and update them to reflect removing the transaction
+  const filteredTotalBalance = await db('balance')
+    .where({ fk_user_id: userId, type: 'total' })
+    .andWhere('balance_id', '>', balanceForAccount.balance_id)
+    .decrement({ balance: transaction.amount })
+    .returning([
+      'balance',
+      'balance_id',
+      'type',
+      'date',
+      'fk_user_id',
+      'fk_transaction_id',
+      'fk_account_id',
+    ])
+
+  // Remove the balance records corresponding to the transaction
+  await db('balance')
     .del()
     .where({ fk_transaction_id: transId })
 
-  // Remove the total balance record corresponding to the transaction
-  await db('totalbalance')
-    .del()
-    .where({ fk_transaction_id: transId })
-
+  // Remove the transaction record
   const result = await db('transactions')
     .del()
     .where({ trans_id: transId, fk_user_id: userId })
