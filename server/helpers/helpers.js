@@ -1,3 +1,4 @@
+const { compareAsc } = require('date-fns')
 const db = require('../database/database.js')
 
 const isValidBudgetAndAccount = async (accountId, budgetId, userId) => {
@@ -10,6 +11,15 @@ const isValidBudgetAndAccount = async (accountId, budgetId, userId) => {
     .where({ account_id: accountId, fk_user_id: userId })
 
   if (budgetCheck.length === 0 || accountCheck.length === 0) {
+    return false
+  }
+  return true
+}
+
+const isValidDate = (transactionDate, accountDate) => {
+  const result = compareAsc(transactionDate, accountDate)
+
+  if (result === -1) {
     return false
   }
   return true
@@ -62,4 +72,5 @@ module.exports = {
   isValidBudgetAndAccount,
   getTotalBalance,
   getAccountsWithBalance,
+  isValidDate,
 }
