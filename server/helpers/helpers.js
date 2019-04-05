@@ -30,27 +30,34 @@ const getAccountsWithBalance = async userId => {
   const accounts = await db('accounts')
     .select()
     .where({ fk_user_id: userId })
-  const accountsWithBalance = await Promise.all(
-    accounts.map(async account => {
-      const [{ balance, balance_id: accountBalanceId }] = await db('balance')
-        .select()
-        .where({
-          fk_user_id: userId,
-          fk_account_id: account.account_id,
-          type: 'account',
-        })
-        .orderBy('balance_id', 'desc')
-        .limit(1)
+  // const accountsWithBalance = await Promise.all(
+  //   accounts.map(async account => {
+  //     const [{ balance, balance_id: accountBalanceId }] = await db('balance')
+  //       .select()
+  //       .where({
+  //         fk_user_id: userId,
+  //         fk_account_id: account.account_id,
+  //         type: 'account',
+  //       })
+  //       .orderBy('balance_id', 'desc')
+  //       .limit(1)
 
-      const accountWithBalance = {
-        ...account,
-        balance,
-        accountBalanceId,
-      }
-      return accountWithBalance
-    }),
-  )
-  return accountsWithBalance
+  //     const accountWithBalance = {
+  //       ...account,
+  //       balance,
+  //       accountBalanceId,
+  //     }
+  // return accounts
+  // }),
+  // )
+  return accounts
+}
+
+const amountIsLowerThanBalance = (amount, accountBalance) => {
+  if (amount > accountBalance) {
+    return false
+  }
+  return true
 }
 
 const getTotalBalance = async userId => {
@@ -73,4 +80,5 @@ module.exports = {
   getTotalBalance,
   getAccountsWithBalance,
   isValidDate,
+  amountIsLowerThanBalance,
 }
