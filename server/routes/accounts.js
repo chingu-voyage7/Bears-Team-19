@@ -26,11 +26,44 @@ router.post('/', isAuthenticated, async (req, res, next) => {
 
   const newDate = new Date()
   // Create account
-  const [{ account_id: accountId, balance: accountBalance }] = await db(
+  const [{ account_id: accountId, current_balance: currentBalance }] = await db(
     'accounts',
   )
-    .returning(['account_id', 'account_name', 'balance'])
-    .insert({ fk_user_id: userId, account_name: account, balance })
+    .returning(['account_id', 'account_name', 'current_balance'])
+    .insert({
+      fk_user_id: userId,
+      account_name: account,
+      current_balance: balance,
+    })
+
+  // Get the categoryId for 'New Account'
+  const [categories] = await db('categories')
+    .select()
+    .where({ category: 'New Account' })
+
+  // Check if category exists in categories
+  let categoryId
+  if (!categories) {
+    ;[categoryId] = await db('categories')
+      .returning('category_id')
+      .insert({ category: 'New Account' })
+  } else {
+    categoryId = categories.category_id
+  }
+
+  // Transaction info.
+  const transactionInfo = {
+    fk_user_id: userId,
+    amount: balance,
+    type: 'income',
+    fk_account_id: accountId,
+    date: newDate,
+    fk_category_id: categoryId,
+  }
+  // Make transaction for start balance.
+  await db('transactions').insert(transactionInfo)
+
+  // console.log(transaction)
   // Add record to accounts balance table
   // const [newAccountBalanceRecord] = await db('balance')
   //   .returning(['fk_account_id', 'balance', 'date', 'type', 'fk_user_id'])
@@ -67,7 +100,7 @@ router.post('/', isAuthenticated, async (req, res, next) => {
   res.json({
     message: 'Accounts created',
     accountId,
-    accountBalance,
+    currentBalance,
   })
 })
 
@@ -101,47 +134,24 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
     res
       .status(404)
       .json({ error: 'Can not delete, need to remove transactions first.' })
-  } else {
-    // If there isn't then remove the account and update all total balance records after it was created with removing the amount from the balance
 
-    //Get total balance
-    const [balanceForAccount] = await db('balance')
-      .select()
-      .where({ fk_account_id: accountId, type: 'account' })
-
-    // Get all total Balance records for user that comes after the accounts initial record and decrement their balance by the balance of the account
-    const filteredTotalBalanceForUser = await db('balance')
-      .where({ fk_user_id: userId, type: 'total' })
-      .andWhere('balance_id', '>', balanceForAccount.balance_id)
-      .decrement({ balance: balanceForAccount.balance })
-      .returning([
-        'balance',
-        'balance_id',
-        'type',
-        'date',
-        'fk_user_id',
-        'fk_transaction_id',
-        'fk_account_id',
-      ])
-
-    // Remove the balance records for both account and total
-    await db('balance')
-      .del()
-      .where({ fk_account_id: accountId, fk_user_id: userId })
-
-    // Remove The account Record
-    const result = await db('accounts')
-      .del()
-      .where({ account_id: accountId, fk_user_id: userId })
-
-    if (!result) {
-      res.status(404).json({ error: 'Not authorized' })
-    }
-    res.json({
-      message: 'Account deleted',
-      accountId,
-    })
+    return
   }
+  // If there isn't then remove the account and update all total balance records after it was created with removing the amount from the balance
+
+  // Remove The account Record
+  const result = await db('accounts')
+    .del()
+    .where({ account_id: accountId, fk_user_id: userId })
+
+  if (!result) {
+    res.status(404).json({ error: 'Not authorized' })
+    return
+  }
+  res.json({
+    message: 'Account deleted',
+    accountId,
+  })
 })
 
 module.exports = router

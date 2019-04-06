@@ -1,16 +1,12 @@
 const { compareAsc } = require('date-fns')
 const db = require('../database/database.js')
 
-const isValidBudgetAndAccount = async (accountId, budgetId, userId) => {
-  const budgetCheck = await db('budgets')
-    .select()
-    .where({ budget_id: budgetId, fk_user_id: userId })
-
+const isValidAccount = async (accountId, userId) => {
   const accountCheck = await db('accounts')
     .select()
     .where({ account_id: accountId, fk_user_id: userId })
 
-  if (budgetCheck.length === 0 || accountCheck.length === 0) {
+  if (accountCheck.length === 0) {
     return false
   }
   return true
@@ -60,6 +56,9 @@ const amountIsLowerThanBalance = (amount, accountBalance) => {
   return true
 }
 
+const createBalance = (transactionAmount, accountBalance) =>
+  Number(accountBalance) + Number(transactionAmount)
+
 const getTotalBalance = async userId => {
   // Get all accounts for that user, if none, default to 0.00
   // Set total balance
@@ -76,9 +75,10 @@ const getTotalBalance = async userId => {
   return totalBalance
 }
 module.exports = {
-  isValidBudgetAndAccount,
+  isValidAccount,
   getTotalBalance,
   getAccountsWithBalance,
   isValidDate,
   amountIsLowerThanBalance,
+  createBalance,
 }
