@@ -24,19 +24,15 @@ router.get('/user/', isAuthenticated, async (req, res, next) => {
     .where({ user_id: userId })
     .select()
 
-  const totalBalance = await db('balance')
-    .select()
-    .where({ fk_user_id: userId, type: 'total' })
-    .orderBy('balance_id', 'desc')
-    .limit(1)
+  // Get current total balance for all accounts combined
+  const totalBalance = await getTotalBalance(userId)
 
-  const userWithBalance = {
-    ...user,
-    balance: totalBalance.length > 0 ? totalBalance[0].balance : 0.0,
-  }
   res.json({
     message: 'Got user',
-    data: userWithBalance,
+    data: {
+      ...user,
+      balance: totalBalance,
+    },
   })
 })
 
@@ -63,12 +59,6 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
     .update(updateDetails)
     .returning(['user_id', 'email', 'username', 'notifications', 'currency'])
     .where({ user_id: userId })
-
-  const totalBalance = await db('totalbalance')
-    .select()
-    .where({ fk_user_id: userId })
-    .orderBy('date', 'desc')
-    .limit(1)
 
   const userWithBalance = { ...updatedUser, balance: totalBalance[0].balance }
   res.json({ message: 'Updated user', data: userWithBalance })

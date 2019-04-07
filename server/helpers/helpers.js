@@ -46,9 +46,9 @@ const getTotalBalance = async userId => {
   // Set total balance
   const accountsWithBalance = await getAccountsWithBalance(userId)
   let totalBalance = 0.0
-  if (accountsWithBalance.length) {
+  if (accountsWithBalance.length > 0) {
     totalBalance = accountsWithBalance.reduce(
-      (a, b) => parseFloat(a) + parseFloat(b.balance),
+      (a, b) => parseFloat(a) + parseFloat(b.current_balance),
       0,
     )
   } else {
