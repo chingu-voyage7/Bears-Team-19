@@ -26,26 +26,8 @@ const getAccountsWithBalance = async userId => {
   const accounts = await db('accounts')
     .select()
     .where({ fk_user_id: userId })
-  // const accountsWithBalance = await Promise.all(
-  //   accounts.map(async account => {
-  //     const [{ balance, balance_id: accountBalanceId }] = await db('balance')
-  //       .select()
-  //       .where({
-  //         fk_user_id: userId,
-  //         fk_account_id: account.account_id,
-  //         type: 'account',
-  //       })
-  //       .orderBy('balance_id', 'desc')
-  //       .limit(1)
+    .orderBy('created_at', 'asc')
 
-  //     const accountWithBalance = {
-  //       ...account,
-  //       balance,
-  //       accountBalanceId,
-  //     }
-  // return accounts
-  // }),
-  // )
   return accounts
 }
 
@@ -74,6 +56,21 @@ const getTotalBalance = async userId => {
   }
   return totalBalance
 }
+
+const isNotNewAccountTransaction = async transId => {
+  // const [transaction] = await db('transactions').where({ trans_id: transId })
+  const [transWithCat] = await db('transactions')
+    .innerJoin('categories', 'fk_category_id', 'category_id')
+    .innerJoin('accounts', 'fk_account_id', 'account_id')
+    .whereIn('transactions.trans_id', [transId])
+    .orderBy('date', 'desc', 'created_at', 'desc')
+    .column('category')
+  if (transWithCat.category === 'New Account') {
+    return false
+  }
+  return true
+}
+
 module.exports = {
   isValidAccount,
   getTotalBalance,
@@ -81,4 +78,5 @@ module.exports = {
   isValidDate,
   amountIsLowerThanBalance,
   createBalance,
+  isNotNewAccountTransaction,
 }
