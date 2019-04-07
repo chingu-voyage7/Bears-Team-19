@@ -263,10 +263,6 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
     .where({ fk_user_id: userId })
 
   // Get the transaction
-  // const [transaction] = await db('transactions')
-  // .select()
-  // .where({ trans_id: transId })
-
   const [transWithCat] = await db('transactions')
     .innerJoin('categories', 'fk_category_id', 'category_id')
     .innerJoin('accounts', 'fk_account_id', 'account_id')
@@ -300,54 +296,11 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
     })
     return
   }
-  // //Get account balance when that transaction occured
-  // const [balanceForAccount] = await db('balance')
-  //   .select()
-  //   .where({ fk_transaction_id: transId, type: 'account' })
 
-  // //Get total balance when that transaction occured
-  // const [balanceForTotal] = await db('balance')
-  //   .select()
-  //   .where({ fk_transaction_id: transId, type: 'total' })
-
-  // Get all account balance records after the transaction and update them to reflect removing the transaction
-  // const filteredAccountBalance = await db('balance')
-  //   .where({
-  //     fk_user_id: userId,
-  //     fk_account_id: transaction.fk_account_id,
-  //     type: 'account',
-  //   })
-  //   .andWhere('balance_id', '>', balanceForAccount.balance_id)
-  //   .decrement({ balance: transaction.amount })
-  //   .returning([
-  //     'balance',
-  //     'balance_id',
-  //     'type',
-  //     'date',
-  //     'fk_user_id',
-  //     'fk_transaction_id',
-  //     'fk_account_id',
-  //   ])
-
-  // Get all total balance records after the transaction and update them to reflect removing the transaction
-  // const filteredTotalBalance = await db('balance')
-  //   .where({ fk_user_id: userId, type: 'total' })
-  //   .andWhere('balance_id', '>', balanceForAccount.balance_id)
-  //   .decrement({ balance: transaction.amount })
-  //   .returning([
-  //     'balance',
-  //     'balance_id',
-  //     'type',
-  //     'date',
-  //     'fk_user_id',
-  //     'fk_transaction_id',
-  //     'fk_account_id',
-  //   ])
-
-  // Remove the balance records corresponding to the transaction
-  // await db('balance')
-  //   .del()
-  //   .where({ fk_transaction_id: transId })
+  // Remove transaction amount from accounts balance
+  await db('accounts')
+    .decrement({ current_balance: transWithCat.amount })
+    .where({ account_id: transWithCat.accountId })
 
   // Remove the transaction record
   const result = await db('transactions')
