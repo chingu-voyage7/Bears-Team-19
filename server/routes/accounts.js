@@ -63,40 +63,6 @@ router.post('/', isAuthenticated, async (req, res, next) => {
   // Make transaction for start balance.
   await db('transactions').insert(transactionInfo)
 
-  // console.log(transaction)
-  // Add record to accounts balance table
-  // const [newAccountBalanceRecord] = await db('balance')
-  //   .returning(['fk_account_id', 'balance', 'date', 'type', 'fk_user_id'])
-  //   .insert({
-  //     fk_user_id: userId,
-  //     balance,
-  //     fk_account_id: accountId,
-  //     date: newDate,
-  //     type: 'account',
-  //   })
-
-  // Get last record of total balance table
-  // const oldTotal = await db('balance')
-  //   .select()
-  //   .where({ fk_user_id: userId, type: 'total' })
-  //   .orderBy('balance_id', 'desc')
-  //   .limit(1)
-
-  // Use the old balance add add the new accounts balance to it.
-  // const cleanedBalance =
-  //   oldTotal.length > 0
-  //     ? Number(oldTotal[0].balance) + Number(balance)
-  //     : Number(0 + balance)
-
-  // Add record to total balance table
-  // await db('balance').insert({
-  //   balance: cleanedBalance,
-  //   date: newDate,
-  //   fk_user_id: userId,
-  //   fk_account_id: accountId,
-  //   type: 'total',
-  // })
-
   res.json({
     message: 'Accounts created',
     accountId,
@@ -130,7 +96,7 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
     .select()
     .where({ fk_account_id: accountId })
 
-  if (haveTransactions.length > 0) {
+  if (haveTransactions.length > 1) {
     res
       .status(404)
       .json({ error: 'Can not delete, need to remove transactions first.' })
