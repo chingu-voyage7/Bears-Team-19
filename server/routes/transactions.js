@@ -257,11 +257,6 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
   const { userId } = req
   const { transId } = req.body
 
-  // Get all transactions for that user
-  const transactions = await db('transactions')
-    .select()
-    .where({ fk_user_id: userId })
-
   // Get the transaction
   const [transWithCat] = await db('transactions')
     .innerJoin('categories', 'fk_category_id', 'category_id')
@@ -286,6 +281,10 @@ router.delete('/', isAuthenticated, async (req, res, next) => {
         accountName: 'account_name',
       },
     )
+  // Get all transactions for that user
+  const transactions = await db('transactions')
+    .select()
+    .where({ fk_user_id: userId, fk_account_id: transWithCat.accountId })
 
   // Check if there are more than one transaction for that user.
   if (transactions.length > 1 && transWithCat.category === 'New Account') {
