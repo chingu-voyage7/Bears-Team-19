@@ -6,10 +6,6 @@ import * as yup from 'yup'
 import { editAccount } from '../../store/actions/accountActions'
 
 const schema = yup.object().shape({
-  balance: yup
-    .number('Value must be a number.')
-    .min(0.01, 'Number has to be higher than 0.')
-    .required('Required'),
   accountName: yup
     .string()
     .trim('No whitespace!')
