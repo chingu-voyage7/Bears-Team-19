@@ -10,14 +10,7 @@ const Transaction = ({
   },
   history,
 }) => {
-  const {
-    transId,
-    date,
-    amount,
-    category,
-    budgetName,
-    accountName,
-  } = transaction
+  const { transId, date, amount, category, accountName } = transaction
 
   return (
     <section className="section">
@@ -27,7 +20,6 @@ const Transaction = ({
             <span className="date">{format(date, 'DD MMM')}</span> <br />
           </p>
           <p className="account">Account: {accountName}</p>
-          <p className="budget">Budget: {budgetName}</p>
         </div>
         <div className="column has-text-right">
           <h5>
