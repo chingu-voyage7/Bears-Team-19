@@ -33,15 +33,17 @@ class NavActions extends Component {
         <button className="button is-danger is-outlined" onClick={this.del}>
           <Icon name="delete" color="#E94B25" />
         </button>
-        <Link
-          className="button is-outlined is-info"
-          to={{
-            pathname: `/${itemLink}/edit`,
-            state: { item },
-          }}
-        >
-          <Icon name="edit" color="#6179C7" />
-        </Link>
+        {item.category === 'New Account' ? null : (
+          <Link
+            className="button is-outlined is-info"
+            to={{
+              pathname: `/${itemLink}/edit`,
+              state: { item },
+            }}
+          >
+            <Icon name="edit" color="#6179C7" />
+          </Link>
+        )}
         {history ? (
           <button
             className="button is-link is-outlined"

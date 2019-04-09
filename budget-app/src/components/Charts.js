@@ -10,6 +10,23 @@ import {
   YAxis,
 } from 'recharts'
 import { compareDates } from '../helpers/helpers'
+const renderLegend = props => {
+  const { payload } = props
+  console.log(payload)
+  return (
+    <ul>
+      {payload.map((entry, index) => (
+        <li key={`item-${index}`}>{entry.value}</li>
+      ))}
+    </ul>
+  )
+}
+
+const renderLabel = props => {
+  console.log(props)
+
+  return <div>hey</div>
+}
 export default class Charts extends Component {
   render() {
     const { balancelogs } = this.props
@@ -33,9 +50,9 @@ export default class Charts extends Component {
             dataKey="balance"
             stroke="#8884d8"
             activeDot={true}
+            name="Total balance"
           />
         </LineChart>
-        <div>hey</div>
       </section>
     )
   }
