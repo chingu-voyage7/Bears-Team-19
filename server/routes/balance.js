@@ -17,25 +17,48 @@ router.get('/accounts', isAuthenticated, async (req, res, next) => {
   const accountBalanceOverTime = await Promise.all(
     accounts.map(async account => {
       // Get all transactions for one account
-      const transactions = await db('transactions')
-        .select()
-        .where({ fk_account_id: account.account_id })
-        .orderBy([
-          { column: 'date', order: 'asc' },
-          { column: 'created_at', order: 'asc' },
-        ])
+      // const transactions = await db('transactions')
+      //   .select()
+      //   .where({ fk_account_id: account.account_id })
+      //   .orderBy([
+      //     { column: 'date', order: 'asc' },
+      //     { column: 'created_at', order: 'asc' },
+      //   ])
 
+      const transWithCat = await db('transactions')
+        .innerJoin('categories', 'fk_category_id', 'category_id')
+        .whereIn('transactions.fk_account_id', [account.account_id])
+        .orderBy([
+          { column: 'transactions.date', order: 'asc' },
+          { column: 'transactions.created_at', order: 'asc' },
+        ])
+        .column(
+          {
+            transId: 'trans_id',
+          },
+          'amount',
+          'date',
+          'type',
+          'category',
+          {
+            userId: 'transactions.fk_user_id',
+          },
+          {
+            accountId: 'fk_account_id',
+          },
+        )
       // For each transaction
-      const balanceOverTime = await transactions.reduce((prev, curr) => {
+      const balanceOverTime = await transWithCat.reduce((prev, curr) => {
         if (prev.length === 0) {
           const balance = {
             date: curr.date,
             balance: curr.amount,
-            accountId: curr.fk_account_id,
+            accountId: curr.accountId,
             accountName: account.account_name,
-            transactionId: curr.trans_id,
-            userId: curr.fk_user_id,
+            transactionId: curr.transId,
+            userId: curr.userId,
             type: curr.type,
+            category: curr.category,
           }
           return [balance]
         }
@@ -45,11 +68,12 @@ router.get('/accounts', isAuthenticated, async (req, res, next) => {
         const newBalance = {
           date: curr.date,
           balance: last.balance + curr.amount,
-          accountId: curr.fk_account_id,
+          accountId: curr.accountId,
           accountName: account.account_name,
-          transactionId: curr.trans_id,
-          userId: curr.fk_user_id,
+          transactionId: curr.transId,
+          userId: curr.userId,
           type: curr.type,
+          category: curr.category,
         }
 
         return [...prev, newBalance]
@@ -72,24 +96,43 @@ router.get('/total', isAuthenticated, async (req, res, next) => {
   const { userId } = req
 
   // Get all transactions for user
-  const transactions = await db('transactions')
-    .select()
-    .where({ fk_user_id: userId })
-    .orderBy([
-      { column: 'date', order: 'asc' },
-      { column: 'created_at', order: 'asc' },
-    ])
 
+  const transWithCat = await db('transactions')
+    .innerJoin('categories', 'fk_category_id', 'category_id')
+    .innerJoin('accounts', 'fk_account_id', 'account_id')
+    .whereIn('transactions.fk_user_id', [userId])
+    .orderBy([
+      { column: 'transactions.date', order: 'asc' },
+      { column: 'transactions.created_at', order: 'asc' },
+    ])
+    .column(
+      {
+        transId: 'trans_id',
+      },
+      'amount',
+      'date',
+      'type',
+      'category',
+      {
+        userId: 'transactions.fk_user_id',
+      },
+      {
+        accountId: 'fk_account_id',
+      },
+      { accountName: 'account_name' },
+    )
   // For each transaction
-  const balanceOverTime = await transactions.reduce((prev, curr) => {
+  const balanceOverTime = await transWithCat.reduce((prev, curr) => {
     if (prev.length === 0) {
       const balance = {
         date: curr.date,
         balance: curr.amount,
-        accountId: curr.fk_account_id,
-        transactionId: curr.trans_id,
-        userId: curr.fk_user_id,
+        accountId: curr.accountId,
+        transactionId: curr.transId,
+        userId: curr.userId,
         type: curr.type,
+        category: curr.category,
+        accountName: curr.accountName,
       }
       return [balance]
     }
@@ -99,10 +142,12 @@ router.get('/total', isAuthenticated, async (req, res, next) => {
     const newBalance = {
       date: curr.date,
       balance: last.balance + curr.amount,
-      accountId: curr.fk_account_id,
-      transactionId: curr.trans_id,
-      userId: curr.fk_user_id,
+      accountId: curr.accountId,
+      transactionId: curr.transId,
+      userId: curr.userId,
       type: curr.type,
+      category: curr.category,
+      accountName: curr.accountName,
     }
 
     return [...prev, newBalance]

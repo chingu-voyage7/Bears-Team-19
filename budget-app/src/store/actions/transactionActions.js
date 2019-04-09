@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getAccounts } from './accountActions'
-import { getBalanceLogs } from './balanceActions'
+import { getBalanceAccounts, getBalanceTotal } from './balanceActions'
 import { getUser } from './userActions'
 
 export const updateTransaction = payload => (dispatch, getState) => {
@@ -26,7 +26,8 @@ export const updateTransaction = payload => (dispatch, getState) => {
       dispatch(getTransactions(payload.uid))
       dispatch(getAccounts(payload.uid))
       dispatch(getUser(payload.uid))
-      dispatch(getBalanceLogs(payload.uid))
+      dispatch(getBalanceAccounts(payload.uid))
+      dispatch(getBalanceTotal(payload.uid))
       dispatch({
         type: 'UPDATE_TRANSACTION_SUCCESS',
         payload: res,
@@ -72,7 +73,8 @@ export const addTransaction = payload => (dispatch, getState) => {
       dispatch(getTransactions(uid))
       dispatch(getAccounts(uid))
       dispatch(getUser(uid))
-      dispatch(getBalanceLogs(payload.uid))
+      dispatch(getBalanceAccounts(payload.uid))
+      dispatch(getBalanceTotal(payload.uid))
       dispatch({
         type: 'ADD_TRANSACTION_SUCCESS',
         payload: res,
