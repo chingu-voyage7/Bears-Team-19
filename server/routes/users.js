@@ -60,8 +60,16 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
     .returning(['user_id', 'email', 'username', 'notifications', 'currency'])
     .where({ user_id: userId })
 
-  const userWithBalance = { ...updatedUser, balance: totalBalance[0].balance }
-  res.json({ message: 'Updated user', data: userWithBalance })
+  // Get current total balance for all accounts combined
+  const totalBalance = await getTotalBalance(userId)
+
+  res.json({
+    message: 'Updated user',
+    data: {
+      ...updatedUser,
+      balance: totalBalance,
+    },
+  })
 })
 
 // Delete user based on id
