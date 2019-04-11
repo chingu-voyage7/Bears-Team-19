@@ -1,12 +1,49 @@
-import { compareAsc } from 'date-fns'
+import { compareAsc, format } from 'date-fns'
 
 export const inUse = (id, transactions, type) => {
   return transactions.some(transaction => transaction[type] === id)
 }
 
+export const formatData = (array, name) => {
+  const formatedArray = array.map(record => {
+    return {
+      category: format(record.date, 'YYYY-MM-DD'),
+      value: record.balance,
+    }
+  })
+  return [{ name: name, data: [...formatedArray] }]
+}
+
+export const formatAccounts = accountsArray => {
+  return accountsArray
+    .map(ac => {
+      // map over each account and format the data into the shape that is needed
+      return formatData(ac.balanceOverTime, ac.accountName)
+    })
+    .reduce((prev, curr) => {
+      // Reduce the multiple arrays into one array of objects
+      return [...prev, ...curr]
+    }, [])
+}
+
 export const compareDates = (a, b) => {
   return compareAsc(a.date, b.date)
 }
+
+export const dataColors = [
+  '#8DB55C',
+  '#498F60',
+  '#E2E062',
+  '#297159',
+  '#E18DB7',
+  '#ADA0D3',
+  '#69B0D2',
+  '#73AC61',
+  '#15534C',
+  '#3ABAB4',
+  '#A6C760',
+  '#58BB87',
+]
 export const locales = [
   'AED',
   'AFN',

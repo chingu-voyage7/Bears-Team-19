@@ -80,6 +80,7 @@ router.get('/accounts', isAuthenticated, async (req, res, next) => {
       }, [])
       return {
         accountId: account.account_id,
+        accountName: account.account_name,
         balanceOverTime,
       }
     }),
