@@ -185,6 +185,7 @@ class AddTransaction extends Component {
                         placeholderText="Click to set the transaction date"
                         dateFormat="yyyy-MM-dd"
                         className="input"
+                        disabled={values.accountId ? false : true}
                       />
                     </div>
                   </label>
