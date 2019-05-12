@@ -1,59 +1,16 @@
-import React, { Component } from 'react'
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts'
-import { dataColors, formatAccounts, formatData } from '../helpers/helpers'
+import React from 'react'
+import ExpensePieChart from './ExpensePieChart'
+import SpendingLineChart from './SpendingLineChart'
 
-export default class Charts extends Component {
-  render() {
-    const { balanceAccounts, balanceTotal } = this.props
-
-    // Format data in total balance array
-    const formatedTotal = formatData(balanceTotal, 'Total')
-
-    // Format data in accounts balance array
-    const formatedAccounts = formatAccounts(balanceAccounts)
-
-    // Add the two formated datasets together.
-    const formatedDataset = [...formatedTotal, ...formatedAccounts]
-
-    // Add a stroke color to each of them.
-    const dataWithColors = formatedDataset.map((record, i) => {
-      return {
-        ...record,
-        stroke: dataColors[i],
-      }
-    })
-
-    return (
-      <section className="section small-width">
-        <LineChart width={600} height={400}>
-          <CartesianGrid />
-          <XAxis
-            dataKey="category"
-            type="category"
-            allowDuplicatedCategory={false}
-          />
-          <YAxis dataKey="value" />
-          <Tooltip />
-          <Legend />
-          {dataWithColors.map(s => (
-            <Line
-              dataKey="value"
-              data={s.data}
-              name={s.name}
-              key={s.name}
-              stroke={s.stroke}
-            />
-          ))}
-        </LineChart>
-      </section>
-    )
-  }
+export default function Charts(props) {
+  const { balanceAccounts, balanceTotal, transactions } = props
+  return (
+    <div>
+      <SpendingLineChart
+        balanceAccounts={balanceAccounts}
+        balanceTotal={balanceTotal}
+      />
+      <ExpensePieChart transactions={transactions} />
+    </div>
+  )
 }

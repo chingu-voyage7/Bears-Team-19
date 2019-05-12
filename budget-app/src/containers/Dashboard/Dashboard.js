@@ -54,6 +54,7 @@ class Dashboard extends Component {
           <Charts
             balanceAccounts={balanceAccounts}
             balanceTotal={balanceTotal}
+            transactions={transactions}
           />
         )}
         {transactions && (
