@@ -1,4 +1,4 @@
-import { addDays, format } from 'date-fns'
+import { addDays, format, parse } from 'date-fns'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import * as yup from 'yup'
+import { getMinDate } from '../../helpers/helpers'
 import { addAccount, getAccounts } from '../../store/actions/accountActions'
 import { addTransaction } from '../../store/actions/transactionActions'
 
@@ -36,6 +37,7 @@ class AddTransaction extends Component {
     if (this.state.toDashboard === true) {
       return <Redirect to="/" />
     }
+
     return (
       <section className="form-container">
         <div className="container">
@@ -181,6 +183,16 @@ class AddTransaction extends Component {
                         name="dateselect"
                         value={format(values['dateselect'], 'YYYY-MM-DD')}
                         onChange={e => setFieldValue('dateselect', e)}
+                        minDate={
+                          values.accountId
+                            ? parse(
+                                getMinDate(
+                                  values.accountId,
+                                  this.props.accounts,
+                                ),
+                              )
+                            : new Date()
+                        }
                         maxDate={new Date()}
                         placeholderText="Click to set the transaction date"
                         dateFormat="yyyy-MM-dd"

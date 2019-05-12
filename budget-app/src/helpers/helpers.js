@@ -30,6 +30,13 @@ export const compareDates = (a, b) => {
   return compareAsc(a.date, b.date)
 }
 
+export const getMinDate = (accountId, accounts) => {
+  const correctAccount = accounts.filter(account => {
+    return account.account_id === Number(accountId)
+  })
+  return correctAccount[0].created_at
+}
+
 export const dataColors = [
   '#8DB55C',
   '#498F60',
