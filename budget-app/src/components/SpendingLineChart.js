@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { dataColors, formatAccounts, formatData } from '../helpers/helpers'
+import { COLORS, formatAccounts, formatData } from '../helpers/helpers'
 
 export default class Charts extends Component {
   render() {
@@ -27,7 +27,7 @@ export default class Charts extends Component {
     const dataWithColors = formatedDataset.map((record, i) => {
       return {
         ...record,
-        stroke: dataColors[i],
+        stroke: COLORS[i],
       }
     })
 
