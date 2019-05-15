@@ -36,8 +36,8 @@ class Dashboard extends Component {
     }
     return (
       <section className="dashboard">
-        <h2>Dashboard</h2>
         <section className="section">
+          <h3>DASHBOARD</h3>
           <div className="columns">
             <SetCurrency
               userCurrency={this.props.user.currency}

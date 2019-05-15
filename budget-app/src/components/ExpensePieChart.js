@@ -1,5 +1,5 @@
 import { Component, default as React } from 'react'
-import { Cell, Pie, PieChart, Tooltip } from 'recharts'
+import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts'
 import { COLORS, getExpensesForPieChart } from '../helpers/helpers'
 
 const RADIAN = Math.PI / 180
@@ -45,23 +45,30 @@ export default class ExpensePieChart extends Component {
   }
   render() {
     return (
-      <PieChart width={800} height={400}>
-        <Pie
-          data={this.state.data}
-          cx={200}
-          cy={200}
-          labelLine={false}
-          label={renderCustomizedLabel}
-          outerRadius={80}
-          fill="#8884d8"
-          dataKey="value"
-        >
-          {this.state.data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Tooltip />
-      </PieChart>
+      <div>
+        <h3>Expenses by category</h3>
+        <PieChart width={800} height={400}>
+          <Pie
+            data={this.state.data}
+            cx={200}
+            cy={200}
+            labelLine={false}
+            label={renderCustomizedLabel}
+            outerRadius={90}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            {this.state.data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </div>
     )
   }
 }

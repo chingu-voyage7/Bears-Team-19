@@ -32,7 +32,7 @@ export default class Charts extends Component {
     })
 
     return (
-      <section className="section small-width">
+      <div>
         <h3>Spending over time</h3>
         <LineChart width={600} height={400}>
           <CartesianGrid />
@@ -54,7 +54,7 @@ export default class Charts extends Component {
             />
           ))}
         </LineChart>
-      </section>
+      </div>
     )
   }
 }
