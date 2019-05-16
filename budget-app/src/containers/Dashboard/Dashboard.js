@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
-import AccountList from '../../components/AccountList'
 import Balance from '../../components/Balance'
 import Charts from '../../components/Charts'
 import Icon from '../../components/Icons'
 import SetCurrency from '../../components/SetCurrency'
-import TransactionList from '../../components/TransactionList'
 import {
   getBalanceAccounts,
   getBalanceTotal,
@@ -38,6 +36,12 @@ class Dashboard extends Component {
       <section className="dashboard">
         <section className="section">
           <h3>DASHBOARD</h3>
+          <article>
+            <Link to="/transaction/create">
+              <Icon name="add" color="#23D160" />
+              Add new transaction
+            </Link>
+          </article>
           <div className="columns">
             <SetCurrency
               userCurrency={this.props.user.currency}
@@ -57,19 +61,7 @@ class Dashboard extends Component {
             transactions={transactions}
           />
         )}
-        {transactions && (
-          <AccountList
-            uid={this.props.auth.uid}
-            transactions={transactions}
-            userCurrency={this.props.user.currency}
-          />
-        )}
-        {transactions ? (
-          <TransactionList
-            uid={this.props.auth.uid}
-            userCurrency={this.props.user.currency}
-          />
-        ) : (
+        {transactions ? null : (
           <section className="section">
             <p>You have no transactions yet.</p>
             <Link to="/transaction/create">
@@ -84,7 +76,6 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
   return {
     auth: state.firebase.auth,
     transactions: state.transaction.transactions,
