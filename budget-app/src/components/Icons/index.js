@@ -1,5 +1,6 @@
 import React from 'react'
 import { About } from './About'
+import { Accounts } from './Accounts'
 import { Add } from './Add'
 import { Contact } from './Contact'
 import { Delete } from './Delete'
@@ -19,6 +20,7 @@ import { Phone } from './Phone'
 import { Profile } from './Profile'
 import { Remove } from './Remove'
 import { Signup } from './Signup'
+import { Transactions } from './Transactions'
 import { Twitter } from './Twitter'
 
 const Icon = props => {
@@ -65,6 +67,10 @@ const Icon = props => {
       return <Logout {...props} />
     case 'finance':
       return <Finance {...props} />
+    case 'accounts':
+      return <Accounts {...props} />
+    case 'transactions':
+      return <Transactions {...props} />
     default:
       break
   }
