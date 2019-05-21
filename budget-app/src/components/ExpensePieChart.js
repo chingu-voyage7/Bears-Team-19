@@ -1,6 +1,14 @@
 import { Component, default as React } from 'react'
-import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts'
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from 'recharts'
 import { COLORS, getExpensesForPieChart } from '../helpers/helpers'
+import './chart.css'
 
 const RADIAN = Math.PI / 180
 const renderCustomizedLabel = ({
@@ -45,29 +53,31 @@ export default class ExpensePieChart extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="chart">
         <h3>Expenses by category</h3>
-        <PieChart width={800} height={400}>
-          <Pie
-            data={this.state.data}
-            cx={200}
-            cy={200}
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={90}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {this.state.data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
+        <ResponsiveContainer>
+          <PieChart>
+            <Pie
+              data={this.state.data}
+              cx={120}
+              cy={100}
+              labelLine={false}
+              label={renderCustomizedLabel}
+              outerRadius={90}
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {this.state.data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
       </div>
     )
   }

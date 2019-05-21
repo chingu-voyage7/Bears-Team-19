@@ -4,11 +4,13 @@ import {
   Legend,
   Line,
   LineChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
 import { COLORS, formatAccounts, formatData } from '../helpers/helpers'
+import './chart.css'
 
 export default class Charts extends Component {
   render() {
@@ -32,28 +34,30 @@ export default class Charts extends Component {
     })
 
     return (
-      <div>
+      <div className="chart">
         <h3>Spending over time</h3>
-        <LineChart width={600} height={400}>
-          <CartesianGrid />
-          <XAxis
-            dataKey="category"
-            type="category"
-            allowDuplicatedCategory={false}
-          />
-          <YAxis dataKey="value" />
-          <Tooltip />
-          <Legend />
-          {dataWithColors.map(s => (
-            <Line
-              dataKey="value"
-              data={s.data}
-              name={s.name}
-              key={s.name}
-              stroke={s.stroke}
+        <ResponsiveContainer>
+          <LineChart>
+            <CartesianGrid />
+            <XAxis
+              dataKey="category"
+              type="category"
+              allowDuplicatedCategory={false}
             />
-          ))}
-        </LineChart>
+            <YAxis dataKey="value" />
+            <Tooltip />
+            <Legend />
+            {dataWithColors.map(s => (
+              <Line
+                dataKey="value"
+                data={s.data}
+                name={s.name}
+                key={s.name}
+                stroke={s.stroke}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     )
   }
