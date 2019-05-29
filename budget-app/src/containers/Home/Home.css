@@ -97,11 +97,11 @@ section.above-fold {
 
   .featurelist {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
     grid-gap: 2rem;
   }
-  .feature:nth-child(5) {
-    grid-column: 2 / span 2;
+  .feature:nth-child(4) {
+    grid-column: 1 / span 3;
   }
 
   .quotes {
