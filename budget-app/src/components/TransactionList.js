@@ -5,12 +5,14 @@ import {
   deleteTransaction,
   getTransactions,
 } from '../store/actions/transactionActions'
+import { getUser } from '../store/actions/userActions'
 import Icon from './Icons'
 import TransactionItem from './TransactionItem'
 
 class TransactionList extends Component {
   componentDidMount() {
     this.props.getTransactions(this.props.uid)
+    this.props.getUser(this.props.uid)
   }
 
   handleDelete = id => {
@@ -24,7 +26,7 @@ class TransactionList extends Component {
             transaction={transaction}
             key={transaction.transId}
             handleDelete={this.handleDelete}
-            userCurrency={this.props.userCurrency}
+            userCurrency={this.props.user.currency}
           />
         ))
       : null
@@ -44,6 +46,7 @@ class TransactionList extends Component {
 const mapStateToProps = state => {
   return {
     transactions: state.transaction.transactions,
+    user: state.user,
   }
 }
 
@@ -51,6 +54,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getTransactions: uid => dispatch(getTransactions(uid)),
     deleteTransaction: data => dispatch(deleteTransaction(data)),
+    getUser: uid => dispatch(getUser(uid)),
   }
 }
 

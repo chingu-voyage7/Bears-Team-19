@@ -4,7 +4,11 @@ import { inUse } from '../helpers/helpers'
 import NavActions from './NavActions'
 
 const Account = ({ account, handleDelete, transactions, userCurrency }) => {
-  const { account_id: accountId, account_name: accountName, balance } = account
+  const {
+    account_id: accountId,
+    account_name: accountName,
+    current_balance: balance,
+  } = account
   const isUsed = inUse(accountId, transactions, 'accountId')
   return (
     <div className="pad">

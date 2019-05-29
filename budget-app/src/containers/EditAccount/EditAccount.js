@@ -6,10 +6,6 @@ import * as yup from 'yup'
 import { editAccount } from '../../store/actions/accountActions'
 
 const schema = yup.object().shape({
-  balance: yup
-    .number('Value must be a number.')
-    .min(0.01, 'Number has to be higher than 0.')
-    .required('Required'),
   accountName: yup
     .string()
     .trim('No whitespace!')
@@ -26,7 +22,6 @@ class EditAccount extends Component {
     }
 
     const {
-      balance,
       account_name: accountName,
       account_id: accountId,
     } = this.props.account.item
@@ -35,7 +30,6 @@ class EditAccount extends Component {
         <div className="container">
           <Formik
             initialValues={{
-              balance,
               accountName,
             }}
             validationSchema={schema}
@@ -72,27 +66,6 @@ class EditAccount extends Component {
                   </label>
                   <ErrorMessage
                     name="accountName"
-                    component="div"
-                    className="help is-danger"
-                  />
-                </div>
-                <div className="field">
-                  <label htmlFor="balance" className="label">
-                    Balance
-                    <div className="control">
-                      <Field
-                        type="number"
-                        name="balance"
-                        id="balance"
-                        placeholder="Ex. 12.99"
-                        min="0"
-                        step="0.01"
-                        className="input"
-                      />
-                    </div>
-                  </label>
-                  <ErrorMessage
-                    name="balance"
                     component="div"
                     className="help is-danger"
                   />

@@ -1,4 +1,4 @@
-import { addDays, format } from 'date-fns'
+import { addDays, format, parse } from 'date-fns'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
@@ -6,8 +6,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import * as yup from 'yup'
+import { getMinDate } from '../../helpers/helpers'
 import { addAccount, getAccounts } from '../../store/actions/accountActions'
-import { addBudget, getBudgets } from '../../store/actions/budgetActions'
 import { addTransaction } from '../../store/actions/transactionActions'
 
 const schema = yup.object().shape({
@@ -16,7 +16,6 @@ const schema = yup.object().shape({
     .min(0.01, 'Number has to be higher than 0.')
     .required('Required'),
   accountId: yup.number().required('Required'),
-  budgetId: yup.number().required('Required'),
   category: yup
     .string()
     .trim('No whitespace!')
@@ -33,12 +32,12 @@ class AddTransaction extends Component {
   }
   componentDidMount() {
     this.props.getAccounts(this.props.auth.uid)
-    this.props.getBudgets(this.props.auth.uid)
   }
   render() {
     if (this.state.toDashboard === true) {
       return <Redirect to="/" />
     }
+
     return (
       <section className="form-container">
         <div className="container">
@@ -48,7 +47,6 @@ class AddTransaction extends Component {
               category: '',
               accountId: undefined,
               type: '',
-              budgetId: undefined,
               dateselect: format(new Date()),
             }}
             validationSchema={schema}
@@ -150,46 +148,6 @@ class AddTransaction extends Component {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="budgetId" className="label">
-                    Budget
-                  </label>
-                  <div className="control select">
-                    <Field
-                      defaultValue="Choose budget"
-                      name="budgetId"
-                      id="budgetId"
-                      component="select"
-                      placeholder="Budget"
-                    >
-                      <option disabled hidden>
-                        Choose budget
-                      </option>
-                      {this.props.budgets &&
-                        this.props.budgets.map(budget => (
-                          <option
-                            key={budget.budget_id}
-                            value={budget.budget_id}
-                          >
-                            {budget.budget_name}
-                          </option>
-                        ))}
-                    </Field>
-                  </div>
-                  <div className="link-btn">
-                    <Link
-                      to="/budget/create"
-                      className="button is-link is-outlined"
-                    >
-                      Add new budget
-                    </Link>
-                  </div>
-                  <ErrorMessage
-                    name="budgetId"
-                    component="div"
-                    className="help is-danger"
-                  />
-                </div>
-                <div className="field">
                   <div className="control">
                     <label htmlFor="income" className="radio">
                       <strong>Income</strong>
@@ -225,10 +183,21 @@ class AddTransaction extends Component {
                         name="dateselect"
                         value={format(values['dateselect'], 'YYYY-MM-DD')}
                         onChange={e => setFieldValue('dateselect', e)}
+                        minDate={
+                          values.accountId
+                            ? parse(
+                                getMinDate(
+                                  values.accountId,
+                                  this.props.accounts,
+                                ),
+                              )
+                            : new Date()
+                        }
                         maxDate={new Date()}
                         placeholderText="Click to set the transaction date"
                         dateFormat="yyyy-MM-dd"
                         className="input"
+                        disabled={values.accountId ? false : true}
                       />
                     </div>
                   </label>
@@ -254,8 +223,7 @@ class AddTransaction extends Component {
 
 const mapStateToProps = state => {
   return {
-    accounts: state.account.accounts,
-    budgets: state.budget.budgets,
+    accounts: state.account.accountsWithBalance,
     auth: state.firebase.auth,
   }
 }
@@ -263,9 +231,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   addTransaction: transaction => dispatch(addTransaction(transaction)),
   addAccount: account => dispatch(addAccount(account)),
-  addBudget: budget => dispatch(addBudget(budget)),
   getAccounts: uid => dispatch(getAccounts(uid)),
-  getBudgets: uid => dispatch(getBudgets(uid)),
 })
 
 export default connect(

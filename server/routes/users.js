@@ -24,9 +24,16 @@ router.get('/user/', isAuthenticated, async (req, res, next) => {
     .where({ user_id: userId })
     .select()
 
+  // Get current total balance for all accounts combined
   const totalBalance = await getTotalBalance(userId)
-  const userWithBalance = { ...user, balance: totalBalance }
-  res.json({ message: 'Got user', data: userWithBalance })
+
+  res.json({
+    message: 'Got user',
+    data: {
+      ...user,
+      balance: totalBalance,
+    },
+  })
 })
 
 // Create new user
@@ -53,9 +60,16 @@ router.patch('/', isAuthenticated, async (req, res, next) => {
     .returning(['user_id', 'email', 'username', 'notifications', 'currency'])
     .where({ user_id: userId })
 
+  // Get current total balance for all accounts combined
   const totalBalance = await getTotalBalance(userId)
-  const userWithBalance = { ...updatedUser, balance: totalBalance }
-  res.json({ message: 'Updated user', data: userWithBalance })
+
+  res.json({
+    message: 'Updated user',
+    data: {
+      ...updatedUser,
+      balance: totalBalance,
+    },
+  })
 })
 
 // Delete user based on id

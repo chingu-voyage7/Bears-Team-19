@@ -6,14 +6,7 @@ import { Link } from 'react-router-dom'
 // TODO: Only show date, amount, category and type on transactions.
 // Todo: Click to get more details. Works on mobile and desktop
 const TransactionItem = ({ transaction, handleDelete, userCurrency }) => {
-  const { transId, date, amount, type, category } = transaction
-
-  const amountWithType = type => {
-    if (type === 'income') {
-      return ''
-    }
-    return `-`
-  }
+  const { transId, date, amount, category } = transaction
   return (
     <div className="pad">
       <Link
@@ -31,7 +24,6 @@ const TransactionItem = ({ transaction, handleDelete, userCurrency }) => {
           </div>
           <div className="column has-text-right">
             <h5>
-              {amountWithType(type)}
               <Currency
                 quantity={amount ? amount : 0}
                 currency={userCurrency}

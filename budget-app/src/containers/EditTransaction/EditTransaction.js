@@ -7,7 +7,6 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import * as yup from 'yup'
 import { addAccount, getAccounts } from '../../store/actions/accountActions'
-import { addBudget, getBudgets } from '../../store/actions/budgetActions'
 import { updateTransaction } from '../../store/actions/transactionActions'
 
 const schema = yup.object().shape({
@@ -16,7 +15,6 @@ const schema = yup.object().shape({
     .min(0.01, 'Number has to be higher than 0.')
     .required('Required'),
   accountId: yup.number().required('Required'),
-  budgetId: yup.number().required('Required'),
   category: yup
     .string()
     .trim('No whitespace!')
@@ -34,7 +32,6 @@ class EditTransaction extends Component {
   }
   componentDidMount() {
     this.props.getAccounts(this.props.auth.uid)
-    this.props.getBudgets(this.props.auth.uid)
   }
   render() {
     if (this.state.toDashboard === true) {
@@ -44,7 +41,6 @@ class EditTransaction extends Component {
       amount,
       category,
       accountId,
-      budgetId,
       type,
       date,
     } = this.props.transaction.item
@@ -53,10 +49,9 @@ class EditTransaction extends Component {
         <div className="container">
           <Formik
             initialValues={{
-              amount,
+              amount: Math.abs(amount),
               category,
               accountId,
-              budgetId,
               type,
               dateselect: format(date),
             }}
@@ -66,7 +61,6 @@ class EditTransaction extends Component {
                 const updatedTransaction = {
                   ...values,
                   accountId: parseInt(values.accountId),
-                  budgetId: parseInt(values.budgetId),
                   uid: this.props.auth.uid,
                   transId: this.props.transaction.item.transId,
                 }
@@ -151,35 +145,6 @@ class EditTransaction extends Component {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="budgetId" className="label">
-                    Budget
-                  </label>
-                  <div className="control select">
-                    <Field
-                      name="budgetId"
-                      id="budgetId"
-                      component="select"
-                      placeholder="Budget"
-                    >
-                      {this.props.budgets &&
-                        this.props.budgets.map(budget => (
-                          <option
-                            key={budget.budget_id}
-                            value={budget.budget_id}
-                          >
-                            {budget.budget_name}
-                          </option>
-                        ))}
-                    </Field>
-                  </div>
-
-                  <ErrorMessage
-                    name="budgetId"
-                    component="div"
-                    className="help is-danger"
-                  />
-                </div>
-                <div className="field">
                   <div className="control">
                     <label htmlFor="income" className="radio">
                       <strong>Income</strong>
@@ -248,8 +213,7 @@ const mapStateToProps = (state, props) => {
   const transaction = props.location.state
   return {
     auth: state.firebase.auth,
-    accounts: state.account.accounts,
-    budgets: state.budget.budgets,
+    accounts: state.account.accountsWithBalance,
     transaction,
   }
 }
@@ -257,9 +221,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => ({
   updateTransaction: transaction => dispatch(updateTransaction(transaction)),
   addAccount: account => dispatch(addAccount(account)),
-  addBudget: budget => dispatch(addBudget(budget)),
   getAccounts: uid => dispatch(getAccounts(uid)),
-  getBudgets: uid => dispatch(getBudgets(uid)),
 })
 
 export default connect(

@@ -5,6 +5,7 @@ const users = require('./routes/users')
 const transactions = require('./routes/transactions')
 const accounts = require('./routes/accounts')
 const budgets = require('./routes/budgets')
+const balance = require('./routes/balance')
 
 const app = express()
 
@@ -27,5 +28,6 @@ app.use('/users', users)
 app.use('/transactions', transactions)
 app.use('/accounts', accounts)
 app.use('/budgets', budgets)
+app.use('/balance', balance)
 
 app.listen(port, () => console.log(`Example app listening on port: ${port}`))

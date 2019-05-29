@@ -6,7 +6,7 @@ exports.up = async function(knex, Promise) {
       .primary()
     table.string('account_name').notNullable()
     table
-      .decimal('balance', 10, 2)
+      .decimal('current_balance', 10, 2)
       .notNullable()
       .defaultTo(0.0)
     table.integer('fk_user_id').notNullable()
