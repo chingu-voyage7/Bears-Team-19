@@ -53,6 +53,7 @@ select,
 textarea {
   font-family: var(--font-heading);
   font-weight: 600;
+  color: var(--grey-color-darkest);
 }
 
 h1 {
@@ -83,4 +84,81 @@ code {
 }
 body {
   font-family: var(--font-body);
+}
+
+form {
+  max-width: 300px;
+}
+
+form input[type='radio'] {
+  margin-left: 1rem;
+}
+
+form h3 {
+  text-transform: uppercase;
+}
+
+.react-datepicker__input-container {
+  width: 300px;
+}
+
+.select select {
+  width: 300px;
+}
+
+.content {
+  margin: 0 auto;
+  max-width: 60rem;
+}
+
+.dashboard > section {
+}
+
+section.dashboard h2 {
+  text-transform: uppercase;
+}
+
+.dashboard a {
+  color: var(--primary-color-darker);
+}
+
+.dashboard a:hover {
+  background: none;
+  color: var(--primary-color-brighter);
+}
+
+.form-container {
+  margin: 2rem auto 0;
+  max-width: 300px;
+}
+
+.link-btn {
+  padding-top: 1rem;
+}
+
+.delete-item {
+  cursor: pointer;
+}
+
+.pad {
+  border-bottom: 1px solid var(--grey-color-brighter);
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+
+@media (min-width: 700px) {
+  .dashboard > section {
+    padding: 1rem 4rem;
+  }
+}
+
+.category,
+.account,
+.budget {
+  color: var(--grey-color-darker);
+}
+
+.date {
+  text-transform: uppercase;
+  color: var(--grey-color);
 }

@@ -5,7 +5,6 @@ const createFakeUser = () => ({
   email: faker.internet.email(),
   username: faker.internet.userName(),
   uid: faker.random.uuid(),
-  balance: faker.finance.amount(1, 50, 2),
 })
 exports.seed = async function(knex, Promise) {
   // Users
@@ -15,7 +14,6 @@ exports.seed = async function(knex, Promise) {
     email: 'harry@potter.com',
     username: 'harrypotter',
     uid: 'potter',
-    balance: 12.9,
   }
 
   for (let i = 0; i < desiredFakeUsers; i++) {

@@ -1,5 +1,0 @@
-categories
-users
-budgets
-incomes
-expenses

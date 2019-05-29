@@ -1,163 +1,208 @@
+import { addDays, format } from 'date-fns'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React, { Component } from 'react'
-import DayPicker from 'react-day-picker'
-import 'react-day-picker/lib/style.css'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import * as yup from 'yup'
+import { addAccount, getAccounts } from '../../store/actions/accountActions'
 import { updateTransaction } from '../../store/actions/transactionActions'
-import './EditTransaction.css'
+
+const schema = yup.object().shape({
+  amount: yup
+    .number('Value must be a number.')
+    .min(0.01, 'Number has to be higher than 0.')
+    .required('Required'),
+  accountId: yup.number().required('Required'),
+  category: yup
+    .string()
+    .trim('No whitespace!')
+    .required('Required'),
+  type: yup.string().required('Required'),
+  dateselect: yup
+    .date()
+    .max(addDays(new Date(), 1), 'Can not input future dates.')
+    .required('Required'),
+})
 
 class EditTransaction extends Component {
   state = {
-    amount: this.props.transaction ? this.props.transaction.amount : '',
-    category: this.props.transaction ? this.props.transaction.category : '',
-    account: this.props.transaction ? this.props.transaction.account : '',
-    selectedOption: this.props.transaction ? this.props.transaction.type : '',
-    selectedDay: this.props.transaction
-      ? new Date(this.props.transaction.date)
-      : undefined,
     toDashboard: false,
   }
-
-  handleChange = e => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    })
-  }
-
-  handleOptionChange = changeEvent => {
-    this.setState({
-      selectedOption: changeEvent.target.value,
-    })
-  }
-
-  handleDayClick = (day, { selected }) => {
-    if (selected) {
-      this.setState({ selectedDay: undefined })
-      return
-    }
-    this.setState({
-      selectedDay: day,
-    })
-  }
-
-  handleSubmit = e => {
-    e.preventDefault()
-    // check so all are selected
-    if (
-      this.state.selectedDay === undefined &&
-      this.state.amount &&
-      this.state.category
-    ) {
-      console.log('Fill in the required fields')
-    }
-    const fields = {
-      uid: this.props.auth.uid,
-      id: this.props.transaction.trans_id,
-      amount: this.state.amount,
-      account: this.state.account,
-      category: this.state.category,
-      type: this.state.selectedOption,
-      date: this.state.selectedDay,
-    }
-    this.props.updateTransaction(fields)
-    this.setState({
-      toDashboard: true,
-    })
+  componentDidMount() {
+    this.props.getAccounts(this.props.auth.uid)
   }
   render() {
     if (this.state.toDashboard === true) {
       return <Redirect to="/" />
     }
-
+    const {
+      amount,
+      category,
+      accountId,
+      type,
+      date,
+    } = this.props.transaction.item
     return (
-      <section className="update-transaction">
+      <section className="form-container">
         <div className="container">
-          <form onSubmit={this.handleSubmit}>
-            <h3>Update transaction</h3>
-            <div className="field">
-              <label htmlFor="amount" className="label">
-                Amount
-              </label>
-              <div className="control has-icon-left has-icons-right">
-                <input
-                  type="number"
-                  step="0.01"
-                  className="input"
-                  placeholder="ex 10.03"
-                  required
-                  id="amount"
-                  value={this.state.amount}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label htmlFor="category" className="label">
-                Category
-              </label>
-              <div className="control has-icon-left has-icons-right">
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="Category"
-                  required
-                  id="category"
-                  value={this.state.category}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label htmlFor="account" className="label">
-                Account
-              </label>
-              <div className="control has-icon-left has-icons-right">
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="Account"
-                  id="account"
-                  value={this.state.account}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label htmlFor="income" className="radio">
-                <input
-                  type="radio"
-                  id="income"
-                  name="type"
-                  value="income"
-                  checked={this.state.selectedOption === 'income'}
-                  onChange={this.handleOptionChange}
-                  required
-                />
-                <span>Income</span>
-              </label>
-              <label htmlFor="expense" className="radio">
-                <input
-                  type="radio"
-                  id="expense"
-                  name="type"
-                  value="expense"
-                  checked={this.state.selectedOption === 'expense'}
-                  onChange={this.handleOptionChange}
-                  required
-                />
-                <span>Expense</span>
-              </label>
-            </div>
-            <div className="field">
-              <DayPicker
-                onDayClick={this.handleDayClick}
-                selectedDays={this.state.selectedDay}
-              />
-            </div>
-            <div className="control">
-              <button className="button is-success">Update transaction</button>
-            </div>
-          </form>
+          <Formik
+            initialValues={{
+              amount: Math.abs(amount),
+              category,
+              accountId,
+              type,
+              dateselect: format(date),
+            }}
+            validationSchema={schema}
+            onSubmit={(values, { setSubmitting }) => {
+              setTimeout(() => {
+                const updatedTransaction = {
+                  ...values,
+                  accountId: parseInt(values.accountId),
+                  uid: this.props.auth.uid,
+                  transId: this.props.transaction.item.transId,
+                }
+                this.props.updateTransaction(updatedTransaction)
+                setSubmitting(false)
+                this.setState({
+                  toDashboard: true,
+                })
+              }, 400)
+            }}
+          >
+            {({ isSubmitting, setFieldValue, values, errors }) => (
+              <Form>
+                <h3>Update transaction</h3>
+                <div className="field">
+                  <label htmlFor="amount" className="label">
+                    Amount
+                    <div className="control">
+                      <Field
+                        type="number"
+                        name="amount"
+                        id="amount"
+                        placeholder="Ex. 12.99"
+                        min="0"
+                        step="0.01"
+                        className="input"
+                      />
+                    </div>
+                  </label>
+                  <ErrorMessage
+                    name="amount"
+                    component="div"
+                    className="help is-danger"
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="category" className="label">
+                    Category
+                    <div className="control">
+                      <Field
+                        type="text"
+                        name="category"
+                        id="category"
+                        placeholder="Ex. Groceries"
+                        className="input"
+                      />
+                    </div>
+                  </label>
+                  <ErrorMessage
+                    name="category"
+                    component="div"
+                    className="help is-danger"
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="accountId" className="label">
+                    Account
+                  </label>
+                  <div className="control select">
+                    <Field
+                      name="accountId"
+                      id="accountId"
+                      component="select"
+                      placeholder="Account"
+                    >
+                      {this.props.accounts &&
+                        this.props.accounts.map(account => (
+                          <option
+                            key={account.account_id}
+                            value={account.account_id}
+                          >
+                            {account.account_name}
+                          </option>
+                        ))}
+                    </Field>
+                  </div>
+
+                  <ErrorMessage
+                    name="accountId"
+                    component="div"
+                    className="help is-danger"
+                  />
+                </div>
+                <div className="field">
+                  <div className="control">
+                    <label htmlFor="income" className="radio">
+                      <strong>Income</strong>
+                      <Field
+                        type="radio"
+                        name="type"
+                        value="income"
+                        id="income"
+                        checked={values.type === 'income'}
+                      />
+                    </label>
+                    <label htmlFor="expense" className="radio">
+                      <strong>Expense</strong>
+                      <Field
+                        type="radio"
+                        name="type"
+                        value="expense"
+                        id="expense"
+                        checked={values.type === 'expense'}
+                      />
+                    </label>
+                  </div>
+                  <ErrorMessage
+                    name="type"
+                    component="div"
+                    className="help is-danger"
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="date" className="label">
+                    Date
+                    <div className="control">
+                      <DatePicker
+                        id="date"
+                        name="dateselect"
+                        value={format(values['dateselect'], 'YYYY-MM-DD')}
+                        onChange={e => setFieldValue('dateselect', e)}
+                        maxDate={new Date()}
+                        placeholderText="Click to set the transaction date"
+                        dateFormat="yyyy-MM-dd"
+                        className="input"
+                      />
+                    </div>
+                  </label>
+                  {errors.dateselect && (
+                    <div className="help is-danger">{errors.dateselect}</div>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="is-info button"
+                >
+                  Update Transaction
+                </button>
+              </Form>
+            )}
+          </Formik>
         </div>
       </section>
     )
@@ -168,12 +213,15 @@ const mapStateToProps = (state, props) => {
   const transaction = props.location.state
   return {
     auth: state.firebase.auth,
+    accounts: state.account.accountsWithBalance,
     transaction,
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   updateTransaction: transaction => dispatch(updateTransaction(transaction)),
+  addAccount: account => dispatch(addAccount(account)),
+  getAccounts: uid => dispatch(getAccounts(uid)),
 })
 
 export default connect(

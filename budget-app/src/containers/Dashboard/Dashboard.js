@@ -1,123 +1,75 @@
-import { format } from 'date-fns'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
+import Balance from '../../components/Balance'
+import Charts from '../../components/Charts'
 import Icon from '../../components/Icons'
+import SetCurrency from '../../components/SetCurrency'
 import {
-  deleteTransaction,
-  getTransactions,
-} from '../../store/actions/transactionActions'
-import './Dashboard.css'
+  getBalanceAccounts,
+  getBalanceTotal,
+} from '../../store/actions/balanceActions'
+import { getTransactions } from '../../store/actions/transactionActions'
+import { getUser } from '../../store/actions/userActions'
 
 class Dashboard extends Component {
   componentDidMount() {
     this.props.getTransactions(this.props.auth.uid)
+    this.props.getUser(this.props.auth.uid)
+    this.props.getBalanceAccounts(this.props.auth.uid)
+    this.props.getBalanceTotal(this.props.auth.uid)
   }
-  handleDelete = id => {
-    // call delete action here with the id
-    this.props.deleteTransaction({ id, uid: this.props.auth.uid })
-  }
+
   render() {
-    const { auth, transactions } = this.props
-    if (!transactions) {
-      return (
-        <section className="dashboard">
-          <h3>Dashboard</h3>
-          <p>You have no transactions yet.</p>
-          <Link to="/transaction/create" className="add">
-            <Icon name="add" color="#23D160" /> <p>New transaction</p>
-          </Link>
-        </section>
-      )
-    }
-    const rows = transactions.map(transaction => {
-      const { trans_id, date, amount, type, category, account } = transaction
-      return (
-        <tr key={trans_id}>
-          <td>{format(date, 'YYYY-MM-DD')}</td>
-          <td>{type}</td>
-          <td>{amount}</td>
-          <td>{category}</td>
-          <td>{account}</td>
-          <td>
-            <Link
-              to={{
-                pathname: `/transaction/edit`,
-                state: {
-                  trans_id,
-                  date,
-                  type,
-                  amount,
-                  category,
-                  account,
-                },
-              }}
-            >
-              <Icon name="edit" color="#6179C7" />
-            </Link>
-          </td>
-          <td>
-            <div
-              className="delete-transaction"
-              onClick={() => this.handleDelete(trans_id)}
-            >
-              <Icon name="delete" color="#E94B25" />
-            </div>
-          </td>
-        </tr>
-      )
-    })
+    const {
+      auth,
+      transactions,
+      user: { balance: totalBalance },
+      balanceAccounts,
+      balanceTotal,
+    } = this.props
+
     if (!auth.uid) {
       return <Redirect to="/signin" />
     }
     return (
       <section className="dashboard">
-        <h3>Dashboard</h3>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>
-                <abbr title="Amount">Amt</abbr>
-              </th>
-              <th>
-                <abbr title="Category">Cat</abbr>
-              </th>
-              <th>
-                <abbr title="Account">Account</abbr>
-              </th>
-              <th>Edit</th>
-              <th>
-                <abbr title="Delete">Del</abbr>
-              </th>
-            </tr>
-          </thead>
-          <tfoot>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>
-                <abbr title="Amount">Amt</abbr>
-              </th>
-              <th>
-                <abbr title="Category">Cat</abbr>
-              </th>
-              <th>
-                <abbr title="Account">Account</abbr>
-              </th>
-              <th>Edit</th>
-              <th>
-                <abbr title="Delete">Del</abbr>
-              </th>
-            </tr>
-          </tfoot>
-          <tbody>{rows}</tbody>
-        </table>
+        <section className="section">
+          <h3>DASHBOARD</h3>
+          <article>
+            <Link to="/transaction/create">
+              <Icon name="add" color="#23D160" />
+              Add new transaction
+            </Link>
+          </article>
+          <div className="columns">
+            <SetCurrency
+              userCurrency={this.props.user.currency}
+              uid={this.props.auth.uid}
+            />
+            <Balance
+              balance={totalBalance}
+              userCurrency={this.props.user.currency}
+            />
+          </div>
+        </section>
 
-        <Link to="/transaction/create" className="add">
-          <Icon name="add" color="#23D160" /> <p>New transaction</p>
-        </Link>
+        {balanceAccounts && balanceTotal && (
+          <Charts
+            balanceAccounts={balanceAccounts}
+            balanceTotal={balanceTotal}
+            transactions={transactions}
+          />
+        )}
+        {transactions ? null : (
+          <section className="section">
+            <p>You have no transactions yet.</p>
+            <Link to="/transaction/create">
+              <Icon name="add" color="#23D160" />
+              New transaction
+            </Link>
+          </section>
+        )}
       </section>
     )
   }
@@ -127,13 +79,17 @@ const mapStateToProps = state => {
   return {
     auth: state.firebase.auth,
     transactions: state.transaction.transactions,
+    user: state.user,
+    balanceAccounts: state.balancelog.accountBalanceOverTime,
+    balanceTotal: state.balancelog.balanceOverTime,
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    deleteTransaction: transactionId =>
-      dispatch(deleteTransaction(transactionId)),
     getTransactions: uid => dispatch(getTransactions(uid)),
+    getUser: uid => dispatch(getUser(uid)),
+    getBalanceAccounts: uid => dispatch(getBalanceAccounts(uid)),
+    getBalanceTotal: uid => dispatch(getBalanceTotal(uid)),
   }
 }
 

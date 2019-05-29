@@ -1,15 +1,16 @@
 import React from 'react'
-import './Home.css'
 import { Link } from 'react-router-dom'
+import AccountsMobileImage from '../../assets/AccountsMobile.jpg'
+import ChartsMobileImage from '../../assets/ChartsMobile.jpg'
+import DashboardMobileImage from '../../assets/DashboardMobile.jpg'
+import TransactionsImage from '../../assets/TransactionMobile.jpg'
+import './Home.css'
 
 const Home = () => (
   <>
     <section className="above-fold">
       <article>
-        <h1>Budgeting app for your every day use.</h1>
-        <p className="tagline">
-          Far far away, behind the word mountains, far from the country.
-        </p>
+        <h1>Keep track of your spending all in one place</h1>
         <button className="button is-success button-join">
           <Link className="join-link" to="/signup">
             Join us
@@ -21,138 +22,46 @@ const Home = () => (
       <h2>Features</h2>
       <div className="featurelist">
         <article className="feature">
-          <h3>Feature 1</h3>
+          <h3>Add your accounts</h3>
           <p>
-            Far far away, behind the word mountains, far from the countries
-            Vokalia and Consonantia, there live the blind texts. Separated they
-            live in Bookmarksgrove right at the coast
+            Keep track of all your accounts in one place! You can add as many
+            accounts as you want. For example savings account, spending account.
+            Maybe you have an account specifically for travel. You can add that
+            too.
           </p>
+          <figure className="feature-image">
+            <img src={AccountsMobileImage} alt="Accounts" />
+          </figure>
         </article>
         <article className="feature">
-          <h3>Feature 2</h3>
+          <h3>Transactions</h3>
           <figure className="feature-image">
-            <img
-              src="https://dummyimage.com/600x400/a3a3a3/fff.jpg"
-              alt="placeholder"
-            />
-            <figcaption>Placeholder</figcaption>
+            <img src={TransactionsImage} alt="Transactions" />
           </figure>
           <p>
-            Far far away, behind the word mountains, far from the countries
-            Vokalia and Consonantia, there live the blind texts. Separated they
-            live in Bookmarksgrove right at the coast of the Semantics, a large
-            language ocean. A small river named Duden
+            Add both spending and income transactions in an easy and quick
+            manor.
           </p>
         </article>
         <article className="feature">
-          <h3>Feature 3</h3>
-          <p>
-            Far far away, behind the word mountains, far from the countries
-            Vokalia and Consonantia, there live the blind texts. Separated they
-            live in Bookmarksgrove right at the coast of the Semantics, a large
-            language ocean. A small river named Duden
-          </p>
-        </article>
-        <article className="feature">
-          <h3>Feature 4</h3>
+          <h3>Select your currency</h3>
+          <p>Set which currency you want to see everything in.</p>
           <figure className="feature-image">
-            <img
-              src="https://dummyimage.com/600x400/a3a3a3/fff.jpg"
-              alt="placeholder"
-            />
-            <figcaption>Placeholder</figcaption>
+            <img src={DashboardMobileImage} alt="Dashboard select currency" />
           </figure>
-          <p>
-            Far far away, behind the word mountains, far from the countries
-            Vokalia and Consonantia, there live the blind texts. Separated they
-            live in Bookmarksgrove right at the coast of the Semantics, a large
-            language ocean. A small river named Duden
-          </p>
         </article>
         <article className="feature">
-          <figure className="feature-image">
-            <img
-              src="https://dummyimage.com/600x400/a3a3a3/fff.jpg"
-              alt="placeholder"
-            />
-            <figcaption>Placeholder</figcaption>
-          </figure>
-          <h3>Feature 5</h3>
+          <h3>Charts</h3>
           <p>
-            Far far away, behind the word mountains, far from the countries
-            Vokalia and Consonantia, there live the blind texts. Separated they
-            live in Bookmarksgrove right at the coast of the Semantics, a large
-            language ocean. A small river named Duden
+            View your spending across your accounts and in total in a nice and
+            easy to understand way through our charts. There you can check out
+            what you spend on and when.
           </p>
+          <figure className="feature-image">
+            <img src={ChartsMobileImage} alt="Dashboard Charts" />
+          </figure>
         </article>
       </div>
-    </section>
-    <section className="quotes">
-      <article className="quote">
-        <figure className="quote-image">
-          <img
-            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-            alt="placeholder user"
-          />
-        </figure>
-        <p>
-          Far far away, behind the word mountains, far from the countries
-          Vokalia and Consonantia, there live the blind texts. Separated they
-          live in Bookmarksgrove right
-        </p>
-      </article>
-      <article className="quote">
-        <figure className="quote-image">
-          <img
-            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-            alt="placeholder user"
-          />
-        </figure>
-        <p>
-          Far far away, behind the word mountains, far from the countries
-          Vokalia and Consonantia, there live the blind texts. Separated they
-          live in Bookmarksgrove right
-        </p>
-      </article>
-      <article className="quote">
-        <figure className="quote-image">
-          <img
-            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-            alt="placeholder user"
-          />
-        </figure>
-        <p>
-          Far far away, behind the word mountains, far from the countries
-          Vokalia and Consonantia, there live the blind texts. Separated they
-          live in Bookmarksgrove right
-        </p>
-      </article>
-      <article className="quote">
-        <figure className="quote-image">
-          <img
-            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-            alt="placeholder user"
-          />
-        </figure>
-        <p>
-          Far far away, behind the word mountains, far from the countries
-          Vokalia and Consonantia, there live the blind texts. Separated they
-          live in Bookmarksgrove right
-        </p>
-      </article>
-      <article className="quote">
-        <figure className="quote-image">
-          <img
-            src="https://dummyimage.com/150x150/a3a3a3/fff.jpg"
-            alt="placeholder user"
-          />
-        </figure>
-        <p>
-          Far far away, behind the word mountains, far from the countries
-          Vokalia and Consonantia, there live the blind texts. Separated they
-          live in Bookmarksgrove right
-        </p>
-      </article>
     </section>
   </>
 )
